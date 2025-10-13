@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmgc6vyxruqjm"]
+
+[ext_resource type="PackedScene" uid="uid://hmhmettedvhn" path="res://scenes/map.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://w7308md54try" path="res://scenes/unit.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/turn_manager.tscn" id="3_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://1yt2gttupi16" path="res://scenes/move_sign.tscn" id="3_sugp2"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Map" parent="." instance=ExtResource("1_0wfyh")]
+
+[node name="Unit" parent="." instance=ExtResource("2_sugp2")]
+position = Vector2(48, 47)
+highlight_scene = ExtResource("3_sugp2")
+
+[node name="TurnManager" parent="." instance=ExtResource("3_jyhfs")]
+
+[node name="MoveSign" parent="." instance=ExtResource("3_sugp2")]
+
+[node name="Unit2" parent="." instance=ExtResource("2_sugp2")]
+position = Vector2(48, 113)
+highlight_scene = ExtResource("3_sugp2")
