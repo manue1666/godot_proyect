@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvonow5qxy4bg"
-path="res://.godot/imported/select_atack.png-377effd4307b20b8bf1633cca05a77b9.ctex"
+uid="uid://j4bwlsyfjm7c"
+path="res://.godot/imported/move_sign.png-8d8f61e1bacc32523de3b1f89f7f7df9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/select_atack.png"
-dest_files=["res://.godot/imported/select_atack.png-377effd4307b20b8bf1633cca05a77b9.ctex"]
+source_file="res://sprites/terrain/move_sign.png"
+dest_files=["res://.godot/imported/move_sign.png-8d8f61e1bacc32523de3b1f89f7f7df9.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8cqw254hbwf0"
-path="res://.godot/imported/blue_ant.png-487c5e7b7006f373826b13f1d46f0d71.ctex"
+uid="uid://b1ct508sq1pwb"
+path="res://.godot/imported/atack_sign.png-a1936f7f2f9956751f8cdbee4f3bd4f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/blue_ant.png"
-dest_files=["res://.godot/imported/blue_ant.png-487c5e7b7006f373826b13f1d46f0d71.ctex"]
+source_file="res://sprites/terrain/atack_sign.png"
+dest_files=["res://.godot/imported/atack_sign.png-a1936f7f2f9956751f8cdbee4f3bd4f4.ctex"]
 
 [params]
 

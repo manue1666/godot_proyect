@@ -1,22 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmgc6vyxruqjm"]
+[gd_scene load_steps=6 format=3 uid="uid://dmgc6vyxruqjm"]
 
-[ext_resource type="PackedScene" uid="uid://hmhmettedvhn" path="res://scenes/map.tscn" id="1_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://w7308md54try" path="res://scenes/unit.tscn" id="2_sugp2"]
-[ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/turn_manager.tscn" id="3_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://1yt2gttupi16" path="res://scenes/move_sign.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://d1ipmu1tknbgn" path="res://scenes/game/tablero.tscn" id="1_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/game/turn_manager.tscn" id="3_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://dyp462q34pdvo" path="res://scenes/bugs/base_unit.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cean33tt6t34s" path="res://scenes/bugs/blue_ant.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://8g65wmljio0e" path="res://scenes/bugs/red_ant.tscn" id="5_tefeu"]
 
 [node name="Main" type="Node2D"]
 
-[node name="Map" parent="." instance=ExtResource("1_0wfyh")]
-
-[node name="Unit" parent="." instance=ExtResource("2_sugp2")]
-position = Vector2(48, 47)
-highlight_scene = ExtResource("3_sugp2")
+[node name="tablero" parent="." instance=ExtResource("1_tbgi4")]
 
 [node name="TurnManager" parent="." instance=ExtResource("3_jyhfs")]
 
-[node name="MoveSign" parent="." instance=ExtResource("3_sugp2")]
+[node name="BaseUnit" parent="." instance=ExtResource("4_jyhfs")]
+position = Vector2(-23, 12)
 
-[node name="Unit2" parent="." instance=ExtResource("2_sugp2")]
-position = Vector2(48, 113)
-highlight_scene = ExtResource("3_sugp2")
+[node name="blue_ant" parent="." instance=ExtResource("5_tbgi4")]
+board_position = Vector2i(3, 3)
+
+[node name="red_ant" parent="." instance=ExtResource("5_tefeu")]
+board_position = Vector2i(4, 4)

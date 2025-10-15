@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://1yt2gttupi16"]
 
-[ext_resource type="Texture2D" uid="uid://btp1y81mdsspo" path="res://sprites/select_mov.png" id="1_jukwy"]
+[ext_resource type="Texture2D" uid="uid://j4bwlsyfjm7c" path="res://sprites/terrain/move_sign.png" id="1_jukwy"]
 
 [node name="MoveSign" type="Sprite2D"]
 texture_filter = 1
