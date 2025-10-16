@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://y3p50g01i1y5"]
+
+[ext_resource type="Script" uid="uid://b4tgwsrjgevcs" path="res://scripts/game/team.gd" id="1_vbq6d"]
+[ext_resource type="PackedScene" uid="uid://cean33tt6t34s" path="res://scenes/bugs/blue_ant.tscn" id="2_tdfrv"]
+
+[node name="my_team" type="Node"]
+script = ExtResource("1_vbq6d")
+metadata/_custom_type_script = "uid://b4tgwsrjgevcs"
+
+[node name="blue_ant" parent="." groups=["units"] instance=ExtResource("2_tdfrv")]
+board_position = Vector2i(3, 3)

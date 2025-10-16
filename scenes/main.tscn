@@ -3,20 +3,22 @@
 [ext_resource type="PackedScene" uid="uid://d1ipmu1tknbgn" path="res://scenes/game/tablero.tscn" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/game/turn_manager.tscn" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://dyp462q34pdvo" path="res://scenes/bugs/base_unit.tscn" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://cean33tt6t34s" path="res://scenes/bugs/blue_ant.tscn" id="5_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://8g65wmljio0e" path="res://scenes/bugs/red_ant.tscn" id="5_tefeu"]
+[ext_resource type="PackedScene" uid="uid://y3p50g01i1y5" path="res://scenes/game/my_team.tscn" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cdka23y1ervxw" path="res://scenes/game/enemy_team.tscn" id="5_tefeu"]
 
 [node name="Main" type="Node2D"]
 
 [node name="tablero" parent="." instance=ExtResource("1_tbgi4")]
 
-[node name="TurnManager" parent="." instance=ExtResource("3_jyhfs")]
+[node name="TurnManager" parent="." node_paths=PackedStringArray("teams") instance=ExtResource("3_jyhfs")]
+teams = [NodePath("../my_team"), NodePath("../enemy_team")]
 
 [node name="BaseUnit" parent="." instance=ExtResource("4_jyhfs")]
 position = Vector2(-23, 12)
 
-[node name="blue_ant" parent="." instance=ExtResource("5_tbgi4")]
-board_position = Vector2i(3, 3)
+[node name="my_team" parent="." instance=ExtResource("4_tbgi4")]
+team_name = "Team 1"
 
-[node name="red_ant" parent="." instance=ExtResource("5_tefeu")]
-board_position = Vector2i(4, 4)
+[node name="enemy_team" parent="." instance=ExtResource("5_tefeu")]
+team_id = 1
+team_name = "Team 2"

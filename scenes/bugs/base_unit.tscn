@@ -4,7 +4,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n8bhp"]
 
-[node name="BaseUnit" type="Area2D"]
+[node name="BaseUnit" type="Area2D" groups=["units"]]
 script = ExtResource("1_n8bhp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
