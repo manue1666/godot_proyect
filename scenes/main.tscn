@@ -1,14 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmgc6vyxruqjm"]
+[gd_scene load_steps=9 format=3 uid="uid://dmgc6vyxruqjm"]
 
 [ext_resource type="PackedScene" uid="uid://d1ipmu1tknbgn" path="res://scenes/game/tablero.tscn" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/game/turn_manager.tscn" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://dyp462q34pdvo" path="res://scenes/bugs/base_unit.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://y3p50g01i1y5" path="res://scenes/game/my_team.tscn" id="4_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cdka23y1ervxw" path="res://scenes/game/enemy_team.tscn" id="5_tefeu"]
+[ext_resource type="PackedScene" uid="uid://7le7s31p6ikc" path="res://scenes/interfaz/atack_range_sign.tscn" id="6_tefeu"]
+[ext_resource type="PackedScene" uid="uid://b55vhndeonn1g" path="res://scenes/interfaz/atack_sign.tscn" id="7_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://1yt2gttupi16" path="res://scenes/interfaz/move_sign.tscn" id="8_tipki"]
 
 [node name="Main" type="Node2D"]
 
 [node name="tablero" parent="." instance=ExtResource("1_tbgi4")]
+z_index = -2
 
 [node name="TurnManager" parent="." node_paths=PackedStringArray("teams") instance=ExtResource("3_jyhfs")]
 teams = [NodePath("../my_team"), NodePath("../enemy_team")]
@@ -22,3 +26,9 @@ team_name = "Team 1"
 [node name="enemy_team" parent="." instance=ExtResource("5_tefeu")]
 team_id = 1
 team_name = "Team 2"
+
+[node name="atack_range_sign" parent="." instance=ExtResource("6_tefeu")]
+
+[node name="atack_sign" parent="." instance=ExtResource("7_o6xl0")]
+
+[node name="MoveSign" parent="." instance=ExtResource("8_tipki")]

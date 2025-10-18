@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://b1ct508sq1pwb" path="res://sprites/terrain/atack_sign.png" id="1_t6eap"]
 
 [node name="atack_sign" type="Sprite2D"]
+z_index = -1
 texture = ExtResource("1_t6eap")

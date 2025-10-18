@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://7le7s31p6ikc"]
+
+[ext_resource type="Texture2D" uid="uid://cuet1uauq3s0b" path="res://sprites/terrain/atack_range_sign.png" id="1_hdy32"]
+
+[node name="atack_range_sign" type="Sprite2D"]
+z_index = -1
+texture = ExtResource("1_hdy32")

@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyp462q34pdvo"]
+[gd_scene load_steps=6 format=3 uid="uid://dyp462q34pdvo"]
 
-[ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/bugs/base_unit.gd" id="1_n8bhp"]
+[ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_n8bhp"]
+[ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="2_aakss"]
+[ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_ckk82"]
+[ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="4_dbhn7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n8bhp"]
 
@@ -41,3 +44,12 @@ offset_top = 57.0
 offset_right = 257.0
 offset_bottom = 88.0
 text = "Atack 2"
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("2_aakss")
+
+[node name="AttackComponent" type="Node" parent="."]
+script = ExtResource("3_ckk82")
+
+[node name="AnimationComponent" type="Node" parent="."]
+script = ExtResource("4_dbhn7")

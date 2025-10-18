@@ -1,7 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://8g65wmljio0e"]
+[gd_scene load_steps=19 format=3 uid="uid://8g65wmljio0e"]
 
 [ext_resource type="Script" uid="uid://dx0q7vtaup2sm" path="res://scripts/bugs/red_ant.gd" id="1_355ko"]
 [ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant-sheet.png" id="2_355ko"]
+[ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_esp7m"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="4_sypaj"]
+[ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_wy6ve"]
+[ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_sypaj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_355ko"]
 atlas = ExtResource("2_355ko")
@@ -48,7 +52,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_355ko")
 }],
 "loop": false,
-"name": &"atack_one",
+"name": &"attack_one",
 "speed": 5.0
 }, {
 "frames": [{
@@ -68,7 +72,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_sypaj")
 }],
 "loop": false,
-"name": &"atack_two",
+"name": &"attack_two",
 "speed": 5.0
 }, {
 "frames": [{
@@ -94,14 +98,36 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tipki"]
 size = Vector2(28, 29)
 
+[sub_resource type="Resource" id="Resource_dwbtb"]
+script = ExtResource("4_sypaj")
+attack_name = "meele"
+damage = 5
+range = 1
+attack_type = 0
+range_type = 0
+effect = 0
+effect_duration = 0
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_xdbr7"]
+script = ExtResource("4_sypaj")
+attack_name = "ranged"
+damage = 3
+range = 3
+attack_type = 0
+range_type = 2
+effect = 0
+effect_duration = 0
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
 [node name="red_ant" type="Area2D"]
 script = ExtResource("1_355ko")
 metadata/_custom_type_script = "uid://6a6uyysheykg"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_esp7m")
-animation = &"idle"
-frame_progress = 0.77336
+animation = &"attack_two"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -0.5)
@@ -135,3 +161,18 @@ offset_top = 57.0
 offset_right = 257.0
 offset_bottom = 88.0
 text = "Atack 2"
+
+[node name="AttackComponent" type="Node" parent="."]
+script = ExtResource("3_esp7m")
+attacks = Array[ExtResource("4_sypaj")]([SubResource("Resource_dwbtb"), SubResource("Resource_xdbr7")])
+metadata/_custom_type_script = "uid://ctrvtqym607y4"
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("5_wy6ve")
+movement_type = 0
+metadata/_custom_type_script = "uid://bsetip1eay5vo"
+
+[node name="AnimationComponent" type="Node" parent="." node_paths=PackedStringArray("animated_sprite")]
+script = ExtResource("6_sypaj")
+animated_sprite = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://42xm15ltyvn0"

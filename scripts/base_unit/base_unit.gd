@@ -7,34 +7,38 @@ signal attacked(attacker: BaseUnit, target: BaseUnit, attack_num: int)
 signal died(unit: BaseUnit)
 
 var tile_size := 32
-@export var highlight_scene: PackedScene = preload("res://scenes/interfaz/move_sign.tscn")
-@export var atack_highlight_scene: PackedScene = preload("res://scenes/interfaz/atack_sign.tscn")
+var highlight_scene: PackedScene = preload("res://scenes/interfaz/move_sign.tscn")
+var atack_highlight_scene: PackedScene = preload("res://scenes/interfaz/atack_sign.tscn")
+var atack_range_highlight_scene: PackedScene = preload("res://scenes/interfaz/atack_range_sign.tscn")
 
 @export var board_position := Vector2i(0, 0)
 var highlights := []
 var team: Team = null
 var team_id: int = -1
 
-# State machine
+# Components
 var state_machine: UnitStateMachine
+var movement_component: MovementComponent
+var attack_component: AttackComponent
+var animation_component: AnimationComponent  # ← NUEVO
 
-# STATS BASE DE UNIDAD
+# STATS BASE
 @export var max_hp: int = 10
 @export var hp: int = 10
-@export var move_range := 1
 @export var power: int = 1
 
-# ATAQUES DE UNIDAD
-@export var atack_one := {"name": "Atack 1", "damage": 5, "range": 1, "type": "physical", "effect": "none"}
-@export var atack_two := {"name": "Atack 2", "damage": 5, "range": 2, "type": "ranged", "effect": "none"}
-
 func _ready():
-
 	add_to_group("units")
-	# Crear state machine
+	
+	# Inicializar componentes
 	state_machine = UnitStateMachine.new()
 	add_child(state_machine)
 	state_machine.state_changed.connect(_on_state_changed)
+	
+	# Buscar componentes existentes
+	movement_component = get_node_or_null("MovementComponent")
+	attack_component = get_node_or_null("AttackComponent")
+	animation_component = get_node_or_null("AnimationComponent")  # ← NUEVO
 	
 	update_visual_position()
 	connect("input_event", Callable(self, "_on_input_event"))
@@ -56,11 +60,18 @@ func _on_state_changed(old_state, new_state):
 		UnitStateMachine.State.IDLE, UnitStateMachine.State.EXHAUSTED:
 			$MenuPanel.visible = false
 			clear_highlights()
+			# ← NUEVO: Reproducir idle
+			if animation_component:
+				animation_component.play_idle()
 		UnitStateMachine.State.WAITING_MOVE:
 			show_movable_tiles()
 		UnitStateMachine.State.WAITING_ATTACK:
-			# Ya se muestran los tiles en el botón
 			pass
+		UnitStateMachine.State.MOVING:  # ← NUEVO (si agregas estado MOVING)
+			if animation_component:
+				animation_component.play_move()
+		UnitStateMachine.State.ATTACKING:  # ← NUEVO (si agregas estado ATTACKING)
+			pass  # La animación se maneja en attack_target()
 
 func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -88,78 +99,87 @@ func _unhandled_input(event):
 	
 	# Manejar movimiento
 	if state_machine.is_waiting_move():
-		var valid_cells = get_movable_cells()
-		if cell_clicked in valid_cells and is_cell_free(cell_clicked):
-			move_to(cell_clicked)
-			state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
-			moved.emit(self, cell_clicked)
+		if movement_component:
+			var did_move = await movement_component.move_to(cell_clicked)
+			if did_move:
+				state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
+				moved.emit(self, cell_clicked)
+				clear_highlights()
 	
 	# Manejar ataque
 	elif state_machine.is_waiting_attack():
 		var target = get_unit_at_cell(cell_clicked)
-		if target and can_attack_target(target, state_machine.attack_number):
-			attack_target(target, state_machine.attack_number)
-			state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
-			attacked.emit(self, target, state_machine.attack_number)
+		if target and attack_component:
+			if attack_component.perform_attack(target, state_machine.attack_number - 1):
+				# Reproducir animación de ataque
+				attacked.emit(self, target, state_machine.attack_number)
+				await play_attack_animation(state_machine.attack_number)
+				state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
+				clear_highlights()
 
-func move_to(new_board_pos: Vector2i):
-	board_position = new_board_pos
-	update_visual_position()
-	clear_highlights()
-
-func attack_target(target: BaseUnit, atack_num: int):
-	var atack = atack_one if atack_num == 1 else atack_two
-	target.receive_damage(atack["damage"] + power, self)
-	clear_highlights()
-	# RECOMENDACIÓN: Aquí podrías agregar animación de ataque
+# Función para reproducir animación de ataque
+func play_attack_animation(attack_num: int):
+	if not animation_component:
+		return
+	
+	if attack_num == 1:
+		animation_component.play_attack_one()
+	elif attack_num == 2:
+		animation_component.play_attack_two()
+	
+	# Esperar a que termine la animación
+	if animation_component.is_playing:
+		await animation_component.animation_finished
 
 func receive_damage(damage: int, attacker: BaseUnit):
 	hp -= damage
 	print("%s recibió %d de daño de %s. HP: %d/%d" % [name, damage, attacker.name, hp, max_hp])
 	
-	# RECOMENDACIÓN: Aquí podrías agregar:
-	# - Animación de daño
-	# - Números flotantes mostrando el daño
-	# - Efecto de pantalla shake
+	# flash y shake suave
+	if has_node("AnimatedSprite2D"):
+		var sprite = $AnimatedSprite2D
+		var original_pos = sprite.position
+		
+		var damage_tween = create_tween()
+		damage_tween.set_parallel(true)
+		
+		# Flash rojo
+		damage_tween.tween_property(sprite, "modulate", Color.RED, 0.08)
+		damage_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
+		
+		# Shake simple (solo 2 sacudidas)
+		damage_tween.tween_property(sprite, "position", original_pos + Vector2(2, 0), 0.04)
+		damage_tween.tween_property(sprite, "position", original_pos + Vector2(-2, 0), 0.04).set_delay(0.04)
+		damage_tween.tween_property(sprite, "position", original_pos, 0.04).set_delay(0.08)
 	
+	spawn_damage_popup(damage)
 	if hp <= 0:
 		die()
 
+
+
 func die():
 	state_machine.change_state(UnitStateMachine.State.DEAD)
+	
+	# ← NUEVO: Reproducir animación de muerte
+	if animation_component:
+		animation_component.play_dead()
+		# Esperar a que termine la animación antes de destruir
+		var anim_duration = animation_component.get_animation_duration("dead")
+		await get_tree().create_timer(anim_duration).timeout
+	
 	died.emit(self)
-	# RECOMENDACIÓN: Agregar animación de muerte antes de queue_free
 	queue_free()
 
 func update_visual_position():
 	position = Vector2(board_position.x, board_position.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
 
-func get_movable_cells() -> Array:
-	var cells := []
-	for x in range(-move_range, move_range + 1):
-		for y in range(-move_range, move_range + 1):
-			var distance = abs(x) + abs(y)  # Distancia Manhattan
-			if distance > 0 and distance <= move_range:  # Excluye la casilla actual
-				var cell = board_position + Vector2i(x, y)
-				if is_cell_valid(cell) and is_cell_free(cell):
-					cells.append(cell)
-	return cells
-
-func get_attackable_cells(atack_num: int) -> Array:
-	var atack = atack_one if atack_num == 1 else atack_two
-	var cells := []
-	for x in range(-atack["range"], atack["range"] + 1):
-		for y in range(-atack["range"], atack["range"] + 1):
-			var distance = abs(x) + abs(y)
-			if distance > 0 and distance <= atack["range"]:  # Excluye la casilla actual
-				var cell = board_position + Vector2i(x, y)
-				if is_cell_valid(cell):
-					cells.append(cell)
-	return cells
-
 func show_movable_tiles():
 	clear_highlights()
-	var cells = get_movable_cells()
+	if not movement_component:
+		return
+	
+	var cells = movement_component.get_movable_cells()
 	for cell in cells:
 		var h = highlight_scene.instantiate()
 		h.position = Vector2(cell.x, cell.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
@@ -168,33 +188,31 @@ func show_movable_tiles():
 
 func show_atack_tiles(atack_num: int):
 	clear_highlights()
-	var cells = get_attackable_cells(atack_num)
+	if not attack_component:
+		return
+	
+	var cells = attack_component.get_attackable_cells(atack_num - 1)
 	for cell in cells:
-		# Solo mostrar si hay un enemigo atacable en esa posición
 		var target = get_unit_at_cell(cell)
-		if target and can_attack_target(target, atack_num):
-			var h = atack_highlight_scene.instantiate()
-			h.position = Vector2(cell.x, cell.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
-			get_parent().add_child(h)
-			highlights.append(h)
+		var h
+		if target and attack_component.can_attack_target(target, atack_num - 1):
+			h = atack_highlight_scene.instantiate()
+		else:
+			h = atack_range_highlight_scene.instantiate()
+		h.position = Vector2(cell.x, cell.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
+		get_parent().add_child(h)
+		highlights.append(h)
 
 func clear_highlights():
 	for h in highlights:
 		h.queue_free()
 	highlights.clear()
 
-# Validaciones
-func is_cell_valid(cell: Vector2i) -> bool:
-	# RECOMENDACIÓN: Aquí deberías validar contra los límites del tablero
-	# Por ahora asumimos que el tablero es 32x32
-	return cell.x >= 0 and cell.x < 32 and cell.y >= 0 and cell.y < 32
-
-func is_cell_free(cell: Vector2i) -> bool:
-	var units = get_tree().get_nodes_in_group("units")
-	for unit in units:
-		if unit is BaseUnit and unit.board_position == cell and unit != self:
-			return false
-	return true
+func spawn_damage_popup(damage: int):
+	var popup = preload("res://scenes/interfaz/damage_popup.tscn").instantiate()
+	popup.damage_amount = damage
+	popup.position = position + Vector2(0, -tile_size * 0.5)  # Arriba del sprite
+	get_parent().add_child(popup)
 
 func get_unit_at_cell(cell: Vector2i) -> BaseUnit:
 	var units = get_tree().get_nodes_in_group("units")
@@ -202,19 +220,6 @@ func get_unit_at_cell(cell: Vector2i) -> BaseUnit:
 		if unit is BaseUnit and unit.board_position == cell:
 			return unit
 	return null
-
-func can_attack_target(target: BaseUnit, atack_num: int) -> bool:
-	if not target or target == self:
-		return false
-	if not team or not target.team:
-		return false
-	if not team.is_enemy(target.team):
-		return false
-	if target.state_machine.is_dead():
-		return false
-	
-	var cells = get_attackable_cells(atack_num)
-	return target.board_position in cells
 
 # Botones del menú
 func _on_boton_move_pressed():
@@ -232,12 +237,3 @@ func _on_boton_atack_two_pressed():
 	state_machine.attack_number = 2
 	state_machine.change_state(UnitStateMachine.State.WAITING_ATTACK)
 	show_atack_tiles(2)
-
-# Métodos para acceder/modificar hijos comunes
-func set_sprite_texture(texture: Texture2D):
-	if has_node("Sprite2D"):
-		$Sprite2D.texture = texture
-
-func set_collision_shape(shape: Shape2D):
-	if has_node("CollisionShape2D"):
-		$CollisionShape2D.shape = shape
