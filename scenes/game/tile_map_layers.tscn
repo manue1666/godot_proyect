@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd6ivej740c7j"]
+
+[ext_resource type="TileSet" uid="uid://uaubs888cv0t" path="res://sprites/terrain/terrain_tileset.tres" id="1_puiel"]
+
+[node name="TileMapLayers" type="Node2D"]
+
+[node name="GroundLayer" type="TileMapLayer" parent="."]
+z_index = -10
+tile_set = ExtResource("1_puiel")
+
+[node name="ObstaclesLayer" type="TileMapLayer" parent="."]
+z_index = -5
+tile_set = ExtResource("1_puiel")
+
+[node name="DecorationLayer" type="TileMapLayer" parent="."]
+z_index = -3
+tile_set = ExtResource("1_puiel")

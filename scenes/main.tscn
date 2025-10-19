@@ -1,34 +1,111 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmgc6vyxruqjm"]
+[gd_scene load_steps=16 format=3 uid="uid://dmgc6vyxruqjm"]
 
-[ext_resource type="PackedScene" uid="uid://d1ipmu1tknbgn" path="res://scenes/game/tablero.tscn" id="1_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cbel4s06fdhuw" path="res://scenes/interfaz/UI/battle_hud.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://en72n1htr5ab" path="res://scenes/interfaz/UI/level_result_screen.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/game/turn_manager.tscn" id="3_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://dyp462q34pdvo" path="res://scenes/bugs/base_unit.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://vi8bgnjj03c1" path="res://scenes/interfaz/UI/main_menu.tscn" id="3_sugp2"]
+[ext_resource type="Texture2D" uid="uid://bhyn5ryy8lr76" path="res://sprites/terrain/terrains-sheet.png" id="3_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://y3p50g01i1y5" path="res://scenes/game/my_team.tscn" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cc6p21uxapyo4" path="res://scenes/game/run_manager.tscn" id="5_85g3d"]
 [ext_resource type="PackedScene" uid="uid://cdka23y1ervxw" path="res://scenes/game/enemy_team.tscn" id="5_tefeu"]
-[ext_resource type="PackedScene" uid="uid://7le7s31p6ikc" path="res://scenes/interfaz/atack_range_sign.tscn" id="6_tefeu"]
-[ext_resource type="PackedScene" uid="uid://b55vhndeonn1g" path="res://scenes/interfaz/atack_sign.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://1yt2gttupi16" path="res://scenes/interfaz/move_sign.tscn" id="8_tipki"]
+[ext_resource type="PackedScene" uid="uid://btr7olxlpg05c" path="res://scenes/game/map_generator.tscn" id="6_choun"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eb6dy"]
+texture = ExtResource("3_ya4ey")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_trceg"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_eb6dy")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
+texture = ExtResource("3_ya4ey")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_eb6dy"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ya4ey")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_trceg"]
+texture = ExtResource("3_ya4ey")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ya4ey"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_trceg")
 
 [node name="Main" type="Node2D"]
 
-[node name="tablero" parent="." instance=ExtResource("1_tbgi4")]
-z_index = -2
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(302, 150)
 
-[node name="TurnManager" parent="." node_paths=PackedStringArray("teams") instance=ExtResource("3_jyhfs")]
-teams = [NodePath("../my_team"), NodePath("../enemy_team")]
+[node name="RunManager" parent="." instance=ExtResource("5_85g3d")]
 
-[node name="BaseUnit" parent="." instance=ExtResource("4_jyhfs")]
-position = Vector2(-23, 12)
+[node name="MapGenerator" parent="." node_paths=PackedStringArray("ground_layer", "obstacles_layer", "decoration_layer") instance=ExtResource("6_choun")]
+ground_layer = NodePath("../TileMapsLayers/GroundLayer")
+obstacles_layer = NodePath("../TileMapsLayers/ObstaclesLayer")
+decoration_layer = NodePath("../TileMapsLayers/DecorationLayer")
 
-[node name="my_team" parent="." instance=ExtResource("4_tbgi4")]
-team_name = "Team 1"
+[node name="TileMapsLayers" type="Node2D" parent="."]
 
-[node name="enemy_team" parent="." instance=ExtResource("5_tefeu")]
-team_id = 1
-team_name = "Team 2"
+[node name="GroundLayer" type="TileMapLayer" parent="TileMapsLayers"]
+z_index = -10
+z_as_relative = false
+tile_set = SubResource("TileSet_trceg")
 
-[node name="atack_range_sign" parent="." instance=ExtResource("6_tefeu")]
+[node name="ObstaclesLayer" type="TileMapLayer" parent="TileMapsLayers"]
+z_index = -5
+z_as_relative = false
+tile_set = SubResource("TileSet_eb6dy")
 
-[node name="atack_sign" parent="." instance=ExtResource("7_o6xl0")]
+[node name="DecorationLayer" type="TileMapLayer" parent="TileMapsLayers"]
+z_index = -3
+z_as_relative = false
+tile_set = SubResource("TileSet_ya4ey")
 
-[node name="MoveSign" parent="." instance=ExtResource("8_tipki")]
+[node name="UnitsContainer" type="Node" parent="."]
+
+[node name="my_team" parent="UnitsContainer" instance=ExtResource("4_tbgi4")]
+
+[node name="enemy_team" parent="UnitsContainer" instance=ExtResource("5_tefeu")]
+
+[node name="TurnManager" parent="." node_paths=PackedStringArray("teams") groups=["turn_manager"] instance=ExtResource("3_jyhfs")]
+teams = [NodePath("../UnitsContainer/my_team"), NodePath("../UnitsContainer/enemy_team")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BattleHUD" parent="UI" instance=ExtResource("1_o5qli")]
+offset_left = 15.0
+offset_top = -41.0
+offset_right = 15.0
+offset_bottom = -25.0
+
+[node name="LevelResultScreen" parent="UI" instance=ExtResource("2_0wfyh")]
+visible = false
+
+[node name="MainMenu" parent="UI" instance=ExtResource("3_sugp2")]
+visible = false

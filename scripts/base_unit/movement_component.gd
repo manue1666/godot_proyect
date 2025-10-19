@@ -158,5 +158,8 @@ func is_cell_free(cell: Vector2i) -> bool:
 	return true
 
 func is_cell_walkable(cell: Vector2i) -> bool:
-	# RECOMENDACIÓN: Consultar TileMap para terreno en el futuro
+	var map_generator = owner_unit.get_tree().get_first_node_in_group("map_generator")
+	if map_generator and map_generator.current_map:
+		if not map_generator.current_map.is_walkable(cell.x, cell.y):
+			return false
 	return is_cell_valid(cell) and is_cell_free(cell)

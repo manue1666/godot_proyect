@@ -5,6 +5,7 @@
 
 [node name="my_team" type="Node"]
 script = ExtResource("1_vbq6d")
+team_name = "My team"
 metadata/_custom_type_script = "uid://b4tgwsrjgevcs"
 
 [node name="blue_ant" parent="." groups=["units"] instance=ExtResource("2_tdfrv")]

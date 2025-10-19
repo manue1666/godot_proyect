@@ -8,9 +8,14 @@ signal battle_ended(winner_team: Team)
 @export var teams: Array[Team] = []
 var current_team_index := 0
 var selected_unit: BaseUnit = null
+var map_generator: MapGenerator
 
 func _ready():
 	add_to_group("turn_manager")
+
+	map_generator = get_tree().get_first_node_in_group("map_generator")
+	if map_generator:
+		map_generator.map_generated.connect(_on_map_generated)
 	
 	# Buscar equipos automáticamente si no están asignados
 	if teams.is_empty():
@@ -34,6 +39,36 @@ func _ready():
 			unit.died.connect(_on_unit_died)
 	
 	start_turn()
+
+func _on_map_generated(map_data: MapData):
+	print("🗺️  TurnManager recibió mapa generado")
+	
+	# Esperar un frame para que las unidades estén listas
+	await get_tree().process_frame
+	
+	# Posicionar equipos
+	if teams.size() >= 2:
+		_spawn_team(teams[0], map_data.spawn_positions_team1)
+		_spawn_team(teams[1], map_data.spawn_positions_team2)
+
+func _spawn_team(team: Team, spawn_positions: Array[Vector2i]):
+	if spawn_positions.is_empty():
+		push_warning("⚠️  No hay posiciones de spawn para %s" % team.team_name)
+		return
+	
+	var units = team.get_living_units()
+	print("  Posicionando %d unidades de %s" % [units.size(), team.team_name])
+	
+	for i in range(units.size()):
+		if i < spawn_positions.size():
+			units[i].board_position = spawn_positions[i]
+		else:
+			# Reutilizar posiciones si hay más unidades que slots
+			var pos_index = i % spawn_positions.size()
+			units[i].board_position = spawn_positions[pos_index]
+		
+		units[i].update_visual_position()
+		print("    · %s → %s" % [units[i].name, units[i].board_position])
 
 func _on_unit_clicked(unit: BaseUnit):
 	print("📢 TurnManager recibió click de: %s" % unit.name)
@@ -79,13 +114,14 @@ func get_current_team() -> Team:
 	return teams[current_team_index] if current_team_index < teams.size() else null
 
 func start_turn():
-	var current_team = get_current_team()
-	if not current_team:
-		return
+	print("\n=== Turno de %s ===" % teams[current_team_index].team_name)
 	
-	current_team.reset_units_for_turn()
-	turn_started.emit(current_team)
-	print("\n=== Turno de %s ===" % current_team.team_name)
+	turn_started.emit(teams[current_team_index])
+	
+	# Resetear estado de todas las unidades del equipo actual
+	for unit in teams[current_team_index].get_living_units():
+		if unit.state_machine:
+			unit.state_machine.change_state(UnitStateMachine.State.IDLE)
 
 func check_turn_end():
 	var current_team = get_current_team()
@@ -124,4 +160,3 @@ func check_battle_end():
 		# RECOMENDACIÓN: Aquí podrías mostrar una pantalla de victoria
 		# Por ahora solo pausamos
 		await get_tree().create_timer(2.0).timeout
-		get_tree().paused = true

@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbel4s06fdhuw"]
+
+[ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battle_hud.gd" id="1_ueiah"]
+
+[node name="BattleHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_ueiah")
+
+[node name="ButtomBar" type="Panel" parent="."]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 700.0
+offset_top = -95.0
+offset_right = -44.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ButtomBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -11.5
+offset_right = 54.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ButtomBar/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="LevelLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "level 1"
+
+[node name="VSeparator" type="VSeparator" parent="ButtomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "turn 1"
+
+[node name="Turn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 394.0
+offset_top = -179.0
+offset_right = 525.0
+offset_bottom = -108.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "END TURN"
