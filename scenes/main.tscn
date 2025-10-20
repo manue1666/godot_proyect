@@ -1,16 +1,18 @@
-[gd_scene load_steps=16 format=3 uid="uid://dmgc6vyxruqjm"]
+[gd_scene load_steps=18 format=3 uid="uid://dmgc6vyxruqjm"]
 
+[ext_resource type="Script" uid="uid://dxm0il0o84itk" path="res://scripts/UI/game_camera.gd" id="1_choun"]
 [ext_resource type="PackedScene" uid="uid://cbel4s06fdhuw" path="res://scenes/interfaz/UI/battle_hud.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://en72n1htr5ab" path="res://scenes/interfaz/UI/level_result_screen.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cxs82vdcdekfm" path="res://scenes/game/turn_manager.tscn" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://vi8bgnjj03c1" path="res://scenes/interfaz/UI/main_menu.tscn" id="3_sugp2"]
-[ext_resource type="Texture2D" uid="uid://bhyn5ryy8lr76" path="res://sprites/terrain/terrains-sheet.png" id="3_ya4ey"]
+[ext_resource type="Texture2D" uid="uid://dgkngtk1gc14s" path="res://sprites/terrain/terrains-sheet.png" id="3_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://y3p50g01i1y5" path="res://scenes/game/my_team.tscn" id="4_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cc6p21uxapyo4" path="res://scenes/game/run_manager.tscn" id="5_85g3d"]
 [ext_resource type="PackedScene" uid="uid://cdka23y1ervxw" path="res://scenes/game/enemy_team.tscn" id="5_tefeu"]
 [ext_resource type="PackedScene" uid="uid://btr7olxlpg05c" path="res://scenes/game/map_generator.tscn" id="6_choun"]
+[ext_resource type="Script" uid="uid://f6dv3iufhx0n" path="res://scripts/game/enemy_ai.gd" id="11_eb6dy"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eb6dy"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_choun"]
 texture = ExtResource("3_ya4ey")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -22,9 +24,9 @@ texture_region_size = Vector2i(32, 32)
 6:0/0 = 0
 7:0/0 = 0
 
-[sub_resource type="TileSet" id="TileSet_trceg"]
+[sub_resource type="TileSet" id="TileSet_choun"]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_eb6dy")
+sources/0 = SubResource("TileSetAtlasSource_choun")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
 texture = ExtResource("3_ya4ey")
@@ -42,7 +44,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ya4ey")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_trceg"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eb6dy"]
 texture = ExtResource("3_ya4ey")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -54,28 +56,35 @@ texture_region_size = Vector2i(32, 32)
 6:0/0 = 0
 7:0/0 = 0
 
-[sub_resource type="TileSet" id="TileSet_ya4ey"]
+[sub_resource type="TileSet" id="TileSet_trceg"]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_trceg")
+sources/0 = SubResource("TileSetAtlasSource_eb6dy")
 
 [node name="Main" type="Node2D"]
 
-[node name="Camera" type="Camera2D" parent="."]
-position = Vector2(302, 150)
+[node name="GameCamera" type="Camera2D" parent="."]
+position = Vector2(559, 310)
+offset = Vector2(-300, -200)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+script = ExtResource("1_choun")
 
 [node name="RunManager" parent="." instance=ExtResource("5_85g3d")]
 
 [node name="MapGenerator" parent="." node_paths=PackedStringArray("ground_layer", "obstacles_layer", "decoration_layer") instance=ExtResource("6_choun")]
+map_width = 10
 ground_layer = NodePath("../TileMapsLayers/GroundLayer")
 obstacles_layer = NodePath("../TileMapsLayers/ObstaclesLayer")
 decoration_layer = NodePath("../TileMapsLayers/DecorationLayer")
+obstacle_density = 0.025
+decoration_density = 0.069
 
 [node name="TileMapsLayers" type="Node2D" parent="."]
 
 [node name="GroundLayer" type="TileMapLayer" parent="TileMapsLayers"]
 z_index = -10
 z_as_relative = false
-tile_set = SubResource("TileSet_trceg")
+tile_set = SubResource("TileSet_choun")
 
 [node name="ObstaclesLayer" type="TileMapLayer" parent="TileMapsLayers"]
 z_index = -5
@@ -83,9 +92,9 @@ z_as_relative = false
 tile_set = SubResource("TileSet_eb6dy")
 
 [node name="DecorationLayer" type="TileMapLayer" parent="TileMapsLayers"]
-z_index = -3
+z_index = 5
 z_as_relative = false
-tile_set = SubResource("TileSet_ya4ey")
+tile_set = SubResource("TileSet_trceg")
 
 [node name="UnitsContainer" type="Node" parent="."]
 
@@ -109,3 +118,6 @@ visible = false
 
 [node name="MainMenu" parent="UI" instance=ExtResource("3_sugp2")]
 visible = false
+
+[node name="EnemyAI" type="Node" parent="."]
+script = ExtResource("11_eb6dy")

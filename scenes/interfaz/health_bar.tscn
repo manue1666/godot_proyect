@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dex02gily5741"]
+
+[ext_resource type="Script" uid="uid://ddc172c7mirf" path="res://scripts/UI/health_bar.gd" id="1_mauhn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_awbq1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwbtb"]
+bg_color = Color(0.7343915, 0, 0.30173844, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_awbq1"]
+bg_color = Color(0.11489678, 0.11489683, 0.11489671, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xdbr7"]
+bg_color = Color(1, 1, 1, 1)
+
+[node name="HealthBar" type="ProgressBar"]
+texture_filter = 1
+offset_left = -10.0
+offset_top = -35.0
+offset_right = 10.0
+offset_bottom = -31.0
+size_flags_stretch_ratio = 0.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_awbq1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dwbtb")
+value = 60.0
+show_percentage = false
+script = ExtResource("1_mauhn")
+
+[node name="DamageBar" type="ProgressBar" parent="."]
+z_index = -1
+layout_mode = 0
+offset_right = 20.0
+offset_bottom = 4.0
+theme_override_styles/background = SubResource("StyleBoxFlat_awbq1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xdbr7")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5

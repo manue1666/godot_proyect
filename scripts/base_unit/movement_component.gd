@@ -131,6 +131,8 @@ func _get_teleport_cells(start: Vector2i) -> Array[Vector2i]:
 func move_to(target_pos: Vector2i) -> bool:
 	if target_pos not in get_movable_cells():
 		return false
+	var direction = target_pos - owner_unit.board_position
+	update_sprite_direction(direction)
 	# Movimiento suave con tween
 	owner_unit.board_position = target_pos  # Actualizar posición lógica
 	var target_world_pos = Vector2(target_pos.x, target_pos.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
@@ -145,6 +147,12 @@ func move_to(target_pos: Vector2i) -> bool:
 	
 	moved.emit(target_pos)
 	return true
+
+func update_sprite_direction(direction: Vector2i):
+	if direction.x < 0:
+		owner_unit.get_node("AnimatedSprite2D").flip_h = true
+	elif direction.x > 0:
+		owner_unit.get_node("AnimatedSprite2D").flip_h = false
 
 # Validaciones
 func is_cell_valid(cell: Vector2i) -> bool:

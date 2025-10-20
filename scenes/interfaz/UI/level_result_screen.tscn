@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://en72n1htr5ab"]
+[gd_scene load_steps=3 format=3 uid="uid://en72n1htr5ab"]
 
 [ext_resource type="Script" uid="uid://cmah4cdm5wyoc" path="res://scripts/UI/level_result_screen.gd" id="1_ehjtt"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_pa873"]
 
 [node name="LevelResultScreen" type="Control"]
 layout_mode = 3
@@ -47,6 +48,8 @@ grow_vertical = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pa873")
+theme_override_font_sizes/font_size = 32
 text = "VICTORY"
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/Panel/VBoxContainer"]
@@ -54,6 +57,8 @@ layout_mode = 2
 
 [node name="StatsLabel" type="Label" parent="CenterContainer/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pa873")
+theme_override_font_sizes/font_size = 32
 text = "Level 3/15
 Units: 3/4"
 
@@ -66,9 +71,13 @@ theme_override_constants/separation = 37
 
 [node name="MenuButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pa873")
+theme_override_font_sizes/font_size = 32
 text = "Main Menu"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_pa873")
+theme_override_font_sizes/font_size = 32
 text = "Continue"

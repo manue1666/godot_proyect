@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbel4s06fdhuw"]
+[gd_scene load_steps=3 format=3 uid="uid://cbel4s06fdhuw"]
 
 [ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battle_hud.gd" id="1_ueiah"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_tv7i6"]
 
 [node name="BattleHUD" type="Control"]
 layout_mode = 3
@@ -46,6 +47,8 @@ size_flags_horizontal = 0
 
 [node name="LevelLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 32
 text = "level 1"
 
 [node name="VSeparator" type="VSeparator" parent="ButtomBar/MarginContainer/HBoxContainer"]
@@ -53,6 +56,8 @@ layout_mode = 2
 
 [node name="TurnLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 32
 text = "turn 1"
 
 [node name="Turn" type="Button" parent="."]
@@ -68,4 +73,6 @@ offset_right = 525.0
 offset_bottom = -108.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 32
 text = "END TURN"

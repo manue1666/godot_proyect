@@ -163,6 +163,14 @@ func _show_run_complete():
 func _on_turn_started(team: Team):
 	if battle_hud:
 		battle_hud.update_turn(team.team_name)
+		
+		# Mostrar botón End Turn solo si es turno del jugador (team_id = 0)
+		if team.team_id == 0:
+			battle_hud.end_turn_button.visible = true
+			print("🎮 Botón End Turn VISIBLE (turno del jugador)")
+		else:
+			battle_hud.end_turn_button.visible = false
+			print("🤖 Botón End Turn OCULTO (turno de IA)")
 
 func _on_end_turn_button_pressed():
 	print("⏭️  Botón End Turn presionado")

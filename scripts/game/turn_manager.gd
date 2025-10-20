@@ -108,25 +108,33 @@ func _on_unit_died(unit: BaseUnit):
 	print("💀 %s murió" % unit.name)
 	if unit == selected_unit:
 		selected_unit = null
+	# Verificar inmediatamente si la batalla terminó
 	check_battle_end()
 
 func get_current_team() -> Team:
 	return teams[current_team_index] if current_team_index < teams.size() else null
 
 func start_turn():
-	print("\n=== Turno de %s ===" % teams[current_team_index].team_name)
-	
-	turn_started.emit(teams[current_team_index])
-	
-	# Resetear estado de todas las unidades del equipo actual
-	for unit in teams[current_team_index].get_living_units():
-		if unit.state_machine:
-			unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+	var current_team = teams[current_team_index]
+	print("\n=== Turno de %s ===" % current_team.team_name)
+	# Resetear SOLO si es el equipo del jugador
+	if current_team.team_id == 0:
+		for unit in current_team.get_living_units():
+			if unit.state_machine and unit.state_machine.is_exhausted():
+				unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+		print("  ✅ Estados reseteados (equipo del jugador)")
+	# Esperar un frame para que los cambios de estado se procesen
+	await get_tree().process_frame
+	# Emitir la señal
+	turn_started.emit(current_team)
 
 func check_turn_end():
 	var current_team = get_current_team()
-	if not current_team.has_units_that_can_act():
-		end_turn()
+	# Solo verificar si quedan unidades del jugador que actúen
+	if current_team.team_id == 0:
+		if not current_team.has_units_that_can_act():
+			print("  📋 Equipo %s completó su turno" % current_team.team_name)
+			end_turn()
 
 func end_turn():
 	var current_team = get_current_team()
@@ -148,6 +156,8 @@ func check_battle_end():
 		if team.get_living_units().size() > 0:
 			alive_teams.append(team)
 	
+	print("  🔍 Equipos vivos: %d" % alive_teams.size())
+	
 	if alive_teams.size() <= 1:
 		var winner = alive_teams[0] if alive_teams.size() == 1 else null
 		battle_ended.emit(winner)
@@ -156,7 +166,3 @@ func check_battle_end():
 			print("\n🎉 ¡%s GANÓ LA BATALLA! 🎉" % winner.team_name)
 		else:
 			print("\n💀 ¡EMPATE! Todos murieron 💀")
-		
-		# RECOMENDACIÓN: Aquí podrías mostrar una pantalla de victoria
-		# Por ahora solo pausamos
-		await get_tree().create_timer(2.0).timeout

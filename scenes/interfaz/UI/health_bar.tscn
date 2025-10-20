@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjlropp8rb62"]
+
+[ext_resource type="Script" uid="uid://ddc172c7mirf" path="res://scripts/UI/health_bar.gd" id="1_yfa17"]
+
+[node name="HealthBar" type="CanvasLayer"]
+layer = 3
+offset = Vector2(-10, -35)
+transform = Transform2D(1, 0, 0, 1, -10, -35)
+script = ExtResource("1_yfa17")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+modulate = Color(0.28172085, 1, 0.91470957, 1)
+offset_right = 20.0
+offset_bottom = 5.0
+value = 30.0
+show_percentage = false
+
+[node name="DamageBar" type="ProgressBar" parent="."]
+z_index = -1
+offset_right = 20.0
+offset_bottom = 5.0
+value = 60.0
+show_percentage = false

@@ -51,7 +51,7 @@ func play_attack_two() -> bool:
 func play_move():
 	play(ANIM_MOVE, true)
 
-# Función genérica para reproducir animaciones
+# Función para reproducir animaciones
 func play(anim_name: String, loop: bool = false) -> bool:
 	if not animated_sprite:
 		return false

@@ -5,6 +5,7 @@ signal clicked()
 signal moved(unit: BaseUnit, new_position: Vector2i)
 signal attacked(attacker: BaseUnit, target: BaseUnit, attack_num: int)
 signal died(unit: BaseUnit)
+signal receive_dam(damage: int, attacker: BaseUnit)
 
 var tile_size := 32
 var highlight_scene: PackedScene = preload("res://scenes/interfaz/move_sign.tscn")
@@ -134,7 +135,7 @@ func play_attack_animation(attack_num: int):
 func receive_damage(damage: int, attacker: BaseUnit):
 	hp -= damage
 	print("%s recibió %d de daño de %s. HP: %d/%d" % [name, damage, attacker.name, hp, max_hp])
-	
+	receive_dam.emit(damage, attacker)
 	# flash y shake suave
 	if has_node("AnimatedSprite2D"):
 		var sprite = $AnimatedSprite2D
