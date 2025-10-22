@@ -14,7 +14,6 @@ enum AttackType {
 	PHYSICAL,  # Ataque cuerpo a cuerpo
 	RANGED,    # Ataque a distancia
 	AREA,      # Ataque en área (daña múltiples objetivos)
-	PIERCE     # Atraviesa unidades
 }
 
 enum Effect {
@@ -22,8 +21,8 @@ enum Effect {
 	POISON,    # Daño con el tiempo
 	STUN,      # Pierde siguiente turno
 	HEAL,      # Cura en lugar de dañar
-	KNOCKBACK, # Empuja al objetivo
-	SLOW       # Reduce movimiento
+	SLOW,      # Reduce movimiento
+	LOCK      # No puede moverse ni atacar
 }
 
 @export var attack_name: String = "Attack"

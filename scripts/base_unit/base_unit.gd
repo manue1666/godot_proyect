@@ -21,7 +21,7 @@ var team_id: int = -1
 var state_machine: UnitStateMachine
 var movement_component: MovementComponent
 var attack_component: AttackComponent
-var animation_component: AnimationComponent  # ← NUEVO
+var animation_component: AnimationComponent
 
 # STATS BASE
 @export var max_hp: int = 10
@@ -39,7 +39,7 @@ func _ready():
 	# Buscar componentes existentes
 	movement_component = get_node_or_null("MovementComponent")
 	attack_component = get_node_or_null("AttackComponent")
-	animation_component = get_node_or_null("AnimationComponent")  # ← NUEVO
+	animation_component = get_node_or_null("AnimationComponent")
 	
 	update_visual_position()
 	connect("input_event", Callable(self, "_on_input_event"))
@@ -61,18 +61,17 @@ func _on_state_changed(old_state, new_state):
 		UnitStateMachine.State.IDLE, UnitStateMachine.State.EXHAUSTED:
 			$MenuPanel.visible = false
 			clear_highlights()
-			# ← NUEVO: Reproducir idle
 			if animation_component:
 				animation_component.play_idle()
 		UnitStateMachine.State.WAITING_MOVE:
 			show_movable_tiles()
 		UnitStateMachine.State.WAITING_ATTACK:
 			pass
-		UnitStateMachine.State.MOVING:  # ← NUEVO (si agregas estado MOVING)
+		UnitStateMachine.State.MOVING:
 			if animation_component:
 				animation_component.play_move()
-		UnitStateMachine.State.ATTACKING:  # ← NUEVO (si agregas estado ATTACKING)
-			pass  # La animación se maneja en attack_target()
+		UnitStateMachine.State.ATTACKING:
+			pass
 
 func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -98,27 +97,31 @@ func _unhandled_input(event):
 		int(click_pos.y / tile_size)
 	)
 	
-	# Manejar movimiento
+	# Manejar movimiento con tracking de acciones
 	if state_machine.is_waiting_move():
 		if movement_component:
 			var did_move = await movement_component.move_to(cell_clicked)
 			if did_move:
-				state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
+				# Usar la acción de movimiento
+				state_machine.use_move_action()
 				moved.emit(self, cell_clicked)
 				clear_highlights()
+				
+				state_machine.change_state(UnitStateMachine.State.IDLE)
 	
-	# Manejar ataque
+	# Manejar ataque con tracking de acciones
 	elif state_machine.is_waiting_attack():
 		var target = get_unit_at_cell(cell_clicked)
 		if target and attack_component:
 			if attack_component.perform_attack(target, state_machine.attack_number - 1):
-				# Reproducir animación de ataque
+				# Usar la acción de ataque
+				state_machine.use_attack_action()
 				attacked.emit(self, target, state_machine.attack_number)
 				await play_attack_animation(state_machine.attack_number)
-				state_machine.change_state(UnitStateMachine.State.EXHAUSTED)
 				clear_highlights()
+				
+				state_machine.change_state(UnitStateMachine.State.IDLE)
 
-# Función para reproducir animación de ataque
 func play_attack_animation(attack_num: int):
 	if not animation_component:
 		return
@@ -128,7 +131,6 @@ func play_attack_animation(attack_num: int):
 	elif attack_num == 2:
 		animation_component.play_attack_two()
 	
-	# Esperar a que termine la animación
 	if animation_component.is_playing:
 		await animation_component.animation_finished
 
@@ -136,7 +138,7 @@ func receive_damage(damage: int, attacker: BaseUnit):
 	hp -= damage
 	print("%s recibió %d de daño de %s. HP: %d/%d" % [name, damage, attacker.name, hp, max_hp])
 	receive_dam.emit(damage, attacker)
-	# flash y shake suave
+	
 	if has_node("AnimatedSprite2D"):
 		var sprite = $AnimatedSprite2D
 		var original_pos = sprite.position
@@ -144,11 +146,9 @@ func receive_damage(damage: int, attacker: BaseUnit):
 		var damage_tween = create_tween()
 		damage_tween.set_parallel(true)
 		
-		# Flash rojo
 		damage_tween.tween_property(sprite, "modulate", Color.RED, 0.08)
 		damage_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
 		
-		# Shake simple (solo 2 sacudidas)
 		damage_tween.tween_property(sprite, "position", original_pos + Vector2(2, 0), 0.04)
 		damage_tween.tween_property(sprite, "position", original_pos + Vector2(-2, 0), 0.04).set_delay(0.04)
 		damage_tween.tween_property(sprite, "position", original_pos, 0.04).set_delay(0.08)
@@ -157,15 +157,11 @@ func receive_damage(damage: int, attacker: BaseUnit):
 	if hp <= 0:
 		die()
 
-
-
 func die():
 	state_machine.change_state(UnitStateMachine.State.DEAD)
 	
-	# ← NUEVO: Reproducir animación de muerte
 	if animation_component:
 		animation_component.play_dead()
-		# Esperar a que termine la animación antes de destruir
 		var anim_duration = animation_component.get_animation_duration("dead")
 		await get_tree().create_timer(anim_duration).timeout
 	
@@ -212,7 +208,7 @@ func clear_highlights():
 func spawn_damage_popup(damage: int):
 	var popup = preload("res://scenes/interfaz/damage_popup.tscn").instantiate()
 	popup.damage_amount = damage
-	popup.position = position + Vector2(0, -tile_size * 0.5)  # Arriba del sprite
+	popup.position = position + Vector2(0, -tile_size * 0.5)
 	get_parent().add_child(popup)
 
 func get_unit_at_cell(cell: Vector2i) -> BaseUnit:
@@ -222,18 +218,30 @@ func get_unit_at_cell(cell: Vector2i) -> BaseUnit:
 			return unit
 	return null
 
-# Botones del menú
+
 func _on_boton_move_pressed():
+	if not state_machine.can_move():
+		print("❌ No hay acciones de movimiento disponibles")
+		return
+	
 	$MenuPanel.visible = false
 	state_machine.change_state(UnitStateMachine.State.WAITING_MOVE)
 
 func _on_boton_atack_one_pressed():
+	if not state_machine.can_attack():
+		print("❌ No hay acciones de ataque disponibles")
+		return
+	
 	$MenuPanel.visible = false
 	state_machine.attack_number = 1
 	state_machine.change_state(UnitStateMachine.State.WAITING_ATTACK)
 	show_atack_tiles(1)
 
 func _on_boton_atack_two_pressed():
+	if not state_machine.can_attack():
+		print("❌ No hay acciones de ataque disponibles")
+		return
+	
 	$MenuPanel.visible = false
 	state_machine.attack_number = 2
 	state_machine.change_state(UnitStateMachine.State.WAITING_ATTACK)

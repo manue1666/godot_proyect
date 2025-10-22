@@ -86,8 +86,8 @@ func apply_effect(target: BaseUnit, attack: AttackData):
 			print("⚡ %s aturdió a %s" % [owner_unit.name, target.name])
 		AttackData.Effect.HEAL:
 			print("💚 %s curó a %s" % [owner_unit.name, target.name])
-		AttackData.Effect.KNOCKBACK:
-			print("💥 %s empujó a %s" % [owner_unit.name, target.name])
+		AttackData.Effect.LOCK:
+			print("🔒 %s bloqueó a %s" % [owner_unit.name, target.name])
 		AttackData.Effect.SLOW:
 			print("🐌 %s ralentizó a %s" % [owner_unit.name, target.name])
 

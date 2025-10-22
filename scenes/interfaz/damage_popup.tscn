@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2tkjxsi3jh08"]
+[gd_scene load_steps=3 format=3 uid="uid://d2tkjxsi3jh08"]
 
 [ext_resource type="Script" uid="uid://dwwwdl146vehr" path="res://scripts/base_unit/damage_popup.gd" id="1_o4uti"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_2uku7"]
 
 [node name="DamagePopup" type="Node2D"]
 script = ExtResource("1_o4uti")
@@ -9,4 +10,6 @@ script = ExtResource("1_o4uti")
 modulate = Color(0.773856, 2.23808e-06, 9.62615e-07, 1)
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("2_2uku7")
+theme_override_font_sizes/font_size = 32
 text = "-5"

@@ -27,8 +27,12 @@ func _on_turn_started(team: Team):
 	# ⭐ RESETEAR AQUÍ el equipo enemigo
 	print("  🔄 Reseteando estados del equipo enemigo...")
 	for unit in enemy_team.get_living_units():
-		if unit.state_machine and unit.state_machine.is_exhausted():
-			unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+		if unit.state_machine:
+			# Resetear acciones
+			unit.state_machine.reset_actions()
+			
+			if unit.state_machine.is_exhausted():
+				unit.state_machine.change_state(UnitStateMachine.State.IDLE)
 	
 	# Esperar a que se procese
 	await get_tree().process_frame
@@ -45,7 +49,7 @@ func _on_turn_started(team: Team):
 			await UnitAI.new(unit, turn_manager).take_action()
 			await get_tree().create_timer(0.5).timeout
 		else:
-			print("  ⏸️ %s no puede actuar (estado: %s)" % [unit.name, UnitStateMachine.State.keys()[unit.state_machine.current_state]])
+			print("  ⏸️ %s no puede actuar" % unit.name)
 	
 	print("🤖 IA completó su turno\n")
 	

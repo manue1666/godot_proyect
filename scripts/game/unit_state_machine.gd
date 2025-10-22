@@ -2,6 +2,8 @@ extends Node
 
 class_name UnitStateMachine
 
+signal state_changed(old_state, new_state)
+
 enum State {
 	IDLE,              # Sin hacer nada
 	SELECTED,          # Unidad seleccionada, mostrando menú
@@ -13,25 +15,63 @@ enum State {
 	DEAD               # Unidad muerta
 }
 
-signal state_changed(old_state: State, new_state: State)
+var current_state := State.IDLE
+var attack_number := 1
 
-var current_state: State = State.IDLE
-var attack_number: int = 0
+# Tracking de acciones por turno
+var actions_available := {
+	"move": false,
+	"attack": false
+}
 
-func change_state(new_state: State):
-	if current_state == new_state:
+func _ready():
+	pass
+
+func change_state(new_state: int):
+	if new_state == current_state:
 		return
+	
 	var old_state = current_state
-	current_state = new_state
+	current_state = new_state as State
 	state_changed.emit(old_state, new_state)
 
+func reset_actions():
+	"""Resetea las acciones disponibles al inicio del turno"""
+	actions_available["move"] = true
+	actions_available["attack"] = true
+	print("  🔄 [%s] Acciones reseteadas: Mover ✅ Atacar ✅" % get_parent().name)
 
+func use_move_action():
+	"""Marca que el movimiento fue usado"""
+	if actions_available["move"]:
+		actions_available["move"] = false
+		print("  📍 [%s] Movimiento usado" % get_parent().name)
+		return true
+	return false
 
-func is_idle() -> bool:
-	return current_state == State.IDLE
+func use_attack_action():
+	"""Marca que el ataque fue usado"""
+	if actions_available["attack"]:
+		actions_available["attack"] = false
+		print("  ⚔️ [%s] Ataque usado" % get_parent().name)
+		return true
+	return false
 
-func is_selected() -> bool:
-	return current_state == State.SELECTED
+func has_actions_left() -> bool:
+	"""Retorna true si quedan acciones disponibles"""
+	return actions_available["move"] or actions_available["attack"]
+
+func can_act() -> bool:
+	# Incluir SELECTED
+	return (current_state == State.IDLE or current_state == State.SELECTED) and has_actions_left()
+
+func can_move() -> bool:
+	# Incluir SELECTED
+	return (current_state == State.IDLE or current_state == State.SELECTED) and actions_available["move"]
+
+func can_attack() -> bool:
+	# Incluir SELECTED
+	return (current_state == State.IDLE or current_state == State.SELECTED) and actions_available["attack"]
 
 func is_waiting_move() -> bool:
 	return current_state == State.WAITING_MOVE
@@ -44,10 +84,3 @@ func is_exhausted() -> bool:
 
 func is_dead() -> bool:
 	return current_state == State.DEAD
-
-func can_act() -> bool:
-	return current_state in [State.IDLE, State.SELECTED]
-
-func reset_for_new_turn():
-	if current_state != State.DEAD:
-		change_state(State.IDLE)

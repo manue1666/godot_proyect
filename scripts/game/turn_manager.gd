@@ -98,17 +98,17 @@ func _on_unit_clicked(unit: BaseUnit):
 
 func _on_unit_moved(unit: BaseUnit, _new_position: Vector2i):
 	print("🚶 %s se movió" % unit.name)
-	check_turn_end()
+	# El turno solo termina cuando el jugador presiona End Turn
 
 func _on_unit_attacked(attacker: BaseUnit, target: BaseUnit, attack_num: int):
 	print("⚔️ %s atacó a %s con ataque %d" % [attacker.name, target.name, attack_num])
-	check_turn_end()
+	# El turno solo termina cuando el jugador presiona End Turn
 
 func _on_unit_died(unit: BaseUnit):
 	print("💀 %s murió" % unit.name)
 	if unit == selected_unit:
 		selected_unit = null
-	# Verificar inmediatamente si la batalla terminó
+	# Verificar batalla
 	check_battle_end()
 
 func get_current_team() -> Team:
@@ -117,15 +117,19 @@ func get_current_team() -> Team:
 func start_turn():
 	var current_team = teams[current_team_index]
 	print("\n=== Turno de %s ===" % current_team.team_name)
+	
 	# Resetear SOLO si es el equipo del jugador
 	if current_team.team_id == 0:
 		for unit in current_team.get_living_units():
-			if unit.state_machine and unit.state_machine.is_exhausted():
-				unit.state_machine.change_state(UnitStateMachine.State.IDLE)
-		print("  ✅ Estados reseteados (equipo del jugador)")
-	# Esperar un frame para que los cambios de estado se procesen
+			if unit.state_machine:
+				# Resetear acciones
+				unit.state_machine.reset_actions()
+				
+				if unit.state_machine.is_exhausted():
+					unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+		print("  ✅ Estados y acciones reseteados (equipo del jugador)")
+	
 	await get_tree().process_frame
-	# Emitir la señal
 	turn_started.emit(current_team)
 
 func check_turn_end():
@@ -134,7 +138,6 @@ func check_turn_end():
 	if current_team.team_id == 0:
 		if not current_team.has_units_that_can_act():
 			print("  📋 Equipo %s completó su turno" % current_team.team_name)
-			end_turn()
 
 func end_turn():
 	var current_team = get_current_team()
