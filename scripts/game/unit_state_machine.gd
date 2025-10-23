@@ -24,6 +24,8 @@ var actions_available := {
 	"attack": false
 }
 
+var is_stunned: bool = false
+
 func _ready():
 	pass
 
@@ -63,7 +65,7 @@ func has_actions_left() -> bool:
 
 func can_act() -> bool:
 	# Incluir SELECTED
-	return (current_state == State.IDLE or current_state == State.SELECTED) and has_actions_left()
+	return not is_stunned and (current_state == State.IDLE or current_state == State.SELECTED) and has_actions_left()
 
 func can_move() -> bool:
 	# Incluir SELECTED
@@ -84,3 +86,11 @@ func is_exhausted() -> bool:
 
 func is_dead() -> bool:
 	return current_state == State.DEAD
+
+func stun_unit():
+	is_stunned = true
+	print("⚡ Unidad aturdida")
+
+func unstun_unit():
+	is_stunned = false
+	print("✅ Aturdimiento finalizado")

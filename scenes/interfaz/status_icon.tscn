@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dv1h1htis7bbw"]
+
+[ext_resource type="Script" uid="uid://b23t72ig6qhhd" path="res://scripts/UI/status_icon.gd" id="1_tovep"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_1gb5e"]
+
+[node name="StatusIcon" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_tovep")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -10.0
+offset_right = 8.0
+offset_bottom = 6.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -17.0
+offset_right = 14.0
+offset_bottom = 1.0
+theme_override_fonts/font = ExtResource("2_1gb5e")
+text = "0"

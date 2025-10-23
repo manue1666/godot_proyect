@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://8g65wmljio0e"]
+[gd_scene load_steps=22 format=3 uid="uid://8g65wmljio0e"]
 
 [ext_resource type="Script" uid="uid://dx0q7vtaup2sm" path="res://scripts/bugs/red_ant.gd" id="1_355ko"]
 [ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant-sheet.png" id="2_355ko"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_wy6ve"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_sypaj"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="8_jvo16"]
+[ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="9_g20eg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_355ko"]
 atlas = ExtResource("2_355ko")
@@ -102,16 +103,20 @@ size = Vector2(28, 29)
 
 [sub_resource type="Resource" id="Resource_dwbtb"]
 script = ExtResource("4_sypaj")
-attack_name = "meele"
+attack_name = "Bite"
+damage = 3
 range_type = 0
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [sub_resource type="Resource" id="Resource_xdbr7"]
 script = ExtResource("4_sypaj")
-attack_name = "ranged"
-damage = 3
-range = 3
+attack_name = "Venom Prick"
+damage = 2
+range = 2
+attack_type = 1
 range_type = 2
+effect = 1
+effect_duration = 2
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [node name="red_ant" type="Area2D"]
@@ -150,7 +155,7 @@ offset_right = 259.0
 offset_bottom = 57.0
 theme_override_fonts/font = ExtResource("3_wy6ve")
 theme_override_font_sizes/font_size = 32
-text = "Atack 1"
+text = "Bite"
 
 [node name="Atack2" type="Button" parent="MenuPanel"]
 layout_mode = 0
@@ -160,7 +165,7 @@ offset_right = 260.0
 offset_bottom = 110.0
 theme_override_fonts/font = ExtResource("3_wy6ve")
 theme_override_font_sizes/font_size = 32
-text = "Atack 2"
+text = "Venom Prick"
 
 [node name="AttackComponent" type="Node" parent="."]
 script = ExtResource("3_esp7m")
@@ -178,3 +183,7 @@ animated_sprite = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://42xm15ltyvn0"
 
 [node name="HealthBar" parent="." instance=ExtResource("8_jvo16")]
+
+[node name="StatusManager" type="Node" parent="."]
+script = ExtResource("9_g20eg")
+metadata/_custom_type_script = "uid://dvxcv4rs07sug"

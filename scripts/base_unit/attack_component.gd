@@ -78,18 +78,18 @@ func perform_attack(target: BaseUnit, attack_index: int) -> bool:
 	return true
 
 func apply_effect(target: BaseUnit, attack: AttackData):
-	match attack.effect:
-		AttackData.Effect.POISON:
-			print("🧪 %s envenenó a %s" % [owner_unit.name, target.name])
-			# TODO: Implementar sistema de status effects
-		AttackData.Effect.STUN:
-			print("⚡ %s aturdió a %s" % [owner_unit.name, target.name])
-		AttackData.Effect.HEAL:
-			print("💚 %s curó a %s" % [owner_unit.name, target.name])
-		AttackData.Effect.LOCK:
-			print("🔒 %s bloqueó a %s" % [owner_unit.name, target.name])
-		AttackData.Effect.SLOW:
-			print("🐌 %s ralentizó a %s" % [owner_unit.name, target.name])
+	# HEAL es caso especial - se aplica directamente
+	if attack.effect == AttackData.Effect.HEAL:
+		target.hp = min(target.hp + attack.damage, target.max_hp)
+		print("💚 %s curó a %s por %d HP" % [owner_unit.name, target.name, attack.damage])
+		return
+	
+	# Otros efectos se pasan al StatusManager
+	if target.has_node("StatusManager"):
+		var status_manager = target.get_node("StatusManager")
+		status_manager.apply_effect(attack.effect, attack.effect_duration)
+	else:
+		print("⚠️ %s no tiene StatusManager" % target.name)
 
 # Métodos helper para rangos
 func _get_square_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:

@@ -3,7 +3,7 @@ class_name MovementComponent
 
 signal moved(new_position: Vector2i)
 
-@export var move_range: int = 1
+var move_range: int = 1
 var tile_size: int = 32
 @export var movement_type: MovementType = MovementType.DIAMOND
 
@@ -19,28 +19,42 @@ enum MovementType {
 
 var owner_unit: BaseUnit
 
+var is_slowed: bool = false
+@export var original_range: int = 2
+
 func _ready():
 	owner_unit = get_parent() as BaseUnit
 	if not owner_unit:
 		push_error("MovementComponent debe ser hijo de BaseUnit")
 
+func apply_slow():
+	is_slowed = true
+	print("🐌 Movimiento ralentizado")
+
+func remove_slow():
+	is_slowed = false
+	print("✅ Efecto lentitud finalizado")
+
 func get_movable_cells() -> Array[Vector2i]:
+	var range_val = original_range
+	if is_slowed:
+		range_val = 1 # Ralentizado a 1 casilla
 	var cells: Array[Vector2i] = []
 	var start_pos = owner_unit.board_position
 	
 	match movement_type:
 		MovementType.SQUARE:
-			cells = _get_square_cells(start_pos, move_range)
+			cells = _get_square_cells(start_pos, range_val)
 		MovementType.DIAMOND:
-			cells = _get_diamond_cells(start_pos, move_range)
+			cells = _get_diamond_cells(start_pos, range_val)
 		MovementType.CROSS:
-			cells = _get_cross_cells(start_pos, move_range)
+			cells = _get_cross_cells(start_pos, range_val)
 		MovementType.CIRCLE:
-			cells = _get_circle_cells(start_pos, move_range)
+			cells = _get_circle_cells(start_pos, range_val)
 		MovementType.KNIGHT:
 			cells = _get_knight_cells(start_pos)
 		MovementType.FLYING:
-			cells = _get_flying_cells(start_pos, move_range)
+			cells = _get_flying_cells(start_pos, range_val)
 		MovementType.TELEPORT:
 			cells = _get_teleport_cells(start_pos)
 	

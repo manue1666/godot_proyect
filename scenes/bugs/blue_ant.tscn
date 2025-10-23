@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cean33tt6t34s"]
+[gd_scene load_steps=22 format=3 uid="uid://cean33tt6t34s"]
 
 [ext_resource type="Script" uid="uid://bx6csb3yuhc68" path="res://scripts/bugs/blue_ant.gd" id="1_xs8ad"]
 [ext_resource type="Texture2D" uid="uid://c1ylraabrxab2" path="res://sprites/bugs/bug-sheets/blue_ant-sheet.png" id="2_4s8cf"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_awbq1"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_nspur"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="8_dwbtb"]
+[ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="9_xdbr7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_462tg"]
 atlas = ExtResource("2_4s8cf")
@@ -105,16 +106,18 @@ size = Vector2(29, 30)
 
 [sub_resource type="Resource" id="Resource_dwbtb"]
 script = ExtResource("4_nspur")
-attack_name = "meele"
+attack_name = "Bite"
+damage = 3
 range_type = 0
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [sub_resource type="Resource" id="Resource_xdbr7"]
 script = ExtResource("4_nspur")
-attack_name = "ranged"
-damage = 3
-range = 3
+attack_name = "Lock Jaw"
+damage = 2
 range_type = 2
+effect = 2
+effect_duration = 2
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [node name="blue_ant" type="Area2D"]
@@ -152,7 +155,7 @@ offset_right = 259.0
 offset_bottom = 57.0
 theme_override_fonts/font = ExtResource("3_awbq1")
 theme_override_font_sizes/font_size = 32
-text = "Atack 1"
+text = "Bite"
 
 [node name="Atack2" type="Button" parent="MenuPanel"]
 layout_mode = 0
@@ -162,7 +165,7 @@ offset_right = 260.0
 offset_bottom = 110.0
 theme_override_fonts/font = ExtResource("3_awbq1")
 theme_override_font_sizes/font_size = 32
-text = "Atack 2"
+text = "Lock Jaw"
 
 [node name="AttackComponent" type="Node" parent="."]
 script = ExtResource("3_v5bu6")
@@ -180,3 +183,7 @@ animated_sprite = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://42xm15ltyvn0"
 
 [node name="HealthBar" parent="." instance=ExtResource("8_dwbtb")]
+
+[node name="StatusManager" type="Node" parent="."]
+script = ExtResource("9_xdbr7")
+metadata/_custom_type_script = "uid://dvxcv4rs07sug"

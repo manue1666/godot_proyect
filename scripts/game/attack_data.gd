@@ -22,12 +22,11 @@ enum Effect {
 	STUN,      # Pierde siguiente turno
 	HEAL,      # Cura en lugar de dañar
 	SLOW,      # Reduce movimiento
-	LOCK      # No puede moverse ni atacar
 }
 
 @export var attack_name: String = "Attack"
 @export var damage: int = 5
-@export var range: int = 1  # ← CAMBIAR DE attack_range a range
+@export var range: int = 1
 @export var attack_type: AttackType = AttackType.PHYSICAL
 @export var range_type: RangeType = RangeType.DIAMOND
 @export var effect: Effect = Effect.NONE
