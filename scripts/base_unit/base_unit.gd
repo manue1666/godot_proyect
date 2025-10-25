@@ -13,33 +13,46 @@ var atack_highlight_scene: PackedScene = preload("res://scenes/interfaz/atack_si
 var atack_range_highlight_scene: PackedScene = preload("res://scenes/interfaz/atack_range_sign.tscn")
 
 @export var board_position := Vector2i(0, 0)
+@export var power: int = 1
+
 var highlights := []
 var team: Team = null
 var team_id: int = -1
 
-# Components
+# ✅ COMPONENTES - Referencias
 var state_machine: UnitStateMachine
 var movement_component: MovementComponent
 var attack_component: AttackComponent
 var animation_component: AnimationComponent
-
-# STATS BASE
-@export var max_hp: int = 10
-@export var hp: int = 10
-@export var power: int = 1
+var health_component: HealthComponent
+var status_manager: StatusManager
 
 func _ready():
 	add_to_group("units")
 	
-	# Inicializar componentes
-	state_machine = UnitStateMachine.new()
-	add_child(state_machine)
-	state_machine.state_changed.connect(_on_state_changed)
+	# OBTENER COMPONENTES
+	state_machine = get_node_or_null("UnitStateMachine")
+	if not state_machine:
+		push_error("❌ BaseUnit: No encontró UnitStateMachine como hijo")
+		return
 	
-	# Buscar componentes existentes
 	movement_component = get_node_or_null("MovementComponent")
 	attack_component = get_node_or_null("AttackComponent")
 	animation_component = get_node_or_null("AnimationComponent")
+	health_component = get_node_or_null("HealthComponent")
+	status_manager = get_node_or_null("StatusManager")
+	
+	#Conectar señales de componentes
+	if state_machine:
+		state_machine.state_changed.connect(_on_state_changed)
+	
+	if health_component:
+		health_component.died.connect(func(unit): died.emit(unit))
+		health_component.damage_taken.connect(func(dmg, attacker): receive_dam.emit(dmg, attacker))
+	
+	if status_manager:
+		# StatusManager ya conecta con TurnManager en su _ready()
+		pass
 	
 	update_visual_position()
 	connect("input_event", Callable(self, "_on_input_event"))
@@ -97,29 +110,23 @@ func _unhandled_input(event):
 		int(click_pos.y / tile_size)
 	)
 	
-	# Manejar movimiento con tracking de acciones
 	if state_machine.is_waiting_move():
 		if movement_component:
 			var did_move = await movement_component.move_to(cell_clicked)
 			if did_move:
-				# Usar la acción de movimiento
 				state_machine.use_move_action()
 				moved.emit(self, cell_clicked)
 				clear_highlights()
-				
 				state_machine.change_state(UnitStateMachine.State.IDLE)
 	
-	# Manejar ataque con tracking de acciones
 	elif state_machine.is_waiting_attack():
 		var target = get_unit_at_cell(cell_clicked)
 		if target and attack_component:
 			if attack_component.perform_attack(target, state_machine.attack_number - 1):
-				# Usar la acción de ataque
 				state_machine.use_attack_action()
 				attacked.emit(self, target, state_machine.attack_number)
 				await play_attack_animation(state_machine.attack_number)
 				clear_highlights()
-				
 				state_machine.change_state(UnitStateMachine.State.IDLE)
 
 func play_attack_animation(attack_num: int):
@@ -127,46 +134,18 @@ func play_attack_animation(attack_num: int):
 		return
 	
 	if attack_num == 1:
-		animation_component.play_attack_one()
+		await animation_component.play_attack_one()
 	elif attack_num == 2:
-		animation_component.play_attack_two()
+		await animation_component.play_attack_two()
 	
 	if animation_component.is_playing:
 		await animation_component.animation_finished
 
+# Delegado a HealthComponent
 func receive_damage(damage: int, attacker: BaseUnit):
-	hp -= damage
-	print("%s recibió %d de daño de %s. HP: %d/%d" % [name, damage, attacker.name, hp, max_hp])
-	receive_dam.emit(damage, attacker)
-	
-	if has_node("AnimatedSprite2D"):
-		var sprite = $AnimatedSprite2D
-		var original_pos = sprite.position
-		
-		var damage_tween = create_tween()
-		damage_tween.set_parallel(true)
-		
-		damage_tween.tween_property(sprite, "modulate", Color.RED, 0.08)
-		damage_tween.tween_property(sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
-		
-		damage_tween.tween_property(sprite, "position", original_pos + Vector2(2, 0), 0.04)
-		damage_tween.tween_property(sprite, "position", original_pos + Vector2(-2, 0), 0.04).set_delay(0.04)
-		damage_tween.tween_property(sprite, "position", original_pos, 0.04).set_delay(0.08)
-	
+	if health_component:
+		health_component.take_damage(damage, attacker)
 	spawn_damage_popup(damage)
-	if hp <= 0:
-		die()
-
-func die():
-	state_machine.change_state(UnitStateMachine.State.DEAD)
-	
-	if animation_component:
-		animation_component.play_dead()
-		var anim_duration = animation_component.get_animation_duration("dead")
-		await get_tree().create_timer(anim_duration).timeout
-	
-	died.emit(self)
-	queue_free()
 
 func update_visual_position():
 	position = Vector2(board_position.x, board_position.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)

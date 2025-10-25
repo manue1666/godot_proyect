@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d2tkjxsi3jh08"]
 
-[ext_resource type="Script" uid="uid://dwwwdl146vehr" path="res://scripts/base_unit/damage_popup.gd" id="1_o4uti"]
+[ext_resource type="Script" uid="uid://dwwwdl146vehr" path="res://scripts/UI/damage_popup.gd" id="1_o4uti"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_2uku7"]
 
 [node name="DamagePopup" type="Node2D"]

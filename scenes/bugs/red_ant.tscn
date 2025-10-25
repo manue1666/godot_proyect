@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://8g65wmljio0e"]
+[gd_scene load_steps=24 format=3 uid="uid://8g65wmljio0e"]
 
 [ext_resource type="Script" uid="uid://dx0q7vtaup2sm" path="res://scripts/bugs/red_ant.gd" id="1_355ko"]
 [ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant-sheet.png" id="2_355ko"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_sypaj"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="8_jvo16"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="9_g20eg"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="10_frqla"]
+[ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="11_2d6qe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_355ko"]
 atlas = ExtResource("2_355ko")
@@ -167,6 +169,8 @@ theme_override_fonts/font = ExtResource("3_wy6ve")
 theme_override_font_sizes/font_size = 32
 text = "Venom Prick"
 
+[node name="HealthBar" parent="." instance=ExtResource("8_jvo16")]
+
 [node name="AttackComponent" type="Node" parent="."]
 script = ExtResource("3_esp7m")
 attacks = Array[ExtResource("4_sypaj")]([SubResource("Resource_dwbtb"), SubResource("Resource_xdbr7")])
@@ -177,13 +181,18 @@ script = ExtResource("5_wy6ve")
 movement_type = 0
 metadata/_custom_type_script = "uid://bsetip1eay5vo"
 
-[node name="AnimationComponent" type="Node" parent="." node_paths=PackedStringArray("animated_sprite")]
+[node name="AnimationComponent" type="Node" parent="."]
 script = ExtResource("6_sypaj")
-animated_sprite = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://42xm15ltyvn0"
-
-[node name="HealthBar" parent="." instance=ExtResource("8_jvo16")]
 
 [node name="StatusManager" type="Node" parent="."]
 script = ExtResource("9_g20eg")
 metadata/_custom_type_script = "uid://dvxcv4rs07sug"
+
+[node name="UnitStateMachine" type="Node" parent="."]
+script = ExtResource("10_frqla")
+metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("11_2d6qe")
+metadata/_custom_type_script = "uid://dge20l8umo3ho"

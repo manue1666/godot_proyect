@@ -80,14 +80,14 @@ func perform_attack(target: BaseUnit, attack_index: int) -> bool:
 func apply_effect(target: BaseUnit, attack: AttackData):
 	# HEAL es caso especial - se aplica directamente
 	if attack.effect == AttackData.Effect.HEAL:
-		target.hp = min(target.hp + attack.damage, target.max_hp)
-		print("💚 %s curó a %s por %d HP" % [owner_unit.name, target.name, attack.damage])
+		if target.health_component:
+			target.health_component.heal(attack.damage)
+			print("💚 %s curó a %s por %d HP" % [owner_unit.name, target.name, attack.damage])
 		return
 	
 	# Otros efectos se pasan al StatusManager
-	if target.has_node("StatusManager"):
-		var status_manager = target.get_node("StatusManager")
-		status_manager.apply_effect(attack.effect, attack.effect_duration)
+	if target.status_manager:
+		target.status_manager.apply_effect(attack.effect, attack.effect_duration)
 	else:
 		print("⚠️ %s no tiene StatusManager" % target.name)
 

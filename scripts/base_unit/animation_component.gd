@@ -3,7 +3,7 @@ class_name AnimationComponent
 
 signal animation_finished(anim_name: String)
 
-@export var animated_sprite: AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = get_parent().get_node("AnimatedSprite2D")
 var owner_unit: BaseUnit
 
 # Animaciones estándar que todas las unidades deben tener
@@ -22,12 +22,8 @@ func _ready():
 		push_error("AnimationComponent debe ser hijo de BaseUnit")
 		return
 	
-	# Buscar AnimatedSprite2D automáticamente
 	if not animated_sprite:
-		animated_sprite = owner_unit.get_node_or_null("AnimatedSprite2D")
-	
-	if not animated_sprite:
-		push_warning("AnimationComponent no encontró AnimatedSprite2D en %s" % owner_unit.name)
+		push_error("AnimationComponent no encontró AnimatedSprite2D en %s" % owner_unit.name)
 		return
 	
 	# Conectar señal de animación terminada
@@ -42,11 +38,22 @@ func play_idle():
 func play_dead():
 	play(ANIM_DEAD, false)
 
-func play_attack_one() -> bool:
-	return play(ANIM_ATTACK_ONE, false)
+func play_attack_one():
+	return await play_attack(ANIM_ATTACK_ONE)
 
-func play_attack_two() -> bool:
-	return play(ANIM_ATTACK_TWO, false)
+func play_attack_two():
+	return await play_attack(ANIM_ATTACK_TWO)
+
+# Nueva función async para ataques
+func play_attack(anim_name: String) -> bool:
+	if not play(anim_name, false):
+		return false
+	
+	# Esperar a que termine la animación
+	if is_playing:
+		await animation_finished
+	
+	return true
 
 func play_move():
 	play(ANIM_MOVE, true)

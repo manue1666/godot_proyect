@@ -28,6 +28,7 @@ var is_stunned: bool = false
 
 func _ready():
 	pass
+	reset_actions()
 
 func change_state(new_state: int):
 	if new_state == current_state:
@@ -38,13 +39,11 @@ func change_state(new_state: int):
 	state_changed.emit(old_state, new_state)
 
 func reset_actions():
-	"""Resetea las acciones disponibles al inicio del turno"""
 	actions_available["move"] = true
 	actions_available["attack"] = true
 	print("  🔄 [%s] Acciones reseteadas: Mover ✅ Atacar ✅" % get_parent().name)
 
 func use_move_action():
-	"""Marca que el movimiento fue usado"""
 	if actions_available["move"]:
 		actions_available["move"] = false
 		print("  📍 [%s] Movimiento usado" % get_parent().name)
@@ -52,7 +51,6 @@ func use_move_action():
 	return false
 
 func use_attack_action():
-	"""Marca que el ataque fue usado"""
 	if actions_available["attack"]:
 		actions_available["attack"] = false
 		print("  ⚔️ [%s] Ataque usado" % get_parent().name)
@@ -60,7 +58,6 @@ func use_attack_action():
 	return false
 
 func has_actions_left() -> bool:
-	"""Retorna true si quedan acciones disponibles"""
 	return actions_available["move"] or actions_available["attack"]
 
 func can_act() -> bool:

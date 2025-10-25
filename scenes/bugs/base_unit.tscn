@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://dyp462q34pdvo"]
+[gd_scene load_steps=9 format=3 uid="uid://dyp462q34pdvo"]
 
 [ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_n8bhp"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="2_aakss"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_ckk82"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="4_dbhn7"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="5_sna7e"]
+[ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="6_n6f5v"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="7_0olfr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n8bhp"]
 
@@ -58,3 +60,10 @@ script = ExtResource("4_dbhn7")
 [node name="StatusManager" type="Node" parent="."]
 script = ExtResource("5_sna7e")
 metadata/_custom_type_script = "uid://dvxcv4rs07sug"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("6_n6f5v")
+
+[node name="UnitStateMachine" type="Node" parent="."]
+script = ExtResource("7_0olfr")
+metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
