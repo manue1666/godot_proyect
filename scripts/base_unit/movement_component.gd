@@ -8,13 +8,13 @@ var tile_size: int = 32
 @export var movement_type: MovementType = MovementType.DIAMOND
 
 enum MovementType {
-	SQUARE,    # Cuadrado completo (todas las casillas)
-	DIAMOND,   # Distancia Manhattan (forma de diamante)
-	CROSS,     # Solo líneas rectas (cruz)
-	CIRCLE,    # Radio circular
-	KNIGHT,    # Patrón de caballo de ajedrez
-	FLYING,    # Puede pasar sobre unidades
-	TELEPORT   # Puede aparecer en cualquier casilla válida
+	SQUARE,
+	DIAMOND,
+	CROSS,
+	CIRCLE,
+	KNIGHT,
+	FLYING,
+	TELEPORT
 }
 
 var owner_unit: BaseUnit
@@ -38,7 +38,7 @@ func remove_slow():
 func get_movable_cells() -> Array[Vector2i]:
 	var range_val = original_range
 	if is_slowed:
-		range_val = 1 # Ralentizado a 1 casilla
+		range_val = 1
 	var cells: Array[Vector2i] = []
 	var start_pos = owner_unit.board_position
 	
@@ -75,7 +75,7 @@ func _get_diamond_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
 	for x in range(-range_val, range_val + 1):
 		for y in range(-range_val, range_val + 1):
-			var distance = abs(x) + abs(y)  # Manhattan
+			var distance = abs(x) + abs(y)
 			if distance > 0 and distance <= range_val:
 				var cell = start + Vector2i(x, y)
 				if is_cell_walkable(cell):
@@ -120,43 +120,52 @@ func _get_knight_cells(start: Vector2i) -> Array[Vector2i]:
 	return cells
 
 func _get_flying_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	# Voladores usan DIAMOND pero pueden pasar sobre unidades
 	var cells: Array[Vector2i] = []
 	for x in range(-range_val, range_val + 1):
 		for y in range(-range_val, range_val + 1):
 			var distance = abs(x) + abs(y)
 			if distance > 0 and distance <= range_val:
 				var cell = start + Vector2i(x, y)
-				# Solo validar que la casilla exista, no que esté libre
 				if is_cell_valid(cell) and is_cell_free(cell):
 					cells.append(cell)
 	return cells
 
 func _get_teleport_cells(start: Vector2i) -> Array[Vector2i]:
-	# Teletransporte puede ir a cualquier casilla libre del tablero
 	var cells: Array[Vector2i] = []
-	for x in range(32):  # Tamaño del tablero
-		for y in range(32):
+	
+	# OBTENER DIMENSIONES DEL MAPA DINÁMICAMENTE
+	var map_generator = owner_unit.get_tree().get_first_node_in_group("map_generator")
+	if not map_generator or not map_generator.current_map:
+		print("⚠️ No hay mapa disponible para teletransporte")
+		return cells
+	
+	var map_width = map_generator.current_map.width
+	var map_height = map_generator.current_map.height
+
+	# USAR DIMENSIONES DEL MAPA
+	for x in range(map_width):
+		for y in range(map_height):
 			var cell = Vector2i(x, y)
-			if cell != start and is_cell_free(cell):
+			if cell != start and is_cell_free(cell) and is_cell_walkable(cell):
 				cells.append(cell)
+	
 	return cells
 
 func move_to(target_pos: Vector2i) -> bool:
 	if target_pos not in get_movable_cells():
 		return false
+	
 	var direction = target_pos - owner_unit.board_position
 	update_sprite_direction(direction)
-	# Movimiento suave con tween
-	owner_unit.board_position = target_pos  # Actualizar posición lógica
+	
+	owner_unit.board_position = target_pos
 	var target_world_pos = Vector2(target_pos.x, target_pos.y) * tile_size + Vector2(tile_size * 0.5, tile_size * 0.5)
-	# Crear tween para movimiento suave
+	
 	var mov_tween = owner_unit.create_tween()
-	mov_tween.set_ease(Tween.EASE_IN_OUT)  # Suavizado
-	mov_tween.set_trans(Tween.TRANS_QUAD)  # Tipo de transición
+	mov_tween.set_ease(Tween.EASE_IN_OUT)
+	mov_tween.set_trans(Tween.TRANS_QUAD)
 	mov_tween.tween_property(owner_unit, "position", target_world_pos, 0.3)
 	
-	# Esperar a que termine el movimiento
 	await mov_tween.finished
 	
 	moved.emit(target_pos)
@@ -168,9 +177,18 @@ func update_sprite_direction(direction: Vector2i):
 	elif direction.x > 0:
 		owner_unit.get_node("AnimatedSprite2D").flip_h = false
 
-# Validaciones
+# ============ VALIDACIONES ============
+
 func is_cell_valid(cell: Vector2i) -> bool:
-	return cell.x >= 0 and cell.x < 32 and cell.y >= 0 and cell.y < 32
+	var map_generator = owner_unit.get_tree().get_first_node_in_group("map_generator")
+	
+	if not map_generator or not map_generator.current_map:
+		return cell.x >= 0 and cell.x < 32 and cell.y >= 0 and cell.y < 32
+	
+	var map_width = map_generator.current_map.width
+	var map_height = map_generator.current_map.height
+	
+	return cell.x >= 0 and cell.x < map_width and cell.y >= 0 and cell.y < map_height
 
 func is_cell_free(cell: Vector2i) -> bool:
 	var units = owner_unit.get_tree().get_nodes_in_group("units")

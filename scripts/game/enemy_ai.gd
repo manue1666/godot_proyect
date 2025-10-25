@@ -24,7 +24,7 @@ func _on_turn_started(team: Team):
 	print("\n🤖 === TURNO DE IA ===")
 	enemy_team = team
 	
-	# ⭐ RESETEAR AQUÍ el equipo enemigo
+	# RESETEAR AQUÍ el equipo enemigo
 	print("  🔄 Reseteando estados del equipo enemigo...")
 	for unit in enemy_team.get_living_units():
 		if unit.state_machine:
