@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://8g65wmljio0e"]
+[gd_scene load_steps=26 format=3 uid="uid://8g65wmljio0e"]
 
 [ext_resource type="Script" uid="uid://dx0q7vtaup2sm" path="res://scripts/bugs/red_ant.gd" id="1_355ko"]
 [ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant-sheet.png" id="2_355ko"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="9_g20eg"]
 [ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="10_frqla"]
 [ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="11_2d6qe"]
+[ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="12_lfn87"]
+[ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="13_7vanl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_355ko"]
 atlas = ExtResource("2_355ko")
@@ -196,3 +198,11 @@ metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("11_2d6qe")
 metadata/_custom_type_script = "uid://dge20l8umo3ho"
+
+[node name="UIHandler" type="Node" parent="."]
+script = ExtResource("12_lfn87")
+metadata/_custom_type_script = "uid://cxyoi21174a4f"
+
+[node name="InputHandler" type="Node2D" parent="."]
+script = ExtResource("13_7vanl")
+metadata/_custom_type_script = "uid://d4gv5e3gfep1"

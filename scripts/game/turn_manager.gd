@@ -27,17 +27,21 @@ func _ready():
 	
 	# ESPERAR un frame para que Team._ready() se ejecute primero
 	await get_tree().process_frame
-	
+
 	# Conectar señales de todas las unidades
 	for team in teams:
 		print("  - Team: %s con %d unidades" % [team.team_name, team.units.size()])
 		for unit in team.units:
-			print("    · Conectando señales de: %s" % unit.name)
-			unit.clicked.connect(_on_unit_clicked.bind(unit))
-			unit.moved.connect(_on_unit_moved)
-			unit.attacked.connect(_on_unit_attacked)
-			unit.died.connect(_on_unit_died)
-	
+			if unit and is_instance_valid(unit):
+				print("    · Conectando señales de: %s" % unit.name)
+				
+				# CONECTAR TODAS LAS SEÑALES
+				unit.clicked.connect(_on_unit_clicked.bind(unit))
+				unit.moved.connect(_on_unit_moved)       
+				unit.attacked.connect(_on_unit_attacked)    
+				unit.died.connect(_on_unit_died)
+				unit.receive_dam.connect(_on_unit_received_damage)
+
 	start_turn()
 
 func _on_map_generated(map_data: MapData):
@@ -70,8 +74,10 @@ func _spawn_team(team: Team, spawn_positions: Array[Vector2i]):
 		units[i].update_visual_position()
 		print("    · %s → %s" % [units[i].name, units[i].board_position])
 
+# HANDLERS DE SEÑALES 
+
 func _on_unit_clicked(unit: BaseUnit):
-	print("📢 TurnManager recibió click de: %s" % unit.name)
+	print("🖱️ Unidad clickeada: %s" % unit.name)
 	# Solo permitir seleccionar unidades del equipo actual
 	if unit.team != get_current_team():
 		print("❌ No es tu turno")
@@ -96,13 +102,15 @@ func _on_unit_clicked(unit: BaseUnit):
 		selected_unit = null
 		print("✅ Unidad deseleccionada")
 
-func _on_unit_moved(unit: BaseUnit, _new_position: Vector2i):
-	print("🚶 %s se movió" % unit.name)
-	# El turno solo termina cuando el jugador presiona End Turn
+func _on_unit_moved(unit: BaseUnit, new_position: Vector2i):
+	print("📍 %s se movió a %v" % [unit.name, new_position])
+	unit.board_position = new_position
+	unit.update_visual_position()
+	check_turn_end()
 
 func _on_unit_attacked(attacker: BaseUnit, target: BaseUnit, attack_num: int):
 	print("⚔️ %s atacó a %s con ataque %d" % [attacker.name, target.name, attack_num])
-	# El turno solo termina cuando el jugador presiona End Turn
+	check_turn_end()
 
 func _on_unit_died(unit: BaseUnit):
 	print("💀 %s murió" % unit.name)
@@ -110,6 +118,9 @@ func _on_unit_died(unit: BaseUnit):
 		selected_unit = null
 	# Verificar batalla
 	check_battle_end()
+
+func _on_unit_received_damage(damage: int, attacker: BaseUnit):
+	print("🏥 %s recibió %d de daño" % [attacker.name, damage])
 
 func get_current_team() -> Team:
 	return teams[current_team_index] if current_team_index < teams.size() else null
