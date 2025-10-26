@@ -9,20 +9,30 @@ signal run_failed()
 var current_level: int = 0
 var levels_completed: int = 0
 
+# Referencias
 var map_generator: MapGenerator
 var turn_manager: TurnManager
 var battle_hud: BattleHUD
 var result_screen: LevelResultScreen
+var currency_manager: CurrencyManager
+var reward_calculator: RewardCalculator
+var shop_inventory: ShopInventory
+var shop_screen: ShopScreen
 
 func _ready():
 	add_to_group("run_manager")
 	
-	# Esperar un frame para que todos los nodos estén listos
 	await get_tree().process_frame
 	
 	# Buscar referencias
 	map_generator = get_tree().get_first_node_in_group("map_generator")
 	turn_manager = get_tree().get_first_node_in_group("turn_manager")
+	currency_manager = get_tree().get_first_node_in_group("currency_manager")
+	reward_calculator = get_tree().get_first_node_in_group("reward_calculator")
+	shop_inventory = get_tree().get_first_node_in_group("shop_inventory")
+	shop_screen = get_tree().get_first_node_in_group("shop_screen")
+	if not shop_screen:
+		push_error("❌ No se encontró ShopScreen en la escena")
 	
 	# Si UI es hermano de RunManager
 	var ui_node = get_parent().get_node_or_null("UI")
@@ -30,13 +40,17 @@ func _ready():
 		battle_hud = ui_node.get_node_or_null("BattleHUD")
 		result_screen = ui_node.get_node_or_null("LevelResultScreen")
 	
-	# Debug: Verificar que encontró todo
+	# Debug
 	print("🔍 RunManager inicializando...")
 	print("  MapGenerator: %s" % ("✅" if map_generator else "❌"))
 	print("  TurnManager: %s" % ("✅" if turn_manager else "❌"))
 	print("  BattleHUD: %s" % ("✅" if battle_hud else "❌"))
 	print("  ResultScreen: %s" % ("✅" if result_screen else "❌"))
-	
+	print("  CurrencyManager: %s" % ("✅" if currency_manager else "❌"))
+	print("  RewardCalculator: %s" % ("✅" if reward_calculator else "❌"))
+	print("  ShopInventory: %s" % ("✅" if shop_inventory else "❌"))
+	print("  ShopScreen: %s" % ("✅" if shop_screen else "❌"))
+
 	# Conectar señales
 	if map_generator:
 		map_generator.map_generated.connect(_on_map_generated)
@@ -54,7 +68,10 @@ func _ready():
 		result_screen.continue_pressed.connect(_on_result_continue)
 		result_screen.menu_pressed.connect(_on_result_menu)
 	
-	# Iniciar run
+	#CONECTAR SHOP SCREEN
+	if shop_screen:
+		shop_screen.shop_closed.connect(_on_shop_closed)
+	
 	start_new_run()
 
 func _on_map_generated(_map_data: MapData):
@@ -63,6 +80,15 @@ func _on_map_generated(_map_data: MapData):
 func start_new_run():
 	current_level = 0
 	levels_completed = 0
+	
+	# RESETEAR monedas
+	if currency_manager:
+		currency_manager.reset_coins()
+	
+	# LIMPIAR INVENTARIO
+	if shop_inventory:
+		shop_inventory.clear_inventory()
+	
 	print("\n🎮 === NUEVA RUN INICIADA ===")
 	start_next_level()
 
@@ -95,6 +121,15 @@ func _on_battle_ended(winner_team: Team):
 	if winner_team and winner_team.team_id == 0:  # Team del jugador ganó
 		levels_completed += 1
 		level_completed.emit(current_level)
+		
+		# Procesar recompensa
+		if reward_calculator:
+			reward_calculator.process_victory_reward(current_level)
+		
+		# GENERAR TIENDA
+		if shop_inventory:
+			shop_inventory.generate_items(current_level)
+		
 		_show_level_complete(winner_team)
 	else:
 		_show_defeat()
@@ -102,26 +137,43 @@ func _on_battle_ended(winner_team: Team):
 func _show_level_complete(winner_team: Team):
 	print("🎉 Nivel completado!")
 	
-	if not result_screen:
+	# ✅ MOSTRAR TIENDA
+	if shop_screen:
+		print("🛍️ Mostrando tienda...")
+		shop_screen.show_shop()
+	elif not result_screen:
 		print("  ⚠️  No hay ResultScreen, auto-continuando...")
 		await get_tree().create_timer(2.0).timeout
 		start_next_level()
 		return
-	
-	var units_alive = winner_team.get_living_units().size()
-	var total_units = winner_team.units.size()
-	
-	# Usar enum de LevelResultScreen
-	result_screen.show_result(
-		LevelResultScreen.ResultType.VICTORY,
-		current_level,
-		total_levels,
-		units_alive,
-		total_units
-	)
+	else:
+		var units_alive = winner_team.get_living_units().size()
+		var total_units = winner_team.units.size()
+		
+		result_screen.show_result(
+			LevelResultScreen.ResultType.VICTORY,
+			current_level,
+			total_levels,
+			units_alive,
+			total_units
+		)
+
+# Manejador para cuando se cierra la tienda
+func _on_shop_closed():
+	print("🛍️ Tienda cerrada, continuando...")
+	start_next_level()
 
 func _show_defeat():
 	print("💀 Derrota - Run terminada")
+	
+	# RESETEAR monedas al perder
+	if currency_manager:
+		print("🔄 Reseteando monedas por derrota")
+		currency_manager.reset_coins()
+	
+	# LIMPIAR INVENTARIO AL PERDER
+	if shop_inventory:
+		shop_inventory.clear_inventory()
 	
 	if not result_screen:
 		return
@@ -142,6 +194,10 @@ func _show_defeat():
 
 func _show_run_complete():
 	print("🎉 Run completada - 15/15 niveles!")
+	
+	# Mostrar monedas finales
+	if currency_manager:
+		currency_manager.print_status()
 	
 	if not result_screen:
 		return

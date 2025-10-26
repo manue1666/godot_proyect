@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://cc6p21uxapyo4"]
+[gd_scene load_steps=5 format=3 uid="uid://cc6p21uxapyo4"]
 
 [ext_resource type="Script" uid="uid://7cc5lhtqpvgo" path="res://scripts/game/run_manager.gd" id="1_p46cw"]
+[ext_resource type="Script" uid="uid://22uh2qp1vt1v" path="res://scripts/game/economy/currency_manager.gd" id="2_kw0er"]
+[ext_resource type="Script" uid="uid://c5icpo16to7gw" path="res://scripts/game/economy/reward_calculator.gd" id="3_5q4an"]
+[ext_resource type="Script" uid="uid://dfpqaavy1vhd" path="res://scripts/game/shop/shop_inventory.gd" id="4_p81cw"]
 
 [node name="RunManager" type="Node"]
 script = ExtResource("1_p46cw")
+
+[node name="CurrencyManager" type="Node" parent="."]
+script = ExtResource("2_kw0er")
+metadata/_custom_type_script = "uid://22uh2qp1vt1v"
+
+[node name="RewardCalculator" type="Node" parent="."]
+script = ExtResource("3_5q4an")
+metadata/_custom_type_script = "uid://c5icpo16to7gw"
+
+[node name="ShopInventory" type="Node" parent="."]
+script = ExtResource("4_p81cw")
+metadata/_custom_type_script = "uid://dfpqaavy1vhd"

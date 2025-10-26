@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dmgc6vyxruqjm"]
+[gd_scene load_steps=20 format=3 uid="uid://dmgc6vyxruqjm"]
 
 [ext_resource type="Script" uid="uid://dxm0il0o84itk" path="res://scripts/UI/game_camera.gd" id="1_choun"]
 [ext_resource type="PackedScene" uid="uid://cbel4s06fdhuw" path="res://scenes/interfaz/UI/battle_hud.tscn" id="1_o5qli"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://cdka23y1ervxw" path="res://scenes/game/enemy_team.tscn" id="5_tefeu"]
 [ext_resource type="PackedScene" uid="uid://btr7olxlpg05c" path="res://scenes/game/map_generator.tscn" id="6_choun"]
 [ext_resource type="Script" uid="uid://f6dv3iufhx0n" path="res://scripts/game/enemy_ai.gd" id="11_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://b187f1dmr56i6" path="res://scenes/interfaz/UI/shop_screen.tscn" id="12_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://ji44mple28kk" path="res://scenes/interfaz/UI/shop_item_card.tscn" id="13_trceg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_choun"]
 texture = ExtResource("3_ya4ey")
@@ -121,3 +123,8 @@ visible = false
 
 [node name="EnemyAI" type="Node" parent="."]
 script = ExtResource("11_eb6dy")
+
+[node name="ShopScreen" parent="." instance=ExtResource("12_eb6dy")]
+
+[node name="ShopItemCard" parent="." instance=ExtResource("13_trceg")]
+visible = false
