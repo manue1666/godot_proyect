@@ -180,3 +180,31 @@ func check_battle_end():
 			print("\n🎉 ¡%s GANÓ LA BATALLA! 🎉" % winner.team_name)
 		else:
 			print("\n💀 ¡EMPATE! Todos murieron 💀")
+
+func connect_unit_signals(unit: BaseUnit):
+	if not unit or not is_instance_valid(unit):
+		push_warning("⚠️  Intentando conectar señales a unidad inválida")
+		return
+	
+	print("    🔗 Conectando señales a: %s" % unit.name)
+	
+	# Desconectar si ya estaban conectadas (evitar duplicados)
+	if unit.clicked.is_connected(_on_unit_clicked):
+		unit.clicked.disconnect(_on_unit_clicked)
+	if unit.moved.is_connected(_on_unit_moved):
+		unit.moved.disconnect(_on_unit_moved)
+	if unit.attacked.is_connected(_on_unit_attacked):
+		unit.attacked.disconnect(_on_unit_attacked)
+	if unit.died.is_connected(_on_unit_died):
+		unit.died.disconnect(_on_unit_died)
+	if unit.receive_dam.is_connected(_on_unit_received_damage):
+		unit.receive_dam.disconnect(_on_unit_received_damage)
+	
+	# Conectar nuevas señales
+	unit.clicked.connect(_on_unit_clicked.bindv([unit]))
+	unit.moved.connect(_on_unit_moved)
+	unit.attacked.connect(_on_unit_attacked)
+	unit.died.connect(_on_unit_died)
+	unit.receive_dam.connect(_on_unit_received_damage)
+	
+	print("    ✅ Señales conectadas correctamente")

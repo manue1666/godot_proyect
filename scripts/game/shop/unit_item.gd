@@ -58,6 +58,13 @@ func apply_effect(game_manager: Node) -> bool:
 	# Agregar a la escena (será posicionado en la siguiente batalla)
 	player_team.add_child(new_unit)
 	
+	# ESPERAR UN FRAME PARA QUE _READY() SE EJECUTE
+	await game_manager.get_tree().process_frame
+	
+	# CONECTAR SEÑALES DE LA NUEVA UNIDAD
+	print("  🔗 Conectando señales de nueva unidad...")
+	turn_manager.connect_unit_signals(new_unit)
+	
 	print("  ✅ %s agregada al equipo" % item_name)
 	print("  📊 Equipo ahora tiene %d unidades\n" % player_team.units.size())
 	

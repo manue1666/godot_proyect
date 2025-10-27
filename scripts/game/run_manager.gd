@@ -5,7 +5,7 @@ signal level_completed(level_num: int)
 signal run_completed()
 signal run_failed()
 
-@export var total_levels: int = 15
+@export var total_levels: int = 5
 var current_level: int = 0
 var levels_completed: int = 0
 
@@ -18,6 +18,8 @@ var currency_manager: CurrencyManager
 var reward_calculator: RewardCalculator
 var shop_inventory: ShopInventory
 var shop_screen: ShopScreen
+var team_stats_tracker: TeamStatsTracker
+var enemy_spawner: EnemySpawner
 
 func _ready():
 	add_to_group("run_manager")
@@ -31,8 +33,8 @@ func _ready():
 	reward_calculator = get_tree().get_first_node_in_group("reward_calculator")
 	shop_inventory = get_tree().get_first_node_in_group("shop_inventory")
 	shop_screen = get_tree().get_first_node_in_group("shop_screen")
-	if not shop_screen:
-		push_error("❌ No se encontró ShopScreen en la escena")
+	team_stats_tracker = get_tree().get_first_node_in_group("team_stats_tracker")
+	enemy_spawner = get_tree().get_first_node_in_group("enemy_spawner")
 	
 	# Si UI es hermano de RunManager
 	var ui_node = get_parent().get_node_or_null("UI")
@@ -50,6 +52,8 @@ func _ready():
 	print("  RewardCalculator: %s" % ("✅" if reward_calculator else "❌"))
 	print("  ShopInventory: %s" % ("✅" if shop_inventory else "❌"))
 	print("  ShopScreen: %s" % ("✅" if shop_screen else "❌"))
+	print("  TeamStatsTracker: %s" % ("✅" if team_stats_tracker else "❌"))
+	print("  EnemySpawner: %s" % ("✅" if enemy_spawner else "❌"))
 
 	# Conectar señales
 	if map_generator:
@@ -68,7 +72,6 @@ func _ready():
 		result_screen.continue_pressed.connect(_on_result_continue)
 		result_screen.menu_pressed.connect(_on_result_menu)
 	
-	#CONECTAR SHOP SCREEN
 	if shop_screen:
 		shop_screen.shop_closed.connect(_on_shop_closed)
 	
@@ -81,13 +84,15 @@ func start_new_run():
 	current_level = 0
 	levels_completed = 0
 	
-	# RESETEAR monedas
 	if currency_manager:
 		currency_manager.reset_coins()
 	
-	# LIMPIAR INVENTARIO
 	if shop_inventory:
 		shop_inventory.clear_inventory()
+	
+	# LIMPIAR STATS
+	if team_stats_tracker:
+		team_stats_tracker.clear()
 	
 	print("\n🎮 === NUEVA RUN INICIADA ===")
 	start_next_level()
@@ -100,6 +105,12 @@ func start_next_level():
 		return
 	
 	print("\n📍 === NIVEL %d/%d ===" % [current_level, total_levels])
+	
+	# ✅ GENERAR ENEMIGOS PARA ESTE NIVEL
+	if enemy_spawner:
+		enemy_spawner.spawn_enemies_for_level(current_level)
+	else:
+		push_error("❌ EnemySpawner no encontrado!")
 	
 	# Actualizar HUD
 	if battle_hud:
@@ -161,6 +172,17 @@ func _show_level_complete(winner_team: Team):
 # Manejador para cuando se cierra la tienda
 func _on_shop_closed():
 	print("🛍️ Tienda cerrada, continuando...")
+	
+	# ✅ ESPERAR UN FRAME para asegurar que las unidades estén listas
+	await get_tree().process_frame
+	
+	if team_stats_tracker and turn_manager and turn_manager.teams.size() > 0:
+		var player_team = turn_manager.teams[0]
+		team_stats_tracker.apply_all_boosts_to_team(player_team)
+
+	if battle_hud:
+		battle_hud.update_boosts_display()
+	
 	start_next_level()
 
 func _show_defeat():
@@ -174,6 +196,10 @@ func _show_defeat():
 	# LIMPIAR INVENTARIO AL PERDER
 	if shop_inventory:
 		shop_inventory.clear_inventory()
+	
+	# LIMPIAR STATS AL PERDER
+	if team_stats_tracker:
+		team_stats_tracker.clear()
 	
 	if not result_screen:
 		return

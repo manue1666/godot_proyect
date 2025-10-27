@@ -20,25 +20,24 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 700.0
-offset_top = -95.0
-offset_right = -44.0
-offset_bottom = -31.0
+offset_left = 535.0
+offset_top = -154.0
+offset_right = -39.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="ButtomBar"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -54.5
-offset_top = -11.5
-offset_right = 54.5
-offset_bottom = 11.5
-grow_horizontal = 2
+offset_left = -141.0
+offset_top = -17.5
+offset_bottom = 17.5
+grow_horizontal = 0
 grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ButtomBar/MarginContainer"]
@@ -60,6 +59,55 @@ theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 32
 text = "turn 1"
 
+[node name="VSeparator" type="VSeparator" parent="ButtomBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -30.0
+offset_right = 2.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="ButtomBar"]
+layout_mode = 1
+offset_right = 118.0
+offset_bottom = 85.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ButtomBar/MarginContainer2"]
+layout_mode = 2
+
+[node name="BoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "BOOSTS"
+
+[node name="HSeparator" type="HSeparator" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Health Boost: 0"
+
+[node name="PowerLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Power Boost: 0"
+
+[node name="MovBoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Movement Boost: 0"
+
 [node name="Turn" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -67,10 +115,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 394.0
-offset_top = -179.0
-offset_right = 525.0
-offset_bottom = -108.0
+offset_left = 398.0
+offset_top = -231.0
+offset_right = 529.0
+offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_tv7i6")
