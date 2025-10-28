@@ -4,6 +4,7 @@ class_name TurnManager
 signal turn_started(team: Team)
 signal turn_ended(team: Team)
 signal battle_ended(winner_team: Team)
+signal unit_selected(unit: BaseUnit)
 
 @export var teams: Array[Team] = []
 var current_team_index := 0
@@ -97,6 +98,7 @@ func _on_unit_clicked(unit: BaseUnit):
 		selected_unit = unit
 		unit.select_unit()
 		print("✅ Unidad seleccionada: %s" % unit.name)
+		unit_selected.emit(unit)
 	else:
 		unit.deselect_unit()
 		selected_unit = null

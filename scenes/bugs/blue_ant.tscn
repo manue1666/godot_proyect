@@ -1,8 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://cean33tt6t34s"]
+[gd_scene load_steps=25 format=3 uid="uid://cean33tt6t34s"]
 
 [ext_resource type="Script" uid="uid://bx6csb3yuhc68" path="res://scripts/bugs/blue_ant.gd" id="1_xs8ad"]
 [ext_resource type="Texture2D" uid="uid://c1ylraabrxab2" path="res://sprites/bugs/bug-sheets/blue_ant-sheet.png" id="2_4s8cf"]
-[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="3_awbq1"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_v5bu6"]
 [ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="4_nspur"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_awbq1"]
@@ -144,41 +143,6 @@ polygon = PackedVector2Array(-6, -6, 6, -6, 12, 0, 6, 5, -6, 5, -12, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 shape = SubResource("RectangleShape2D_tipki")
-
-[node name="MenuPanel" type="Panel" parent="."]
-visible = false
-offset_right = 286.0
-offset_bottom = 127.0
-
-[node name="Move" type="Button" parent="MenuPanel"]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 13.0
-offset_right = 108.0
-offset_bottom = 111.0
-theme_override_fonts/font = ExtResource("3_awbq1")
-theme_override_font_sizes/font_size = 32
-text = "Move"
-
-[node name="Atack1" type="Button" parent="MenuPanel"]
-layout_mode = 0
-offset_left = 116.0
-offset_top = 14.0
-offset_right = 259.0
-offset_bottom = 57.0
-theme_override_fonts/font = ExtResource("3_awbq1")
-theme_override_font_sizes/font_size = 32
-text = "Bite"
-
-[node name="Atack2" type="Button" parent="MenuPanel"]
-layout_mode = 0
-offset_left = 118.0
-offset_top = 67.0
-offset_right = 260.0
-offset_bottom = 110.0
-theme_override_fonts/font = ExtResource("3_awbq1")
-theme_override_font_sizes/font_size = 32
-text = "Lock Jaw"
 
 [node name="HealthBar" parent="." instance=ExtResource("8_dwbtb")]
 

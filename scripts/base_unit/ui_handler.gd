@@ -53,12 +53,11 @@ func _on_state_changed(_old_state: int, new_state: int):
 		UnitStateMachine.State.SELECTED:
 			print("  → Mostrando menú")
 			_update_shadow_color() 
-			show_menu_panel()
+
 		
 		UnitStateMachine.State.IDLE, UnitStateMachine.State.EXHAUSTED:
 			print("  → Ocultando UI")
 			_update_shadow_color()
-			hide_menu_panel()
 			clear_highlights()
 			
 		UnitStateMachine.State.WAITING_MOVE:
@@ -74,7 +73,6 @@ func _on_state_changed(_old_state: int, new_state: int):
 				owner_unit.animation_component.play_move()
 		
 		UnitStateMachine.State.DEAD:
-			hide_menu_panel()
 			clear_highlights()
 			_update_shadow_color()
 
@@ -106,18 +104,7 @@ func _update_shadow_color():
 	tween.set_ease(Tween.EASE_OUT)
 	tween.tween_property(shadow, "color", target_color, 0.15)
 
-# ============ MENU PANEL ============
-func show_menu_panel():
-	if owner_unit.has_node("MenuPanel"):
-		var menu_panel = owner_unit.get_node("MenuPanel")
-		menu_panel.visible = true
-		print("  📋 MenuPanel VISIBLE para %s" % owner_unit.name)
-	else:
-		push_error("❌ UIHandler: No encontró MenuPanel en %s" % owner_unit.name)
 
-func hide_menu_panel():
-	if owner_unit.has_node("MenuPanel"):
-		owner_unit.get_node("MenuPanel").visible = false
 
 # ============ HIGHLIGHTS ============
 func show_movable_tiles():

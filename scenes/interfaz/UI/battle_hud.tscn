@@ -13,100 +13,52 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_ueiah")
 
-[node name="ButtomBar" type="Panel" parent="."]
+[node name="LevelPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 535.0
-offset_top = -154.0
-offset_right = -39.0
-offset_bottom = -12.0
+offset_left = 817.0
+offset_top = -54.0
+offset_right = -11.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ButtomBar"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -141.0
-offset_top = -17.5
-offset_bottom = 17.5
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ButtomBar/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="LevelLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 32
-text = "level 1"
-
-[node name="VSeparator" type="VSeparator" parent="ButtomBar/MarginContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="TurnLabel" type="Label" parent="ButtomBar/MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 32
-text = "turn 1"
-
-[node name="VSeparator" type="VSeparator" parent="ButtomBar"]
+[node name="MarginContainer" type="MarginContainer" parent="LevelPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = -30.0
-offset_right = 2.0
-offset_bottom = 53.0
+offset_left = -70.5
+offset_top = -17.5
+offset_right = 70.5
+offset_bottom = 17.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="ButtomBar"]
-layout_mode = 1
-offset_right = 118.0
-offset_bottom = 85.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ButtomBar/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelPanel/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="BoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+[node name="LevelLabel" type="Label" parent="LevelPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "BOOSTS"
+theme_override_font_sizes/font_size = 32
+text = "level 1"
 
-[node name="HSeparator" type="HSeparator" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="LevelPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="HealthBoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "Health Boost: 0"
-
-[node name="PowerLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
+[node name="TurnLabel" type="Label" parent="LevelPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "Power Boost: 0"
-
-[node name="MovBoostLabel" type="Label" parent="ButtomBar/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "Movement Boost: 0"
+theme_override_font_sizes/font_size = 32
+text = "turn 1"
 
 [node name="Turn" type="Button" parent="."]
 layout_mode = 1
@@ -115,12 +67,156 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 398.0
-offset_top = -231.0
-offset_right = 529.0
-offset_bottom = -160.0
+offset_left = 427.0
+offset_top = -132.0
+offset_right = 558.0
+offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 32
 text = "END TURN"
+
+[node name="BoostsPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 892.0
+offset_top = -585.0
+offset_right = -27.0
+offset_bottom = -419.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BoostsPanel"]
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 85.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BoostsPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="BoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "BOOSTS"
+
+[node name="HSeparator" type="HSeparator" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Health Boost: 0"
+
+[node name="PowerLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Power Boost: 0"
+
+[node name="MovBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Movement Boost: 0"
+
+[node name="ActionPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 197.0
+offset_top = -124.0
+offset_right = -620.0
+offset_bottom = -4.0
+grow_horizontal = 2
+
+[node name="Move" type="Button" parent="ActionPanel"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 10.0
+offset_right = 141.0
+offset_bottom = 108.0
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 34
+text = "Move"
+
+[node name="VSeparator" type="VSeparator" parent="ActionPanel"]
+layout_mode = 0
+offset_left = 153.0
+offset_top = 19.0
+offset_right = 157.0
+offset_bottom = 99.0
+
+[node name="Attack_one" type="Button" parent="ActionPanel"]
+layout_mode = 0
+offset_left = 167.0
+offset_top = 8.0
+offset_right = 317.0
+offset_bottom = 58.0
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "attack one name
+"
+
+[node name="Attack_two" type="Button" parent="ActionPanel"]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 63.0
+offset_right = 318.0
+offset_bottom = 113.0
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "attack two name"
+
+[node name="StatsPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 14.0
+offset_top = -172.0
+offset_right = -965.0
+offset_bottom = -5.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="StatsPanel"]
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 85.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StatsPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "UNIT NAME"
+
+[node name="HSeparator" type="HSeparator" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "HP : 0"
+
+[node name="PowerLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Power : 0"
+
+[node name="MovLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Movement : 0"
+
+[node name="StatusLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Status : None"
