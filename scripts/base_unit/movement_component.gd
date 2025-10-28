@@ -3,7 +3,6 @@ class_name MovementComponent
 
 signal moved(new_position: Vector2i)
 
-var move_range: int = 1
 var tile_size: int = 32
 @export var movement_type: MovementType = MovementType.DIAMOND
 
@@ -21,11 +20,15 @@ var owner_unit: BaseUnit
 
 var is_slowed: bool = false
 @export var original_range: int = 2
+var current_range: int = 2
 
 func _ready():
 	owner_unit = get_parent() as BaseUnit
 	if not owner_unit:
 		push_error("MovementComponent debe ser hijo de BaseUnit")
+
+	current_range = original_range
+	print("🚶 MovementComponent: base=%d, actual=%d" % [original_range, current_range])
 
 func apply_slow():
 	is_slowed = true
@@ -36,7 +39,7 @@ func remove_slow():
 	print("✅ Efecto lentitud finalizado")
 
 func get_movable_cells() -> Array[Vector2i]:
-	var range_val = original_range
+	var range_val = current_range
 	if is_slowed:
 		range_val = 1
 	var cells: Array[Vector2i] = []
@@ -59,6 +62,16 @@ func get_movable_cells() -> Array[Vector2i]:
 			cells = _get_teleport_cells(start_pos)
 	
 	return cells
+
+# Aplicar boost desde el valor base
+func set_range_boost(boost: int):
+	current_range = original_range + boost
+	print("  🚶 Rango recalculado: %d (base) + %d (boost) = %d" % [original_range, boost, current_range])
+
+# Resetear al original
+func reset_range():
+	current_range = original_range
+	print("  🔄 Rango reseteado: %d" % current_range)
 
 func _get_square_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
@@ -177,7 +190,7 @@ func update_sprite_direction(direction: Vector2i):
 	elif direction.x > 0:
 		owner_unit.get_node("AnimatedSprite2D").flip_h = false
 
-# ============ VALIDACIONES ============
+# VALIDACIONES
 
 func is_cell_valid(cell: Vector2i) -> bool:
 	var map_generator = owner_unit.get_tree().get_first_node_in_group("map_generator")

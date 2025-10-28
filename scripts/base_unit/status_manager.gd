@@ -136,6 +136,12 @@ func clear_effect():
 	
 	effect_expired.emit(expired_effect)
 
+# Limpiar todos los efectos
+func clear_all_effects():
+	if has_active_effect():
+		clear_effect()
+	print("🧹 Todos los efectos de %s limpiados" % owner_unit.name)
+
 func has_active_effect() -> bool:
 	return current_effect != AttackData.Effect.NONE
 

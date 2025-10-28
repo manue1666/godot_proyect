@@ -208,3 +208,44 @@ func connect_unit_signals(unit: BaseUnit):
 	unit.receive_dam.connect(_on_unit_received_damage)
 	
 	print("    ✅ Señales conectadas correctamente")
+
+func reset_all_units_for_new_battle():
+	print("\n🔄 === RESETEANDO UNIDADES PARA NUEVA BATALLA ===")
+	
+	for team in teams:
+		for unit in team.get_living_units():
+			if not is_instance_valid(unit):
+				continue
+			
+			print("  🔄 Reseteando: %s" % unit.name)
+			
+			# RESETEAR MOVIMIENTO AL ORIGINAL
+			if unit.has_node("MovementComponent"):
+				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
+				movement_comp.reset_range()
+			
+			# RESETEAR PODER AL ORIGINAL
+			unit.power = 0
+			
+			# RESETEAR ESTADO
+			if unit.state_machine:
+				unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+				unit.state_machine.reset_for_new_turn()
+				unit.state_machine.reset_actions()
+			
+			# RESETEAR SALUD Y STATUS
+			if unit.has_node("HealthComponent"):
+				var health_comp = unit.get_node("HealthComponent") as HealthComponent
+				health_comp.hp = health_comp.max_hp
+			
+			if unit.has_node("StatusManager"):
+				var status_manager = unit.get_node("StatusManager") as StatusManager
+				status_manager.clear_all_effects()
+			
+			# DESELECCIONAR
+			if unit == selected_unit:
+				selected_unit = null
+			
+			unit.deselect_unit()
+	
+	print("✅ Todas las unidades reseteadas\n")

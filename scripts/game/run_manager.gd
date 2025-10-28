@@ -106,7 +106,11 @@ func start_next_level():
 	
 	print("\n📍 === NIVEL %d/%d ===" % [current_level, total_levels])
 	
-	# ✅ GENERAR ENEMIGOS PARA ESTE NIVEL
+	# RESETEAR UNIDADES DEL NIVEL ANTERIOR
+	if turn_manager:
+		turn_manager.reset_all_units_for_new_battle()
+	
+	# Generar enemigos
 	if enemy_spawner:
 		enemy_spawner.spawn_enemies_for_level(current_level)
 	else:

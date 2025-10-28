@@ -43,6 +43,14 @@ func reset_actions():
 	actions_available["attack"] = true
 	print("  🔄 [%s] Acciones reseteadas: Mover ✅ Atacar ✅" % get_parent().name)
 
+# Resetear completamente para nueva batalla
+func reset_for_new_turn():
+	print("  🔄 [%s] Reseteando para nuevo turno" % get_parent().name)
+	change_state(State.IDLE)
+	reset_actions()
+	is_stunned = false
+	attack_number = 1
+
 func use_move_action():
 	if actions_available["move"]:
 		actions_available["move"] = false

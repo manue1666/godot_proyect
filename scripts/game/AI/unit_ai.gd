@@ -18,11 +18,11 @@ func take_action() -> void:
 		print("  ⚠️ %s no está en estado válido" % unit.name)
 		return
 	
-	# ✅ NUEVA LÍNEA: Usar decision_maker
+	# Usar decision_maker
 	var action = decision_maker.decide_action()
 	
 	if action:
-		# ✅ NUEVA LÍNEA: Ejecutar estrategia elegida
+		# Ejecutar estrategia elegida
 		await strategies.execute_strategy(action)
 	else:
 		print("  ❌ No se pudo decidir acción")

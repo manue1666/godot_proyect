@@ -133,7 +133,7 @@ func _on_card_purchase_pressed(index: int):
 	if shop_inventory.purchase_item(index, currency_manager):
 		print("✅ Compra exitosa")
 		
-		#GREGAR AWAIT AQUÍ
+
 		var result = await item.apply_effect(get_tree().root)
 		if result:
 			print("✅ Efecto aplicado")

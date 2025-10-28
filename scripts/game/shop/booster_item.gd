@@ -56,7 +56,6 @@ func apply_effect(game_manager: Node) -> bool:
 			return true
 		
 		"full_heal":
-			# Full heal se aplica inmediatamente a unidades vivas
 			var turn_manager = game_manager.get_tree().get_first_node_in_group("turn_manager")
 			if not turn_manager or turn_manager.teams.size() == 0:
 				return false
@@ -67,7 +66,11 @@ func apply_effect(game_manager: Node) -> bool:
 			for unit in units:
 				if unit.has_node("HealthComponent"):
 					var health_comp = unit.get_node("HealthComponent") as HealthComponent
+					var old_hp = health_comp.hp
 					health_comp.hp = health_comp.max_hp
+					
+					# EMITIR SEÑAL PARA QUE HEALTHBAR SE ACTUALICE
+					health_comp.healed.emit(health_comp.max_hp - old_hp)
 			
 			print("  ✅ Curación completa aplicada")
 			return true
