@@ -49,6 +49,11 @@ func apply_effect(game_manager: Node) -> bool:
 	if not new_unit:
 		push_error("❌ No se pudo instanciar la unidad")
 		return false
+
+	var unit_count = player_team.units.size()
+	var unit_type = unit_id.to_lower()
+	new_unit.name = "%s_%d" % [unit_type, unit_count]
+	print("  📛 Nombre asignado: %s" % new_unit.name)
 	
 	# Agregar al equipo
 	new_unit.team = player_team
@@ -58,10 +63,8 @@ func apply_effect(game_manager: Node) -> bool:
 	# Agregar a la escena (será posicionado en la siguiente batalla)
 	player_team.add_child(new_unit)
 	
-	# ESPERAR UN FRAME PARA QUE _READY() SE EJECUTE
 	await game_manager.get_tree().process_frame
 	
-	# CONECTAR SEÑALES DE LA NUEVA UNIDAD
 	print("  🔗 Conectando señales de nueva unidad...")
 	turn_manager.connect_unit_signals(new_unit)
 	

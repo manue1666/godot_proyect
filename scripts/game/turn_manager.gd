@@ -214,6 +214,8 @@ func connect_unit_signals(unit: BaseUnit):
 func reset_all_units_for_new_battle():
 	print("\n🔄 === RESETEANDO UNIDADES PARA NUEVA BATALLA ===")
 	
+	var team_stats_tracker = get_tree().get_first_node_in_group("team_stats_tracker")
+	
 	for team in teams:
 		for unit in team.get_living_units():
 			if not is_instance_valid(unit):
@@ -221,13 +223,26 @@ func reset_all_units_for_new_battle():
 			
 			print("  🔄 Reseteando: %s" % unit.name)
 			
-			# RESETEAR MOVIMIENTO AL ORIGINAL
+			# RESETEAR MOVIMIENTO CON BOOSTS
 			if unit.has_node("MovementComponent"):
 				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
-				movement_comp.reset_range()
-			
-			# RESETEAR PODER AL ORIGINAL
-			unit.power = 0
+				
+				if team_stats_tracker:
+					movement_comp.set_range_boost(team_stats_tracker.get_movement_boost())
+					print("    · Movement: %d (base %d + boost %d)" % [
+						movement_comp.current_range,
+						movement_comp.original_range,
+						team_stats_tracker.get_movement_boost()
+					])
+				else:
+					movement_comp.reset_range()
+
+			# RESETEAR PODER CON BOOSTS
+			if team_stats_tracker:
+				unit.power = 0 + team_stats_tracker.get_power_boost()
+				print("    · Power: %d (base 0 + boost %d)" % [unit.power, team_stats_tracker.get_power_boost()])
+			else:
+				unit.power = 0
 			
 			# RESETEAR ESTADO
 			if unit.state_machine:
@@ -235,14 +250,20 @@ func reset_all_units_for_new_battle():
 				unit.state_machine.reset_for_new_turn()
 				unit.state_machine.reset_actions()
 			
-			# RESETEAR SALUD Y STATUS
+			# CONSERVAR HP
 			if unit.has_node("HealthComponent"):
 				var health_comp = unit.get_node("HealthComponent") as HealthComponent
-				health_comp.hp = health_comp.max_hp
+				print("    · HP conservado: %d/%d" % [health_comp.hp, health_comp.max_hp])
+				
+				if health_comp.hp <= 0:
+					unit.state_machine.change_state(UnitStateMachine.State.DEAD)
+					print("    · Unidad muerta (HP = 0)")
 			
+			# LIMPIAR EFECTOS
 			if unit.has_node("StatusManager"):
 				var status_manager = unit.get_node("StatusManager") as StatusManager
 				status_manager.clear_all_effects()
+				print("    · Efectos de estado limpiados")
 			
 			# DESELECCIONAR
 			if unit == selected_unit:

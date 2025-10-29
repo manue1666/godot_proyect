@@ -64,11 +64,15 @@ func perform_attack(target: BaseUnit, attack_index: int) -> bool:
 	# Calcular daño
 	var damage = attack.damage + owner_unit.power
 	
-	# Aplicar daño
-	if target.has_node("HealthComponent"):
-		target.get_node("HealthComponent").take_damage(damage, owner_unit)
-	else:
-		target.receive_damage(damage, owner_unit)
+	print("⚔️ %s ataca a %s por %d de daño (base %d + poder %d)" % [
+		owner_unit.name,
+		target.name,
+		damage,
+		attack.damage,
+		owner_unit.power
+	])
+	
+	target.receive_damage(damage, owner_unit)
 	
 	# Aplicar efectos
 	if attack.effect != AttackData.Effect.NONE:

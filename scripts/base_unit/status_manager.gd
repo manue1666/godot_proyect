@@ -96,7 +96,7 @@ func _tick_effect():
 	match current_effect:
 		AttackData.Effect.POISON:
 			# Daño por turno
-			var poison_damage = 2
+			var poison_damage = 1
 			owner_unit.receive_damage(poison_damage, owner_unit)
 			print("🧪 %s recibe %d de daño por veneno" % [owner_unit.name, poison_damage])
 		AttackData.Effect.SLOW:

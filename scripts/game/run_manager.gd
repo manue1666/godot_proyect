@@ -177,16 +177,23 @@ func _show_level_complete(winner_team: Team):
 func _on_shop_closed():
 	print("🛍️ Tienda cerrada, continuando...")
 	
-	# ✅ ESPERAR UN FRAME para asegurar que las unidades estén listas
+	# ESPERAR UN FRAME para asegurar que las unidades estén listas
 	await get_tree().process_frame
 	
 	if team_stats_tracker and turn_manager and turn_manager.teams.size() > 0:
 		var player_team = turn_manager.teams[0]
+		
+		# APLICAR BOOSTS ANTES DEL SIGUIENTE NIVEL
+		print("📊 Aplicando boosts acumulados a unidades...")
 		team_stats_tracker.apply_all_boosts_to_team(player_team)
-
-	if battle_hud:
-		battle_hud.update_boosts_display()
+		
+		# ACTUALIZAR HUD CON LOS BOOSTS APLICADOS
+		if battle_hud:
+			battle_hud.update_boosts_display()
+			# FORZAR ACTUALIZAR STATS SI HAY UNIDAD SELECCIONADA
+			battle_hud.update_stats_display()
 	
+	# Ahora sí, ir al siguiente nivel
 	start_next_level()
 
 func _show_defeat():

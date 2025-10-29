@@ -42,6 +42,7 @@ func get_movement_boost() -> int:
 # APLICAR A UNIDADES
 func apply_all_boosts_to_team(team: Team):
 	print("\n📊 === APLICANDO BOOSTS ACUMULADOS ===")
+	print("  Salud: +%d | Poder: +%d | Movimiento: +%d" % [health_boost, power_boost, movement_boost])
 	
 	var living_units = team.get_living_units()
 	
@@ -49,8 +50,11 @@ func apply_all_boosts_to_team(team: Team):
 		print("  ⚠️  No hay unidades vivas para aplicar boosts")
 		return
 	
+	print("  Aplicando a %d unidades..." % living_units.size())
+	
+	# APLICAR SALUD
 	if health_boost > 0:
-		print("  💚 Aplicando +%d HP máximo a todas las unidades" % health_boost)
+		print("  💚 Aplicando +%d HP máximo" % health_boost)
 		for unit in living_units:
 			if not is_instance_valid(unit):
 				continue
@@ -59,26 +63,31 @@ func apply_all_boosts_to_team(team: Team):
 				var health_comp = unit.get_node("HealthComponent") as HealthComponent
 				health_comp.max_hp += health_boost
 				health_comp.hp = health_comp.max_hp  # Full heal al aplicar
+				print("    · %s: Max HP ahora es %d" % [unit.name, health_comp.max_hp])
 	
+	# APLICAR PODER
 	if power_boost > 0:
-		print("  ⚔️ Aplicando +%d poder a todas las unidades" % power_boost)
+		print("  ⚔️ Aplicando +%d poder" % power_boost)
 		for unit in living_units:
 			if not is_instance_valid(unit):
 				continue
-			# Power se suma directamente
+			
 			unit.power += power_boost
+			print("    · %s: Power ahora es %d" % [unit.name, unit.power])
 	
+	# APLICAR MOVIMIENTO
 	if movement_boost > 0:
-		print("  🚶 Aplicando +%d movimiento a todas las unidades" % movement_boost)
+		print("  🚶 Aplicando +%d movimiento" % movement_boost)
 		for unit in living_units:
 			if not is_instance_valid(unit):
 				continue
 			
 			if unit.has_node("MovementComponent"):
 				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
-				# USAR set_range_boost que calcula desde el original
 				movement_comp.set_range_boost(movement_boost)
+				print("    · %s: Movement ahora es %d" % [unit.name, movement_comp.current_range])
 	
+	print("  ✅ Boosts aplicados exitosamente")
 	print("=====================================\n")
 
 func print_status() -> void:

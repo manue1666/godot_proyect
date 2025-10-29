@@ -8,8 +8,8 @@ script = ExtResource("1_o4uti")
 
 [node name="Label" type="Label" parent="."]
 modulate = Color(0.773856, 2.23808e-06, 9.62615e-07, 1)
-offset_right = 40.0
-offset_bottom = 23.0
+offset_right = 18.0
+offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("2_2uku7")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "-5"
