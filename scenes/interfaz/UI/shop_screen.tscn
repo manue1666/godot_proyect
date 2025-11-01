@@ -1,23 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://b187f1dmr56i6"]
+[gd_scene load_steps=4 format=3 uid="uid://b187f1dmr56i6"]
 
 [ext_resource type="Script" uid="uid://dvb6a02ktsa1u" path="res://scripts/UI/shop_screen.gd" id="1_jliv7"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_jymxn"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jliv7"]
+bg_color = Color(8.7236984e-08, 0.075966604, 0.10788312, 1)
+
 [node name="ShopScreen" type="CanvasLayer"]
-visible = false
 script = ExtResource("1_jliv7")
 metadata/_custom_type_script = "uid://dvb6a02ktsa1u"
 
 [node name="Panel" type="PanelContainer" parent="."]
+z_index = 20
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 210.0
-offset_top = -1.0
-offset_right = -148.0
-offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jliv7")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
@@ -50,6 +50,7 @@ layout_mode = 2
 
 [node name="ContinueButton" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.5874399, 0.83613807, 0.84953207, 1)
 theme_override_fonts/font = ExtResource("2_jymxn")
 theme_override_font_sizes/font_size = 32
 text = "Continue"

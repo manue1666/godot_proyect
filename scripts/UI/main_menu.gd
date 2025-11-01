@@ -13,7 +13,7 @@ func _ready():
 func _on_new_run_pressed():
 	print("🎮 Iniciando nueva run...")
 	# change_scene_to_file para cambiar completamente
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	get_tree().change_scene_to_file("res://scenes/interfaz/UI/unit_select_screen.tscn")
 
 func _on_settings_pressed():
 	print("⚙️ Settings (no implementado aún)")

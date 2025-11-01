@@ -9,10 +9,37 @@ class_name Team
 var units: Array[BaseUnit] = []
 
 func _ready():
-	# Encuentra todas las unidades hijas y las agrega al equipo
+	# Si es el equipo del jugador (team_id = 0), esperar selección
+	if team_id == 0:
+		await get_tree().process_frame
+		_setup_player_team()
+	else:
+		# Equipo enemigo: usar unidades hardcodeadas
+		for child in get_children():
+			if child is BaseUnit:
+				add_unit(child)
+
+func _setup_player_team():
+	print("🎮 Configurando equipo del jugador...")
+	
+	var selected_unit_id = GState.selected_unit_id
+	print("  📦 Unidad seleccionada: %s" % selected_unit_id)
+	
+	# Limpiar unidades actuales
 	for child in get_children():
 		if child is BaseUnit:
-			add_unit(child)
+			child.queue_free()
+	
+	# Crear la unidad seleccionada
+	var scene = UnitCatalog.get_scene(selected_unit_id)
+	if scene:
+		var new_unit = scene.instantiate() as BaseUnit
+		add_child(new_unit)
+		new_unit.board_position = Vector2i(3, 3)
+		add_unit(new_unit)
+		print("  ✅ %s añadida al equipo" % selected_unit_id)
+	else:
+		push_error("❌ No se pudo cargar escena para %s" % selected_unit_id)
 
 func add_unit(unit: BaseUnit):
 	if unit not in units:

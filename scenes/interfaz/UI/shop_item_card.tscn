@@ -1,11 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ji44mple28kk"]
+[gd_scene load_steps=4 format=3 uid="uid://ji44mple28kk"]
 
 [ext_resource type="Script" uid="uid://dl2s0b3e5n3ii" path="res://scripts/UI/shop_item_card.gd" id="1_5bvfq"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_6o85w"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5bvfq"]
+bg_color = Color(0.10000142, 0.28081155, 0.28187263, 1)
+
 [node name="ShopItemCard" type="PanelContainer"]
 offset_right = 260.0
 offset_bottom = 206.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5bvfq")
 script = ExtResource("1_5bvfq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
