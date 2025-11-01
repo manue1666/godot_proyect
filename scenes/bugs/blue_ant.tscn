@@ -1,7 +1,7 @@
 [gd_scene load_steps=25 format=3 uid="uid://cean33tt6t34s"]
 
 [ext_resource type="Script" uid="uid://bx6csb3yuhc68" path="res://scripts/bugs/blue_ant.gd" id="1_xs8ad"]
-[ext_resource type="Texture2D" uid="uid://c1ylraabrxab2" path="res://sprites/bugs/bug-sheets/blue_ant-sheet.png" id="2_4s8cf"]
+[ext_resource type="Texture2D" uid="uid://c1ylraabrxab2" path="res://sprites/bugs/bug-sheets/blue_ant.png" id="2_4s8cf"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_v5bu6"]
 [ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="4_nspur"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_awbq1"]

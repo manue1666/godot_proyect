@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbel4s06fdhuw"]
+[gd_scene load_steps=5 format=3 uid="uid://cbel4s06fdhuw"]
 
-[ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battle_hud.gd" id="1_ueiah"]
+[ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battleUI/battle_hud.gd" id="1_ueiah"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_tv7i6"]
+[ext_resource type="Script" uid="uid://cnhyw1mnuirk8" path="res://scripts/UI/battleUI/action_panel.gd" id="3_ohllx"]
+[ext_resource type="Script" uid="uid://dggidsndg13uw" path="res://scripts/UI/battleUI/stats_panel.gd" id="4_xm72h"]
 
 [node name="BattleHUD" type="Control"]
 layout_mode = 3
@@ -81,16 +83,25 @@ text = "END TURN"
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 892.0
+offset_left = 842.0
 offset_top = -585.0
 offset_right = -27.0
 offset_bottom = -419.0
 grow_horizontal = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="BoostsPanel"]
-layout_mode = 0
-offset_right = 118.0
-offset_bottom = 85.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -78.5
+offset_top = -64.0
+offset_right = 78.5
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BoostsPanel/MarginContainer"]
 layout_mode = 2
@@ -126,11 +137,12 @@ text = "Movement Boost: 0"
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 197.0
-offset_top = -124.0
-offset_right = -620.0
-offset_bottom = -4.0
+offset_left = 470.0
+offset_top = -127.0
+offset_right = -347.0
+offset_bottom = -7.0
 grow_horizontal = 2
+script = ExtResource("3_ohllx")
 
 [node name="Move" type="Button" parent="ActionPanel"]
 layout_mode = 0
@@ -174,16 +186,26 @@ text = "attack two name"
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 14.0
-offset_top = -172.0
-offset_right = -965.0
-offset_bottom = -5.0
+offset_left = 11.0
+offset_top = -151.0
+offset_right = -691.0
+offset_bottom = -8.0
 grow_horizontal = 2
+script = ExtResource("4_xm72h")
 
 [node name="MarginContainer" type="MarginContainer" parent="StatsPanel"]
-layout_mode = 0
-offset_right = 118.0
-offset_bottom = 85.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -108.5
+offset_top = -68.0
+offset_right = 108.5
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="StatsPanel/MarginContainer"]
 layout_mode = 2
@@ -197,26 +219,100 @@ text = "UNIT NAME"
 [node name="HSeparator" type="HSeparator" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HPLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "HP : 0"
 
-[node name="PowerLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="HPLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3573256, 0.2902088, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Power : 0"
+text = "HP:0"
 
-[node name="MovLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="PowerLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.23754475, 0.99572855, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Movement : 0"
+text = "Pw:0"
 
-[node name="StatusLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="MovLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Mov:0"
+
+[node name="StatusLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Status : None"
+text = "St:None"
+
+[node name="HSeparator2" type="HSeparator" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AttackOneName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Name"
+
+[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8058624, 2.878219e-05, 0.582713, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Dm:0"
+
+[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.587909, 0.99999994, 0.99584645, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "type/type(0)"
+
+[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "none(0)"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AttackTwoName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Name"
+
+[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8058624, 2.878219e-05, 0.582713, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "Dm:0"
+
+[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.587909, 0.99999994, 0.99584645, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "type/type(0)"
+
+[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "none(0)"

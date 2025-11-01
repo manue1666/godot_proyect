@@ -1,0 +1,200 @@
+[gd_scene load_steps=24 format=3 uid="uid://ccssg4kstmjn5"]
+
+[ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_np83u"]
+[ext_resource type="Texture2D" uid="uid://dnrqxcwygot2q" path="res://sprites/bugs/bug-sheets/fly.png" id="2_ujijq"]
+[ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="3_ba6ym"]
+[ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="4_o120r"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="5_wdem3"]
+[ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_ypak7"]
+[ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_wdem3"]
+[ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="7_xxgyh"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="8_b1eto"]
+[ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="9_tw7hk"]
+[ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="10_hk3pj"]
+[ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="11_cwobb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enepr"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_257fa"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gh0f4"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1lv3v"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmrqp"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o120r"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypak7"]
+atlas = ExtResource("2_ujijq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wdem3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enepr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_257fa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enepr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_257fa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enepr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_257fa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enepr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_257fa")
+}],
+"loop": false,
+"name": &"attack_one",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gh0f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gh0f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gh0f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1lv3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1lv3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gh0f4")
+}],
+"loop": false,
+"name": &"attack_two",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmrqp")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o120r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypak7")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxgyh"]
+size = Vector2(28, 29)
+
+[sub_resource type="Resource" id="Resource_xxgyh"]
+script = ExtResource("5_wdem3")
+attack_name = "Buzz Strike"
+damage = 1
+range = 2
+attack_type = 2
+range_type = 4
+effect = 4
+effect_duration = 3
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_b1eto"]
+script = ExtResource("5_wdem3")
+attack_name = "Dive & Retreat"
+damage = 3
+range = 3
+range_type = 2
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[node name="fly" type="Area2D"]
+script = ExtResource("1_np83u")
+power = 0
+metadata/_custom_type_script = "uid://6a6uyysheykg"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_wdem3")
+animation = &"idle"
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = -1
+position = Vector2(0, 1)
+scale = Vector2(1.173913, 1)
+color = Color(0.12156863, 0.1254902, 0.1254902, 0.68235296)
+polygon = PackedVector2Array(-6, -6, 6, -6, 12, 0, 6, 5, -6, 5, -12, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_xxgyh")
+
+[node name="HealthBar" parent="." instance=ExtResource("3_ba6ym")]
+offset_top = -38.0
+offset_bottom = -34.0
+
+[node name="AttackComponent" type="Node" parent="."]
+script = ExtResource("4_o120r")
+attacks = Array[ExtResource("5_wdem3")]([SubResource("Resource_xxgyh"), SubResource("Resource_b1eto")])
+metadata/_custom_type_script = "uid://ctrvtqym607y4"
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("5_ypak7")
+movement_type = 4
+metadata/_custom_type_script = "uid://bsetip1eay5vo"
+
+[node name="AnimationComponent" type="Node" parent="."]
+script = ExtResource("6_wdem3")
+metadata/_custom_type_script = "uid://42xm15ltyvn0"
+
+[node name="StatusManager" type="Node" parent="."]
+script = ExtResource("7_xxgyh")
+metadata/_custom_type_script = "uid://dvxcv4rs07sug"
+
+[node name="UnitStateMachine" type="Node" parent="."]
+script = ExtResource("8_b1eto")
+metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("9_tw7hk")
+max_hp = 8
+hp = 8
+metadata/_custom_type_script = "uid://dge20l8umo3ho"
+
+[node name="UIHandler" type="Node" parent="."]
+script = ExtResource("10_hk3pj")
+metadata/_custom_type_script = "uid://cxyoi21174a4f"
+
+[node name="InputHandler" type="Node2D" parent="."]
+script = ExtResource("11_cwobb")
+metadata/_custom_type_script = "uid://d4gv5e3gfep1"

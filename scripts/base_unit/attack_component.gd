@@ -38,6 +38,9 @@ func get_attackable_cells(attack_index: int) -> Array[Vector2i]:
 			cells = _get_circle_cells(start_pos, range_val)
 		AttackData.RangeType.KNIGHT:
 			cells = _get_knight_cells(start_pos)
+		AttackData.RangeType.LINE:
+			cells = _get_line_cells(start_pos, range_val, Vector2i(1, 0))
+			cells.append_array(_get_line_cells(start_pos, range_val, Vector2i(-1, 0)))
 		_:
 			cells = _get_diamond_cells(start_pos, range_val)
 	
@@ -154,6 +157,19 @@ func _get_knight_cells(start: Vector2i) -> Array[Vector2i]:
 		var cell = start + move
 		if _is_cell_valid(cell):
 			cells.append(cell)
+	return cells
+
+func _get_line_cells(start: Vector2i, range_val: int, direction: Vector2i) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	var dir_step = Vector2i(sign(direction.x), sign(direction.y))
+	
+	for i in range(1, range_val + 1):
+		var cell = start + (dir_step * i)
+		if _is_cell_valid(cell):
+			cells.append(cell)
+		else:
+			break
+	
 	return cells
 
 func _is_cell_valid(cell: Vector2i) -> bool:

@@ -191,7 +191,6 @@ func _on_shop_closed():
 		if battle_hud:
 			battle_hud.update_boosts_display()
 			# FORZAR ACTUALIZAR STATS SI HAY UNIDAD SELECCIONADA
-			battle_hud.update_stats_display()
 	
 	# Ahora sí, ir al siguiente nivel
 	start_next_level()

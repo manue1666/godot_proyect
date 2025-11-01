@@ -1,7 +1,7 @@
 [gd_scene load_steps=25 format=3 uid="uid://8g65wmljio0e"]
 
 [ext_resource type="Script" uid="uid://dx0q7vtaup2sm" path="res://scripts/bugs/red_ant.gd" id="1_355ko"]
-[ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant-sheet.png" id="2_355ko"]
+[ext_resource type="Texture2D" uid="uid://dwp7vplhehkej" path="res://sprites/bugs/bug-sheets/red_ant.png" id="2_355ko"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_esp7m"]
 [ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="4_sypaj"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_wy6ve"]
@@ -104,19 +104,18 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tipki"]
 size = Vector2(28, 29)
 
-[sub_resource type="Resource" id="Resource_dwbtb"]
+[sub_resource type="Resource" id="Resource_tbfxa"]
 script = ExtResource("4_sypaj")
 attack_name = "Bite"
 damage = 3
 range_type = 0
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
-[sub_resource type="Resource" id="Resource_xdbr7"]
+[sub_resource type="Resource" id="Resource_lfn87"]
 script = ExtResource("4_sypaj")
 attack_name = "Venom Prick"
 damage = 2
 range = 2
-attack_type = 1
 range_type = 2
 effect = 1
 effect_duration = 2
@@ -130,7 +129,7 @@ metadata/_custom_type_script = "uid://6a6uyysheykg"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_esp7m")
-animation = &"attack_two"
+animation = &"idle"
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 z_index = -1
@@ -148,7 +147,7 @@ shape = SubResource("RectangleShape2D_tipki")
 
 [node name="AttackComponent" type="Node" parent="."]
 script = ExtResource("3_esp7m")
-attacks = Array[ExtResource("4_sypaj")]([SubResource("Resource_dwbtb"), SubResource("Resource_xdbr7")])
+attacks = Array[ExtResource("4_sypaj")]([SubResource("Resource_tbfxa"), SubResource("Resource_lfn87")])
 metadata/_custom_type_script = "uid://ctrvtqym607y4"
 
 [node name="MovementComponent" type="Node" parent="."]

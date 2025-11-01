@@ -1,8 +1,6 @@
 extends Node
 class_name EnemySpawner
 
-@export var blue_ant_scene: PackedScene = preload("res://scenes/bugs/blue_ant.tscn")
-@export var red_ant_scene: PackedScene = preload("res://scenes/bugs/red_ant.tscn")
 
 var enemy_team: Team
 var turn_manager: TurnManager
@@ -54,14 +52,13 @@ func spawn_enemies_for_level(level: int):
 	print("🤖 === ENEMIGOS GENERADOS Y CONECTADOS ===\n")
 
 func _create_random_enemy() -> BaseUnit:
-	var scene = [blue_ant_scene, red_ant_scene].pick_random()
+	var unit_id = UnitCatalog.get_random_id()
+	var scene = UnitCatalog.get_scene(unit_id)
 	var enemy = scene.instantiate() as BaseUnit
 	enemy_team.add_child(enemy)
 	
-	# ASIGNAR NOMBRE ÚNICO
-	var unit_type = "blue_ant" if scene == blue_ant_scene else "red_ant"
 	var unit_count = enemy_team.units.size()
-	enemy.name = "%s_%d" % [unit_type, unit_count]
+	enemy.name = "%s_%d" % [unit_id, unit_count]
 	
 	return enemy
 

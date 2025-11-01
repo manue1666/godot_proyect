@@ -79,10 +79,14 @@ func _spawn_team(team: Team, spawn_positions: Array[Vector2i]):
 
 func _on_unit_clicked(unit: BaseUnit):
 	print("🖱️ Unidad clickeada: %s" % unit.name)
-	# Solo permitir seleccionar unidades del equipo actual
+	
+	# emitir para mostrar stats (aliada o enemiga)
+	unit_selected.emit(unit)
+	
+	# Solo permitir SELECCIONAR unidades del equipo actual
 	if unit.team != get_current_team():
-		print("❌ No es tu turno")
-		return
+		print("❌ No es tu turno - solo visualizando stats")
+		return  # ← Mostró stats, pero no seleccionó
 	
 	# Si la unidad ya actuó, no se puede seleccionar
 	if unit.state_machine.is_exhausted() or unit.state_machine.is_dead():

@@ -1,0 +1,192 @@
+[gd_scene load_steps=26 format=3 uid="uid://kwrlb76lg5uc"]
+
+[ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_22ybm"]
+[ext_resource type="Texture2D" uid="uid://dlwv0bfmyl386" path="res://sprites/bugs/bug-sheets/termite.png" id="2_vibut"]
+[ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="3_x2oyf"]
+[ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="4_766ff"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="5_hcfcc"]
+[ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="6_5ajbc"]
+[ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="7_0vu60"]
+[ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="8_k0ecg"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="9_3bsv2"]
+[ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="10_ad7iq"]
+[ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="11_37jce"]
+[ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="12_vmqvb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_31mk6"]
+atlas = ExtResource("2_vibut")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v8n0r"]
+atlas = ExtResource("2_vibut")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k12o1"]
+atlas = ExtResource("2_vibut")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_plj24"]
+atlas = ExtResource("2_vibut")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h0li5"]
+atlas = ExtResource("2_vibut")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1g6ck"]
+atlas = ExtResource("2_vibut")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vibut"]
+atlas = ExtResource("2_vibut")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2oyf"]
+atlas = ExtResource("2_vibut")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbpuk"]
+atlas = ExtResource("2_vibut")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_31mk6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_31mk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v8n0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_31mk6")
+}],
+"loop": false,
+"name": &"attack_one",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k12o1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_plj24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_plj24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_plj24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k12o1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h0li5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1g6ck")
+}],
+"loop": false,
+"name": &"attack_two",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vibut")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2oyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbpuk")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v8n0r"]
+size = Vector2(28, 29)
+
+[sub_resource type="Resource" id="Resource_766ff"]
+script = ExtResource("5_hcfcc")
+attack_name = "Gnaw Wood"
+damage = 2
+range_type = 0
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_hcfcc"]
+script = ExtResource("5_hcfcc")
+attack_name = "Tunnel Dive"
+damage = 2
+range = 5
+range_type = 3
+effect = 4
+effect_duration = 2
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[node name="termite" type="Area2D"]
+script = ExtResource("1_22ybm")
+power = 0
+metadata/_custom_type_script = "uid://6a6uyysheykg"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1, -14)
+sprite_frames = SubResource("SpriteFrames_31mk6")
+animation = &"idle"
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = -1
+position = Vector2(0, 1)
+scale = Vector2(1.173913, 1)
+color = Color(0.12156863, 0.1254902, 0.1254902, 0.68235296)
+polygon = PackedVector2Array(-6, -6, 6, -6, 12, 0, 6, 5, -6, 5, -12, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_v8n0r")
+
+[node name="HealthBar" parent="." instance=ExtResource("3_x2oyf")]
+
+[node name="AttackComponent" type="Node" parent="."]
+script = ExtResource("4_766ff")
+attacks = Array[ExtResource("5_hcfcc")]([SubResource("Resource_766ff"), SubResource("Resource_hcfcc")])
+tile_size = null
+metadata/_custom_type_script = "uid://ctrvtqym607y4"
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("6_5ajbc")
+metadata/_custom_type_script = "uid://bsetip1eay5vo"
+
+[node name="AnimationComponent" type="Node" parent="."]
+script = ExtResource("7_0vu60")
+metadata/_custom_type_script = "uid://42xm15ltyvn0"
+
+[node name="StatusManager" type="Node" parent="."]
+script = ExtResource("8_k0ecg")
+metadata/_custom_type_script = "uid://dvxcv4rs07sug"
+
+[node name="UnitStateMachine" type="Node" parent="."]
+script = ExtResource("9_3bsv2")
+metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("10_ad7iq")
+max_hp = 8
+hp = 8
+metadata/_custom_type_script = "uid://dge20l8umo3ho"
+
+[node name="UIHandler" type="Node" parent="."]
+script = ExtResource("11_37jce")
+metadata/_custom_type_script = "uid://cxyoi21174a4f"
+
+[node name="InputHandler" type="Node2D" parent="."]
+script = ExtResource("12_vmqvb")
+metadata/_custom_type_script = "uid://d4gv5e3gfep1"

@@ -1,0 +1,189 @@
+[gd_scene load_steps=24 format=3 uid="uid://c23v4o0s6oq0x"]
+
+[ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_cw04n"]
+[ext_resource type="Texture2D" uid="uid://ba20ovreswy1y" path="res://sprites/bugs/bug-sheets/warrior_ant.png" id="2_vkryh"]
+[ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="3_fuixe"]
+[ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="4_7gg5c"]
+[ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_88qs8"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="5_mxhlm"]
+[ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_mxhlm"]
+[ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="7_81qba"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="8_0q0r5"]
+[ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="9_qtjms"]
+[ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="10_d5aow"]
+[ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="11_2bhdl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wvp55"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bnvm3"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xipe"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5pyhl"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrl03"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7gg5c"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88qs8"]
+atlas = ExtResource("2_vkryh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mxhlm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wvp55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bnvm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wvp55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bnvm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wvp55")
+}],
+"loop": false,
+"name": &"attack_one",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xipe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pyhl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xipe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pyhl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xipe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pyhl")
+}],
+"loop": false,
+"name": &"attack_two",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrl03")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7gg5c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_88qs8")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_81qba"]
+size = Vector2(28, 29)
+
+[sub_resource type="Resource" id="Resource_81qba"]
+script = ExtResource("5_mxhlm")
+attack_name = "Heavy Bite"
+damage = 6
+range_type = 0
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_0q0r5"]
+script = ExtResource("5_mxhlm")
+attack_name = "Ram"
+damage = 4
+range = 4
+attack_type = 2
+range_type = 2
+effect = 2
+effect_duration = 2
+metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[node name="warrior_ant" type="Area2D"]
+script = ExtResource("1_cw04n")
+power = 0
+metadata/_custom_type_script = "uid://6a6uyysheykg"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -15)
+sprite_frames = SubResource("SpriteFrames_mxhlm")
+animation = &"idle"
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = -1
+position = Vector2(0, 1)
+scale = Vector2(1.173913, 1)
+color = Color(0.12156863, 0.1254902, 0.1254902, 0.68235296)
+polygon = PackedVector2Array(-6, -6, 6, -6, 12, 0, 6, 5, -6, 5, -12, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_81qba")
+
+[node name="HealthBar" parent="." instance=ExtResource("3_fuixe")]
+
+[node name="AttackComponent" type="Node" parent="."]
+script = ExtResource("4_7gg5c")
+attacks = Array[ExtResource("5_mxhlm")]([SubResource("Resource_81qba"), SubResource("Resource_0q0r5")])
+metadata/_custom_type_script = "uid://ctrvtqym607y4"
+
+[node name="MovementComponent" type="Node" parent="."]
+script = ExtResource("5_88qs8")
+movement_type = 0
+original_range = 1
+metadata/_custom_type_script = "uid://bsetip1eay5vo"
+
+[node name="AnimationComponent" type="Node" parent="."]
+script = ExtResource("6_mxhlm")
+metadata/_custom_type_script = "uid://42xm15ltyvn0"
+
+[node name="StatusManager" type="Node" parent="."]
+script = ExtResource("7_81qba")
+metadata/_custom_type_script = "uid://dvxcv4rs07sug"
+
+[node name="UnitStateMachine" type="Node" parent="."]
+script = ExtResource("8_0q0r5")
+metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("9_qtjms")
+max_hp = 18
+hp = 18
+metadata/_custom_type_script = "uid://dge20l8umo3ho"
+
+[node name="UIHandler" type="Node" parent="."]
+script = ExtResource("10_d5aow")
+metadata/_custom_type_script = "uid://cxyoi21174a4f"
+
+[node name="InputHandler" type="Node2D" parent="."]
+script = ExtResource("11_2bhdl")
+metadata/_custom_type_script = "uid://d4gv5e3gfep1"
