@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://vi8bgnjj03c1"]
+[gd_scene load_steps=4 format=3 uid="uid://vi8bgnjj03c1"]
 
 [ext_resource type="Script" uid="uid://d3x8gir31cl5s" path="res://scripts/UI/main_menu.gd" id="1_utxct"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_hhf1j"]
+[ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="3_hrf2i"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -50,18 +51,17 @@ layout_mode = 2
 
 [node name="NewRunButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_hhf1j")
-theme_override_font_sizes/font_size = 32
+theme = ExtResource("3_hrf2i")
 text = "New Run"
 
 [node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_hhf1j")
-theme_override_font_sizes/font_size = 32
+theme = ExtResource("3_hrf2i")
 text = "Settings"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_hrf2i")
 theme_override_fonts/font = ExtResource("2_hhf1j")
 theme_override_font_sizes/font_size = 32
 text = "Quit"

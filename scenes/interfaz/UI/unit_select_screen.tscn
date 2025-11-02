@@ -1,10 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://rxpfhm1p5b8j"]
+[gd_scene load_steps=5 format=3 uid="uid://rxpfhm1p5b8j"]
 
 [ext_resource type="Script" uid="uid://ddv0asrf24dne" path="res://scripts/UI/unit_select_screen.gd" id="1_ek3ap"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="1_kcd0f"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ek3ap"]
-bg_color = Color(5.7155265e-08, 0.09415845, 0.12667409, 1)
+[ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="2_oiire"]
+[ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="4_2gdve"]
 
 [node name="UnitSelectScreen" type="Control"]
 layout_mode = 3
@@ -22,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ek3ap")
+theme = ExtResource("2_oiire")
 
 [node name="Label" type="Label" parent="PanelContainer"]
 layout_mode = 2
@@ -50,6 +49,7 @@ alignment = 1
 
 [node name="BlueAnt" type="Button" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_2gdve")
 theme_override_colors/font_color = Color(0.38640693, 0.72705805, 1, 1)
 theme_override_fonts/font = ExtResource("1_kcd0f")
 theme_override_font_sizes/font_size = 24
@@ -58,6 +58,7 @@ text = "BLUE ANT
 
 [node name="RedAnt" type="Button" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_2gdve")
 theme_override_colors/font_color = Color(0.99982303, 0.30032414, 0.23706019, 1)
 theme_override_fonts/font = ExtResource("1_kcd0f")
 theme_override_font_sizes/font_size = 24
@@ -66,6 +67,7 @@ text = "RED ANT
 
 [node name="WarriorAnt" type="Button" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_2gdve")
 theme_override_colors/font_color = Color(0.06337472, 0.4566182, 0.75574756, 1)
 theme_override_fonts/font = ExtResource("1_kcd0f")
 theme_override_font_sizes/font_size = 24
@@ -74,6 +76,7 @@ text = "WARRIOR ANT
 
 [node name="Termite" type="Button" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_2gdve")
 theme_override_colors/font_color = Color(0.92060834, 0.8944146, 0.50735366, 1)
 theme_override_fonts/font = ExtResource("1_kcd0f")
 theme_override_font_sizes/font_size = 24
@@ -82,6 +85,7 @@ text = "TERMITE
 
 [node name="Fly" type="Button" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_2gdve")
 theme_override_colors/font_color = Color(0.23203585, 0.6718137, 0.5936141, 1)
 theme_override_fonts/font = ExtResource("1_kcd0f")
 theme_override_font_sizes/font_size = 24

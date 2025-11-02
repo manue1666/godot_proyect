@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbel4s06fdhuw"]
+[gd_scene load_steps=7 format=3 uid="uid://cbel4s06fdhuw"]
 
 [ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battleUI/battle_hud.gd" id="1_ueiah"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_tv7i6"]
 [ext_resource type="Script" uid="uid://cnhyw1mnuirk8" path="res://scripts/UI/battleUI/action_panel.gd" id="3_ohllx"]
+[ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="3_vlemc"]
+[ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="4_juuyc"]
 [ext_resource type="Script" uid="uid://dggidsndg13uw" path="res://scripts/UI/battleUI/stats_panel.gd" id="4_xm72h"]
 
 [node name="BattleHUD" type="Control"]
@@ -22,12 +24,13 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 817.0
+offset_left = 827.0
 offset_top = -54.0
-offset_right = -11.0
+offset_right = -15.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("4_juuyc")
 
 [node name="MarginContainer" type="MarginContainer" parent="LevelPanel"]
 layout_mode = 1
@@ -75,7 +78,7 @@ offset_right = 558.0
 offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_tv7i6")
+theme = ExtResource("3_vlemc")
 theme_override_font_sizes/font_size = 32
 text = "END TURN"
 
@@ -83,11 +86,12 @@ text = "END TURN"
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 842.0
-offset_top = -585.0
+offset_left = 896.0
+offset_top = -616.0
 offset_right = -27.0
-offset_bottom = -419.0
+offset_bottom = -450.0
 grow_horizontal = 2
+theme = ExtResource("4_juuyc")
 
 [node name="MarginContainer" type="MarginContainer" parent="BoostsPanel"]
 layout_mode = 1
@@ -137,22 +141,22 @@ text = "Movement Boost: 0"
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 470.0
-offset_top = -127.0
-offset_right = -347.0
-offset_bottom = -7.0
+offset_left = 15.0
+offset_top = -290.0
+offset_right = -691.0
+offset_bottom = -161.0
 grow_horizontal = 2
+theme = ExtResource("4_juuyc")
 script = ExtResource("3_ohllx")
 
 [node name="Move" type="Button" parent="ActionPanel"]
 layout_mode = 0
-offset_left = 25.0
-offset_top = 10.0
-offset_right = 141.0
-offset_bottom = 108.0
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 34
-text = "Move"
+offset_left = 27.0
+offset_top = 15.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme = ExtResource("3_vlemc")
+text = "MOVE"
 
 [node name="VSeparator" type="VSeparator" parent="ActionPanel"]
 layout_mode = 0
@@ -163,23 +167,21 @@ offset_bottom = 99.0
 
 [node name="Attack_one" type="Button" parent="ActionPanel"]
 layout_mode = 0
-offset_left = 167.0
-offset_top = 8.0
-offset_right = 317.0
-offset_bottom = 58.0
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
+offset_left = 170.0
+offset_top = 11.0
+offset_right = 409.0
+offset_bottom = 61.0
+theme = ExtResource("3_vlemc")
 text = "attack one name
 "
 
 [node name="Attack_two" type="Button" parent="ActionPanel"]
 layout_mode = 0
-offset_left = 168.0
-offset_top = 63.0
-offset_right = 318.0
-offset_bottom = 113.0
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
+offset_left = 171.0
+offset_top = 68.0
+offset_right = 410.0
+offset_bottom = 118.0
+theme = ExtResource("3_vlemc")
 text = "attack two name"
 
 [node name="StatsPanel" type="Panel" parent="."]
@@ -191,6 +193,7 @@ offset_top = -151.0
 offset_right = -691.0
 offset_bottom = -8.0
 grow_horizontal = 2
+theme = ExtResource("4_juuyc")
 script = ExtResource("4_xm72h")
 
 [node name="MarginContainer" type="MarginContainer" parent="StatsPanel"]
@@ -270,7 +273,7 @@ theme_override_colors/font_color = Color(0.8058624, 2.878219e-05, 0.582713, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Dm:0"
+text = "0"
 
 [node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2

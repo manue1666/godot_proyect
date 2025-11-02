@@ -1,0 +1,30 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://c7gw2v1gydah5"]
+
+[ext_resource type="Texture2D" uid="uid://bnp4nrtlqsh2a" path="res://sprites/UI/ui.png" id="1_rdrw7"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_f106s"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xvrqo"]
+texture = ExtResource("1_rdrw7")
+region_rect = Rect2(161.47617, 0, 29.632767, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qmh0e"]
+texture = ExtResource("1_rdrw7")
+region_rect = Rect2(0.77897644, 0, 30.548515, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bq7o1"]
+texture = ExtResource("1_rdrw7")
+region_rect = Rect2(0, 0, 31.949005, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_35hw8"]
+texture = ExtResource("1_rdrw7")
+region_rect = Rect2(32.06659, 0, 32.655624, 32)
+
+[resource]
+default_font = ExtResource("2_f106s")
+default_font_size = 32
+Button/constants/h_separation = 12
+Button/constants/outline_size = 5
+Button/styles/disabled = SubResource("StyleBoxTexture_xvrqo")
+Button/styles/hover = SubResource("StyleBoxTexture_qmh0e")
+Button/styles/normal = SubResource("StyleBoxTexture_bq7o1")
+Button/styles/pressed = SubResource("StyleBoxTexture_35hw8")

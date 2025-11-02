@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://en72n1htr5ab"]
+[gd_scene load_steps=5 format=3 uid="uid://en72n1htr5ab"]
 
 [ext_resource type="Script" uid="uid://cmah4cdm5wyoc" path="res://scripts/UI/level_result_screen.gd" id="1_ehjtt"]
+[ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="2_6x68o"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_pa873"]
+[ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="4_m3mpy"]
 
 [node name="LevelResultScreen" type="Control"]
 layout_mode = 3
@@ -31,6 +33,7 @@ grow_vertical = 2
 [node name="Panel" type="Panel" parent="CenterContainer"]
 custom_minimum_size = Vector2(300, 400)
 layout_mode = 2
+theme = ExtResource("2_6x68o")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel"]
 layout_mode = 1
@@ -71,13 +74,14 @@ theme_override_constants/separation = 37
 
 [node name="MenuButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_pa873")
-theme_override_font_sizes/font_size = 32
+theme = ExtResource("4_m3mpy")
+theme_override_constants/outline_size = 0
 text = "Main Menu"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("4_m3mpy")
 theme_override_fonts/font = ExtResource("2_pa873")
 theme_override_font_sizes/font_size = 32
 text = "Continue"

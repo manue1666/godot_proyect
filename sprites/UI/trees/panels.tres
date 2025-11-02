@@ -1,0 +1,19 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bkfdwh2gbiv4t"]
+
+[ext_resource type="Texture2D" uid="uid://bnp4nrtlqsh2a" path="res://sprites/UI/ui.png" id="1_oy4la"]
+[ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_i6qmx"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hquol"]
+texture = ExtResource("1_oy4la")
+region_rect = Rect2(128.10866, 0.40836334, 31.567245, 31.633339)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oy4la"]
+texture = ExtResource("1_oy4la")
+texture_margin_top = 5.2666464
+region_rect = Rect2(127.84296, -4.296726, 31.839264, 35.190773)
+
+[resource]
+default_font = ExtResource("2_i6qmx")
+default_font_size = 32
+Panel/styles/panel = SubResource("StyleBoxTexture_hquol")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_oy4la")

@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://ji44mple28kk"]
+[gd_scene load_steps=5 format=3 uid="uid://ji44mple28kk"]
 
 [ext_resource type="Script" uid="uid://dl2s0b3e5n3ii" path="res://scripts/UI/shop_item_card.gd" id="1_5bvfq"]
+[ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="1_gcsks"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_6o85w"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5bvfq"]
-bg_color = Color(0.10000142, 0.28081155, 0.28187263, 1)
+[ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="4_twxr6"]
 
 [node name="ShopItemCard" type="PanelContainer"]
-offset_right = 260.0
-offset_bottom = 206.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_5bvfq")
+offset_right = 281.0
+offset_bottom = 293.0
+theme = ExtResource("1_gcsks")
 script = ExtResource("1_5bvfq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
 [node name="NameLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
@@ -45,6 +45,8 @@ layout_mode = 2
 
 [node name="PurchaseButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("4_twxr6")
 theme_override_colors/font_color = Color(0.99084455, 0.8805559, 0, 1)
 theme_override_fonts/font = ExtResource("2_6o85w")
 theme_override_font_sizes/font_size = 32
