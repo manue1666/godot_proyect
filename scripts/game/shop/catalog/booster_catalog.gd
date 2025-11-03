@@ -6,28 +6,28 @@ class_name BoosterCatalog
 static var CATALOG = {
 	"health": {
 		"name": "Booster de Salud",
-		"description": "+5 Max HP a todas las unidades",
+		"description": "+5 Max HP a todas\n las unidades",
 		"cost": 10,
 		"amount": 5,
 		"type": "health"
 	},
 	"power": {
 		"name": "Booster de Poder",
-		"description": "+1 Poder a todas las unidades",
+		"description": "+1 Poder a todas\n las unidades",
 		"cost": 5,
 		"amount": 1,
 		"type": "power"
 	},
 	"movement": {
 		"name": "Booster de Movimiento",
-		"description": "+1 Rango de movimiento a todas las unidades",
+		"description": "+1 Rango de\n movimiento a todas\n las unidades",
 		"cost": 5,
 		"amount": 1,
 		"type": "movement"
 	},
 	"full_heal": {
 		"name": "Curación Completa",
-		"description": "Restaura toda la salud de todas las unidades",
+		"description": "Restaura toda\n la salud de todas\n las unidades",
 		"cost": 3,
 		"amount": 100,
 		"type": "full_heal"

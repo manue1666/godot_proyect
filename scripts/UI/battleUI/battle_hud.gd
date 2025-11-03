@@ -6,9 +6,9 @@ class_name BattleHUD
 @onready var turn_label: Label = $LevelPanel/MarginContainer/HBoxContainer/TurnLabel
 @onready var end_turn_button: Button = $Turn
 
-@onready var health_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/HealthBoostLabel
-@onready var power_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/PowerLabel
-@onready var movement_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/MovBoostLabel
+@onready var health_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/HBContainer/HealthBoostLabel
+@onready var power_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/PBContainer/PowerBoostLabel
+@onready var movement_boost_label: Label = $BoostsPanel/MarginContainer/VBoxContainer/MBContainer/MovBoostLabel
 
 @onready var action_panel: ActionPanel = $ActionPanel
 @onready var stats_panel: StatsPanel = $StatsPanel
@@ -106,9 +106,9 @@ func update_turn(team_name: String):
 func update_boosts_display():
 	if not team_stats_tracker:
 		return
-	health_boost_label.text = "💚 Health Boost: +%d" % team_stats_tracker.get_health_boost()
-	power_boost_label.text = "⚔️ Power Boost: +%d" % team_stats_tracker.get_power_boost()
-	movement_boost_label.text = "🚶 Movement Boost: +%d" % team_stats_tracker.get_movement_boost()
+	health_boost_label.text = "+%d" % team_stats_tracker.get_health_boost()
+	power_boost_label.text = "+%d" % team_stats_tracker.get_power_boost()
+	movement_boost_label.text = "+%d" % team_stats_tracker.get_movement_boost()
 
 func _on_end_turn_pressed():
 	end_turn_pressed.emit()

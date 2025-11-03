@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbel4s06fdhuw"]
+[gd_scene load_steps=37 format=3 uid="uid://cbel4s06fdhuw"]
 
 [ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battleUI/battle_hud.gd" id="1_ueiah"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_tv7i6"]
@@ -6,6 +6,136 @@
 [ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="3_vlemc"]
 [ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="4_juuyc"]
 [ext_resource type="Script" uid="uid://dggidsndg13uw" path="res://scripts/UI/battleUI/stats_panel.gd" id="4_xm72h"]
+[ext_resource type="Texture2D" uid="uid://ba75gmnlfnjr6" path="res://sprites/UI/icons/icons.png" id="7_juuyc"]
+[ext_resource type="Texture2D" uid="uid://bgbwbcd4vgr55" path="res://sprites/UI/poison_icon.png" id="8_22gvi"]
+[ext_resource type="Texture2D" uid="uid://cruibjgq0j2ot" path="res://sprites/UI/slow_icon.png" id="9_43gih"]
+[ext_resource type="Texture2D" uid="uid://tra4grx4qmta" path="res://sprites/UI/stun_icon.png" id="10_go1sd"]
+[ext_resource type="Texture2D" uid="uid://3g1vggxdbkmc" path="res://sprites/UI/icons/physical_icon.png" id="11_t5ocx"]
+[ext_resource type="Texture2D" uid="uid://ueaein5vkqpm" path="res://sprites/UI/icons/ranged_icon.png" id="12_rl7l4"]
+[ext_resource type="Texture2D" uid="uid://craih28woeqa1" path="res://sprites/UI/icons/area_icon.png" id="13_g45tx"]
+[ext_resource type="Texture2D" uid="uid://c8yfnb0muaojq" path="res://sprites/UI/icons/square_range.png" id="14_0lw3y"]
+[ext_resource type="Texture2D" uid="uid://ck8vmhrueismf" path="res://sprites/UI/icons/x_range.png" id="15_03mo0"]
+[ext_resource type="Texture2D" uid="uid://dve2h8l7pdvjh" path="res://sprites/UI/icons/cross_range.png" id="16_et5r8"]
+[ext_resource type="Texture2D" uid="uid://d1i752xp41vg2" path="res://sprites/UI/icons/circle_range.png" id="17_vl3tb"]
+[ext_resource type="Texture2D" uid="uid://dxn6xbs78477w" path="res://sprites/UI/icons/line_range.png" id="18_mlo44"]
+[ext_resource type="Texture2D" uid="uid://8bn5dgafwwv6" path="res://sprites/UI/icons/knight_range.png" id="19_vuh6p"]
+[ext_resource type="Texture2D" uid="uid://kpo1o754hpi5" path="res://sprites/UI/icons/tp_range.png" id="20_ye1ei"]
+[ext_resource type="Texture2D" uid="uid://ec4d1r64skly" path="res://sprites/UI/icons/diamond_icon.png" id="21_73til"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rl7l4"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(0, 0, 16.359783, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g45tx"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(32.353016, 0, 16.01041, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lw3y"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(15.755148, 0, 16.628527, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_juuyc"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(80.336, 0, 15, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42yth"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(111.989, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_it4on"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(96.096, 0, 16, 16)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_7fp71"]
+frames = 3
+pause = true
+frame_0/texture = ExtResource("8_22gvi")
+frame_1/texture = ExtResource("9_43gih")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("10_go1sd")
+frame_2/duration = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22gvi"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(112.188, -0.053, 16, 16)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_8sb30"]
+frames = 3
+pause = true
+frame_0/texture = ExtResource("11_t5ocx")
+frame_1/texture = ExtResource("12_rl7l4")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("13_g45tx")
+frame_2/duration = 1.0
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_jh5kq"]
+frames = 8
+pause = true
+frame_0/texture = ExtResource("14_0lw3y")
+frame_1/texture = ExtResource("15_03mo0")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("16_et5r8")
+frame_2/duration = 1.0
+frame_3/texture = ExtResource("17_vl3tb")
+frame_3/duration = 1.0
+frame_4/texture = ExtResource("18_mlo44")
+frame_4/duration = 1.0
+frame_5/texture = ExtResource("19_vuh6p")
+frame_5/duration = 1.0
+frame_6/texture = ExtResource("20_ye1ei")
+frame_6/duration = 1.0
+frame_7/texture = ExtResource("21_73til")
+frame_7/duration = 1.0
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_t5ocx"]
+frames = 3
+pause = true
+frame_0/texture = ExtResource("8_22gvi")
+frame_1/texture = ExtResource("9_43gih")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("10_go1sd")
+frame_2/duration = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5ocx"]
+atlas = ExtResource("7_juuyc")
+region = Rect2(112.092, 0, 16, 16)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_rl7l4"]
+frames = 3
+pause = true
+frame_0/texture = ExtResource("11_t5ocx")
+frame_1/texture = ExtResource("12_rl7l4")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("13_g45tx")
+frame_2/duration = 1.0
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_g45tx"]
+frames = 8
+pause = true
+frame_0/texture = ExtResource("14_0lw3y")
+frame_1/texture = ExtResource("15_03mo0")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("16_et5r8")
+frame_2/duration = 1.0
+frame_3/texture = ExtResource("17_vl3tb")
+frame_3/duration = 1.0
+frame_4/texture = ExtResource("18_mlo44")
+frame_4/duration = 1.0
+frame_5/texture = ExtResource("19_vuh6p")
+frame_5/duration = 1.0
+frame_6/texture = ExtResource("20_ye1ei")
+frame_6/duration = 1.0
+frame_7/texture = ExtResource("21_73til")
+frame_7/duration = 1.0
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_0lw3y"]
+frames = 3
+pause = true
+frame_0/texture = ExtResource("8_22gvi")
+frame_1/texture = ExtResource("9_43gih")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("10_go1sd")
+frame_2/duration = 1.0
 
 [node name="BattleHUD" type="Control"]
 layout_mode = 3
@@ -15,20 +145,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+size_flags_vertical = 4
 script = ExtResource("1_ueiah")
 
 [node name="LevelPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(10, 10)
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 827.0
-offset_top = -54.0
-offset_right = -15.0
-offset_bottom = -8.0
-grow_horizontal = 2
+offset_left = -290.0
+offset_top = -47.0
+grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("4_juuyc")
 
@@ -67,16 +196,16 @@ text = "turn 1"
 
 [node name="Turn" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 427.0
-offset_top = -132.0
-offset_right = 558.0
-offset_bottom = -61.0
-grow_horizontal = 2
+offset_left = -158.0
+offset_top = -129.0
+offset_right = -3.0
+offset_bottom = -52.0
+grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("3_vlemc")
 theme_override_font_sizes/font_size = 32
@@ -84,31 +213,30 @@ text = "END TURN"
 
 [node name="BoostsPanel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 896.0
-offset_top = -616.0
-offset_right = -27.0
-offset_bottom = -450.0
-grow_horizontal = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 460.0
+offset_top = -153.0
+offset_right = 583.0
+offset_bottom = -2.0
+grow_vertical = 0
 theme = ExtResource("4_juuyc")
 
 [node name="MarginContainer" type="MarginContainer" parent="BoostsPanel"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -78.5
-offset_top = -64.0
-offset_right = 78.5
-offset_bottom = 64.0
+offset_left = -30.0
+offset_right = 30.0
+offset_bottom = 128.0
 grow_horizontal = 2
-grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BoostsPanel/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="BoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -119,33 +247,61 @@ text = "BOOSTS"
 [node name="HSeparator" type="HSeparator" parent="BoostsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HealthBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+[node name="HBContainer" type="HBoxContainer" parent="BoostsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "Health Boost: 0"
 
-[node name="PowerLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+[node name="HealthBoostTexture" type="TextureRect" parent="BoostsPanel/MarginContainer/VBoxContainer/HBContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tv7i6")
-theme_override_font_sizes/font_size = 24
-text = "Power Boost: 0"
+tooltip_text = "Health Boost"
+texture = SubResource("AtlasTexture_rl7l4")
+expand_mode = 2
 
-[node name="MovBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+[node name="HealthBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer/HBContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Movement Boost: 0"
+text = "0"
+
+[node name="PBContainer" type="HBoxContainer" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PowerBoostTexture" type="TextureRect" parent="BoostsPanel/MarginContainer/VBoxContainer/PBContainer"]
+layout_mode = 2
+tooltip_text = "PowerBoost"
+texture = SubResource("AtlasTexture_g45tx")
+expand_mode = 2
+
+[node name="PowerBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer/PBContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="MBContainer" type="HBoxContainer" parent="BoostsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MovBoostTexture" type="TextureRect" parent="BoostsPanel/MarginContainer/VBoxContainer/MBContainer"]
+layout_mode = 2
+tooltip_text = "Movement Boost"
+texture = SubResource("AtlasTexture_0lw3y")
+expand_mode = 2
+
+[node name="MovBoostLabel" type="Label" parent="BoostsPanel/MarginContainer/VBoxContainer/MBContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tv7i6")
+theme_override_font_sizes/font_size = 24
+text = "0"
 
 [node name="ActionPanel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 15.0
-offset_top = -290.0
-offset_right = -691.0
-offset_bottom = -161.0
-grow_horizontal = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -286.0
+offset_right = 455.0
+offset_bottom = -157.0
+grow_vertical = 0
 theme = ExtResource("4_juuyc")
 script = ExtResource("3_ohllx")
 
@@ -186,13 +342,13 @@ text = "attack two name"
 
 [node name="StatsPanel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 11.0
-offset_top = -151.0
-offset_right = -691.0
-offset_bottom = -8.0
-grow_horizontal = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = -154.0
+offset_right = 455.0
+grow_vertical = 0
 theme = ExtResource("4_juuyc")
 script = ExtResource("4_xm72h")
 
@@ -222,52 +378,86 @@ text = "UNIT NAME"
 [node name="HSeparator" type="HSeparator" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="UnitStatsContainer" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HPLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HPTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3573256, 0.2902088, 1)
+tooltip_text = "Health"
+texture = SubResource("AtlasTexture_juuyc")
+expand_mode = 2
+stretch_mode = 1
+
+[node name="HPLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9999973, 0.040239066, 0.024393436, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "HP:0"
+text = ":0"
 
-[node name="PowerLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="PowerTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.23754475, 0.99572855, 1)
+tooltip_text = "Power"
+texture = SubResource("AtlasTexture_42yth")
+expand_mode = 2
+
+[node name="PowerLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7464902, 0.08510081, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Pw:0"
+text = "+0"
 
-[node name="MovLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MovTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
+layout_mode = 2
+tooltip_text = "Movement"
+texture = SubResource("AtlasTexture_it4on")
+expand_mode = 2
+
+[node name="MovLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Mov:0"
+text = ":0"
 
-[node name="StatusLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="StatusTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
+layout_mode = 2
+tooltip_text = "Current Effect"
+texture = SubResource("AnimatedTexture_7fp71")
+expand_mode = 2
+
+[node name="StatusLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/UnitStatsContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "St:None"
+text = "0"
 
 [node name="HSeparator2" type="HSeparator" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="AttackOneInfo" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AttackOneName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="AttackOneName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
 text = "Name"
 
-[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="VSeparator" type="VSeparator" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
+layout_mode = 2
+
+[node name="DamageTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
+layout_mode = 2
+tooltip_text = "Attack Damage"
+texture = SubResource("AtlasTexture_22gvi")
+expand_mode = 2
+
+[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8058624, 2.878219e-05, 0.582713, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -275,47 +465,93 @@ theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
 text = "0"
 
-[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="AttackTypeTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
+layout_mode = 2
+tooltip_text = "Attack Type"
+texture = SubResource("AnimatedTexture_8sb30")
+expand_mode = 2
+
+[node name="RangeTypeTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
+layout_mode = 2
+tooltip_text = "Range Type"
+texture = SubResource("AnimatedTexture_jh5kq")
+expand_mode = 2
+
+[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.587909, 0.99999994, 0.99584645, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "type/type(0)"
+text = "0"
 
-[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="EffectTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
+layout_mode = 2
+tooltip_text = "Effect"
+texture = SubResource("AnimatedTexture_t5ocx")
+expand_mode = 2
+
+[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackOneInfo"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "none(0)"
+text = "0"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
+[node name="AttackTwoInfo" type="HBoxContainer" parent="StatsPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AttackTwoName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="AttackTwoName" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
 text = "Name"
 
-[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="VSeparator" type="VSeparator" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
+layout_mode = 2
+
+[node name="DamageTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
+layout_mode = 2
+tooltip_text = "Attack Damage"
+texture = SubResource("AtlasTexture_t5ocx")
+expand_mode = 2
+
+[node name="DamageLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8058624, 2.878219e-05, 0.582713, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "Dm:0"
+text = "0"
 
-[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="AttackTypeTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
+layout_mode = 2
+tooltip_text = "Attack Type"
+texture = SubResource("AnimatedTexture_rl7l4")
+expand_mode = 2
+
+[node name="RangeTypeTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
+layout_mode = 2
+tooltip_text = "Range Type"
+texture = SubResource("AnimatedTexture_g45tx")
+expand_mode = 2
+
+[node name="RangeLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.587909, 0.99999994, 0.99584645, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "type/type(0)"
+text = "0"
 
-[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="EffectTexture" type="TextureRect" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
+layout_mode = 2
+tooltip_text = "Effect
+"
+texture = SubResource("AnimatedTexture_0lw3y")
+expand_mode = 2
+
+[node name="EffectLabel" type="Label" parent="StatsPanel/MarginContainer/VBoxContainer/AttackTwoInfo"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
-text = "none(0)"
+text = "0"
