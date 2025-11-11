@@ -29,6 +29,14 @@ func _ready():
 	print("✅ InputHandler inicializado para %s" % owner_unit.name)
 
 func _unhandled_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		if owner_unit.state_machine.is_waiting_move() or owner_unit.state_machine.is_waiting_attack():
+			print("❌ Cancelando acción...")
+			owner_unit.state_machine.change_state(UnitStateMachine.State.IDLE)
+			if ui_handler:
+				ui_handler.clear_highlights()
+			return
+	
 	if not event is InputEventMouseButton or not event.pressed or event.button_index != MOUSE_BUTTON_LEFT:
 		return
 	
@@ -36,7 +44,7 @@ func _unhandled_input(event):
 	if not owner_unit.state_machine.is_waiting_move() and not owner_unit.state_machine.is_waiting_attack():
 		return
 	
-	# ✅ USAR get_global_mouse_position() en lugar de get_viewport().get_mouse_position()
+	#USAR get_global_mouse_position() en lugar de get_viewport().get_mouse_position()
 	var click_pos = get_global_mouse_position()
 	var cell_clicked = Vector2i(
 		int(click_pos.x / tile_size),

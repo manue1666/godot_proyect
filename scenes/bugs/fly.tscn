@@ -134,6 +134,7 @@ script = ExtResource("5_wdem3")
 attack_name = "Dive & Retreat"
 damage = 3
 range = 3
+attack_type = 1
 range_type = 2
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
