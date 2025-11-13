@@ -3,7 +3,8 @@ class_name AttackData
 
 enum RangeType {
 	SQUARE,    # Cuadrado completo (ajedrez: rey)
-	DIAMOND,   # Distancia Manhattan (ajedrez: alfil limitado)
+	X,         # Forma de X (diagonales - ajedrez: alfil)
+	DIAMOND,   # Distancia Manhattan 
 	CROSS,     # Solo líneas rectas (ajedrez: torre)
 	LINE,      # Línea recta en una dirección
 	CIRCLE,    # Radio circular (más realista)

@@ -227,24 +227,28 @@ func reset_all_units_for_new_battle():
 			
 			print("  🔄 Reseteando: %s" % unit.name)
 			
-			# RESETEAR MOVIMIENTO CON BOOSTS
+			# ✅ RESETEAR MOVIMIENTO CON BOOSTS
 			if unit.has_node("MovementComponent"):
 				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
 				
 				if team_stats_tracker:
-					movement_comp.set_range_boost(team_stats_tracker.get_movement_boost())
+					var movement_boost = team_stats_tracker.get_movement_boost()
+					movement_comp.set_range_boost(movement_boost)
+					var current_range = movement_comp.get_current_range()
+					var base_range = movement_comp.movement_data.base_range
 					print("    · Movement: %d (base %d + boost %d)" % [
-						movement_comp.current_range,
-						movement_comp.original_range,
-						team_stats_tracker.get_movement_boost()
+						current_range,
+						base_range,
+						movement_boost
 					])
 				else:
 					movement_comp.reset_range()
 
 			# RESETEAR PODER CON BOOSTS
 			if team_stats_tracker:
-				unit.power = 0 + team_stats_tracker.get_power_boost()
-				print("    · Power: %d (base 0 + boost %d)" % [unit.power, team_stats_tracker.get_power_boost()])
+				var power_boost = team_stats_tracker.get_power_boost()
+				unit.power = power_boost
+				print("    · Power: %d (boost %d)" % [unit.power, power_boost])
 			else:
 				unit.power = 0
 			
@@ -275,4 +279,4 @@ func reset_all_units_for_new_battle():
 			
 			unit.deselect_unit()
 	
-	print("✅ Todas las unidades reseteadas\n")
+	print("Todas las unidades reseteadas\n")

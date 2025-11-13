@@ -85,7 +85,8 @@ func apply_all_boosts_to_team(team: Team):
 			if unit.has_node("MovementComponent"):
 				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
 				movement_comp.set_range_boost(movement_boost)
-				print("    · %s: Movement ahora es %d" % [unit.name, movement_comp.current_range])
+				var current_range = movement_comp.get_current_range()
+				print("    · %s: Movement ahora es %d" % [unit.name, current_range])
 	
 	print("  ✅ Boosts aplicados exitosamente")
 	print("=====================================\n")

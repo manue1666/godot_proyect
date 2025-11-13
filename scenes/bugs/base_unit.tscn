@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="4_dbhn7"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="5_sna7e"]
 [ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="6_n6f5v"]
-[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="7_0olfr"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/base_unit/unit_state_machine.gd" id="7_0olfr"]
 [ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="8_4ck44"]
 [ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="9_mfo21"]
 

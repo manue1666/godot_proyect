@@ -23,28 +23,36 @@ func get_attackable_cells(attack_index: int) -> Array[Vector2i]:
 	if not attack or not attack.is_valid():
 		return []
 	
-	var cells: Array[Vector2i] = []
-	var range_val = attack.range
+	var range_calculator_type = _convert_attack_range_type(attack.range_type)
 	var start_pos = owner_unit.board_position
 	
-	match attack.range_type:
+	# Usar RangeCalculator
+	return RangeCalculator.get_cells_in_range(
+		start_pos,
+		attack.range,
+		range_calculator_type,
+		_is_cell_valid
+	)
+
+# Convertir AttackData.RangeType a RangeCalculator.RangeType
+func _convert_attack_range_type(attack_range_type: AttackData.RangeType) -> RangeCalculator.RangeType:
+	match attack_range_type:
 		AttackData.RangeType.SQUARE:
-			cells = _get_square_cells(start_pos, range_val)
+			return RangeCalculator.RangeType.SQUARE
+		AttackData.RangeType.X:
+			return RangeCalculator.RangeType.X
 		AttackData.RangeType.DIAMOND:
-			cells = _get_diamond_cells(start_pos, range_val)
+			return RangeCalculator.RangeType.DIAMOND
 		AttackData.RangeType.CROSS:
-			cells = _get_cross_cells(start_pos, range_val)
+			return RangeCalculator.RangeType.CROSS
 		AttackData.RangeType.CIRCLE:
-			cells = _get_circle_cells(start_pos, range_val)
+			return RangeCalculator.RangeType.CIRCLE
 		AttackData.RangeType.KNIGHT:
-			cells = _get_knight_cells(start_pos)
+			return RangeCalculator.RangeType.KNIGHT
 		AttackData.RangeType.LINE:
-			cells = _get_line_cells(start_pos, range_val, Vector2i(1, 0))
-			cells.append_array(_get_line_cells(start_pos, range_val, Vector2i(-1, 0)))
+			return RangeCalculator.RangeType.LINE
 		_:
-			cells = _get_diamond_cells(start_pos, range_val)
-	
-	return cells
+			return RangeCalculator.RangeType.DIAMOND
 
 func can_attack_target(target: BaseUnit, attack_index: int) -> bool:
 	if not target or target == owner_unit:
@@ -92,7 +100,7 @@ func _perform_single_attack(target: BaseUnit, attack: AttackData, damage: int, a
 	attack_performed.emit(target, attack)
 	return true
 
-# ✅ FÍSICO - Animación paralela
+#	FÍSICO - Animación paralela
 func _perform_physical_attack(target: BaseUnit, attack: AttackData, damage: int) -> void:
 	if not _has_line_of_sight(target):
 		print("❌ %s no tiene línea recta a %s" % [owner_unit.name, target.name])
@@ -116,14 +124,14 @@ func _perform_physical_attack(target: BaseUnit, attack: AttackData, damage: int)
 	)
 	move_tween.tween_property(owner_unit, "position", original_pos, 0.3)
 
-# ✅ RANGED - Proyectil paralelo
+# RANGED - Proyectil paralelo
 func _perform_ranged_attack(target: BaseUnit, attack: AttackData, damage: int) -> void:
-	print("🎯 RANGED: %s lanza ataque a %s por %d de daño" % [owner_unit.name, target.name, damage])
+	print("RANGED: %s lanza ataque a %s por %d de daño" % [owner_unit.name, target.name, damage])
 	
 	var start_pos = owner_unit.position
 	var target_pos = target.position
 	
-	# 🎬 Lanzar proyectil (NO ESPERAR)
+	# Lanzar proyectil (NO ESPERAR)
 	var projectile = _spawn_projectile(start_pos, target_pos)
 	
 	# Aplicar daño cuando llega (callback)
@@ -147,7 +155,6 @@ func _has_line_of_sight(target: BaseUnit) -> bool:
 		return false
 	
 	# Recorrer cada celda en el camino
-	# ⚠Convertir a Vector2i después de redondear
 	var normalized_dir = Vector2(direction).normalized()
 	var distance = int(start.distance_to(end))
 	
@@ -178,35 +185,35 @@ func _is_straight_line(from: Vector2i, to: Vector2i) -> bool:
 
 # Crear proyectil visual
 func _spawn_projectile(start_pos: Vector2, target_pos: Vector2) -> Node2D:
-	# 🎯 Crear nodo contenedor
+	# Crear nodo contenedor
 	var projectile = Node2D.new()
 	projectile.position = start_pos
 	owner_unit.get_parent().add_child(projectile)
 	
-	# 🟨 Crear sprite (círculo simple por ahora)
+	# Crear sprite (círculo simple por ahora)
 	var sprite = Sprite2D.new()
-	sprite.texture = preload("res://sprites/UI/icons/projectile.png")  # Ajustar ruta
+	sprite.texture = preload("res://sprites/UI/icons/projectile.png")
 	sprite.scale = Vector2(0.5, 0.5)
 	projectile.add_child(sprite)
 	
-	# 🔄 Rotar sprite hacia dirección
+	# Rotar sprite hacia dirección
 	sprite.rotation = start_pos.angle_to_point(target_pos)
 	
-	# ✈️ Animar movimiento del proyectil
+	# Animar movimiento del proyectil
 	var travel_tween = create_tween()
 	travel_tween.set_trans(Tween.TRANS_LINEAR)
 	travel_tween.tween_property(projectile, "position", target_pos, 0.4)
 	
-	# 🔄 Rotar proyectil durante el vuelo
+	# Rotar proyectil durante el vuelo
 	var rotate_tween = create_tween()
 	rotate_tween.set_trans(Tween.TRANS_LINEAR)
 	rotate_tween.tween_property(sprite, "rotation", sprite.rotation + TAU, 0.4)
 	
-	print("✈️ Proyectil lanzado desde %v hacia %v" % [start_pos, target_pos])
+	print("Proyectil lanzado desde %v hacia %v" % [start_pos, target_pos])
 	
 	return projectile
 
-# Ataque de área - daña a todos los objetivos en rango
+# AREA - daña a todos los objetivos en rango
 func _perform_area_attack(attack: AttackData, damage: int) -> bool:
 	var attackable_cells = get_attackable_cells(_get_attack_index(attack))
 	var targets_hit: Array[BaseUnit] = []
@@ -278,80 +285,6 @@ func apply_effect(target: BaseUnit, attack: AttackData):
 		target.status_manager.apply_effect(attack.effect, attack.effect_duration)
 	else:
 		print("⚠️ %s no tiene StatusManager" % target.name)
-
-# Métodos helper para rangos
-func _get_square_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			if x == 0 and y == 0:
-				continue
-			var cell = start + Vector2i(x, y)
-			if _is_cell_valid(cell):
-				cells.append(cell)
-	return cells
-
-func _get_diamond_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			if x == 0 and y == 0:
-				continue
-			if abs(x) + abs(y) <= range_val:
-				var cell = start + Vector2i(x, y)
-				if _is_cell_valid(cell):
-					cells.append(cell)
-	return cells
-
-func _get_cross_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for i in range(1, range_val + 1):
-		var dirs = [Vector2i(i, 0), Vector2i(-i, 0), Vector2i(0, i), Vector2i(0, -i)]
-		for dir in dirs:
-			var cell = start + dir
-			if _is_cell_valid(cell):
-				cells.append(cell)
-	return cells
-
-func _get_circle_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	var range_squared = range_val * range_val
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			if x == 0 and y == 0:
-				continue
-			if x * x + y * y <= range_squared:
-				var cell = start + Vector2i(x, y)
-				if _is_cell_valid(cell):
-					cells.append(cell)
-	return cells
-
-func _get_knight_cells(start: Vector2i) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	var knight_moves = [
-		Vector2i(2, 1), Vector2i(2, -1),
-		Vector2i(-2, 1), Vector2i(-2, -1),
-		Vector2i(1, 2), Vector2i(1, -2),
-		Vector2i(-1, 2), Vector2i(-1, -2)
-	]
-	for move in knight_moves:
-		var cell = start + move
-		if _is_cell_valid(cell):
-			cells.append(cell)
-	return cells
-
-func _get_line_cells(start: Vector2i, range_val: int, direction: Vector2i) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	var dir_step = Vector2i(sign(direction.x), sign(direction.y))
-	
-	for i in range(1, range_val + 1):
-		var cell = start + (dir_step * i)
-		if _is_cell_valid(cell):
-			cells.append(cell)
-		else:
-			break
-	
-	return cells
 
 func _is_cell_valid(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < 32 and cell.y >= 0 and cell.y < 32

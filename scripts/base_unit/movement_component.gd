@@ -4,31 +4,26 @@ class_name MovementComponent
 signal moved(new_position: Vector2i)
 
 var tile_size: int = 32
-@export var movement_type: MovementType = MovementType.DIAMOND
-
-enum MovementType {
-	SQUARE,
-	DIAMOND,
-	CROSS,
-	CIRCLE,
-	KNIGHT,
-	FLYING,
-	TELEPORT
-}
+@export var movement_data: MovementData = MovementData.new()
 
 var owner_unit: BaseUnit
-
 var is_slowed: bool = false
-@export var original_range: int = 2
-var current_range: int = 2
+var current_range_boost: int = 0
 
 func _ready():
 	owner_unit = get_parent() as BaseUnit
 	if not owner_unit:
 		push_error("MovementComponent debe ser hijo de BaseUnit")
-
-	current_range = original_range
-	print("🚶 MovementComponent: base=%d, actual=%d" % [original_range, current_range])
+		return
+	
+	# Asegurar que hay datos de movimiento
+	if not movement_data or not movement_data.is_valid():
+		movement_data = MovementData.new()
+	
+	print("🚶 MovementComponent: tipo=%s, rango_base=%d" % [
+		MovementData.MovementType.keys()[movement_data.movement_type],
+		movement_data.base_range
+	])
 
 func apply_slow():
 	is_slowed = true
@@ -39,109 +34,64 @@ func remove_slow():
 	print("✅ Efecto lentitud finalizado")
 
 func get_movable_cells() -> Array[Vector2i]:
-	var range_val = current_range
-	if is_slowed:
-		range_val = 1
-	var cells: Array[Vector2i] = []
+	var current_range = _calculate_current_range()
+	var range_calculator_type = movement_data.get_range_calculator_type()
 	var start_pos = owner_unit.board_position
 	
-	match movement_type:
-		MovementType.SQUARE:
-			cells = _get_square_cells(start_pos, range_val)
-		MovementType.DIAMOND:
-			cells = _get_diamond_cells(start_pos, range_val)
-		MovementType.CROSS:
-			cells = _get_cross_cells(start_pos, range_val)
-		MovementType.CIRCLE:
-			cells = _get_circle_cells(start_pos, range_val)
-		MovementType.KNIGHT:
-			cells = _get_knight_cells(start_pos)
-		MovementType.FLYING:
-			cells = _get_flying_cells(start_pos, range_val)
-		MovementType.TELEPORT:
-			cells = _get_teleport_cells(start_pos)
+	# Usar RangeCalculator con callback personalizado según el tipo de movimiento
+	match movement_data.range_type:
+		MovementData.MovementRangeType.STANDARD:
+			return RangeCalculator.get_cells_in_range(
+				start_pos,
+				current_range,
+				range_calculator_type,
+				is_cell_walkable
+			)
+		
+		MovementData.MovementRangeType.FLYING:
+			return RangeCalculator.get_cells_in_range(
+				start_pos,
+				current_range,
+				range_calculator_type,
+				func(cell): return is_cell_valid(cell) and is_cell_free(cell)
+			)
+		
+		MovementData.MovementRangeType.TELEPORT:
+			return _get_teleport_cells(start_pos)
+		
+		_:
+			return RangeCalculator.get_cells_in_range(
+				start_pos,
+				current_range,
+				range_calculator_type,
+				is_cell_walkable
+			)
+
+func _calculate_current_range() -> int:
+	var base_range = movement_data.base_range + current_range_boost
 	
-	return cells
+	if is_slowed:
+		return 1
+	
+	return base_range
+
+#acceder al rango actual
+func get_current_range() -> int:
+	return _calculate_current_range()
 
 # Aplicar boost desde el valor base
 func set_range_boost(boost: int):
-	current_range = original_range + boost
-	print("  🚶 Rango recalculado: %d (base) + %d (boost) = %d" % [original_range, boost, current_range])
+	current_range_boost = boost
+	print("  🚶 Rango recalculado: %d (base) + %d (boost) = %d" % [
+		movement_data.base_range,
+		boost,
+		_calculate_current_range()
+	])
 
 # Resetear al original
 func reset_range():
-	current_range = original_range
-	print("  🔄 Rango reseteado: %d" % current_range)
-
-func _get_square_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			if x == 0 and y == 0:
-				continue
-			var cell = start + Vector2i(x, y)
-			if is_cell_walkable(cell):
-				cells.append(cell)
-	return cells
-
-func _get_diamond_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			var distance = abs(x) + abs(y)
-			if distance > 0 and distance <= range_val:
-				var cell = start + Vector2i(x, y)
-				if is_cell_walkable(cell):
-					cells.append(cell)
-	return cells
-
-func _get_cross_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for i in range(1, range_val + 1):
-		var dirs = [Vector2i(i, 0), Vector2i(-i, 0), Vector2i(0, i), Vector2i(0, -i)]
-		for dir in dirs:
-			var cell = start + dir
-			if is_cell_walkable(cell):
-				cells.append(cell)
-	return cells
-
-func _get_circle_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	var range_squared = range_val * range_val
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			if x == 0 and y == 0:
-				continue
-			if x * x + y * y <= range_squared:
-				var cell = start + Vector2i(x, y)
-				if is_cell_walkable(cell):
-					cells.append(cell)
-	return cells
-
-func _get_knight_cells(start: Vector2i) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	var knight_moves = [
-		Vector2i(2, 1), Vector2i(2, -1),
-		Vector2i(-2, 1), Vector2i(-2, -1),
-		Vector2i(1, 2), Vector2i(1, -2),
-		Vector2i(-1, 2), Vector2i(-1, -2)
-	]
-	for move in knight_moves:
-		var cell = start + move
-		if is_cell_walkable(cell):
-			cells.append(cell)
-	return cells
-
-func _get_flying_cells(start: Vector2i, range_val: int) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-range_val, range_val + 1):
-		for y in range(-range_val, range_val + 1):
-			var distance = abs(x) + abs(y)
-			if distance > 0 and distance <= range_val:
-				var cell = start + Vector2i(x, y)
-				if is_cell_valid(cell) and is_cell_free(cell):
-					cells.append(cell)
-	return cells
+	current_range_boost = 0
+	print("  🔄 Rango reseteado: %d" % _calculate_current_range())
 
 func _get_teleport_cells(start: Vector2i) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
@@ -185,10 +135,14 @@ func move_to(target_pos: Vector2i) -> bool:
 	return true
 
 func update_sprite_direction(direction: Vector2i):
+	if not owner_unit.has_node("AnimatedSprite2D"):
+		return
+	
+	var sprite = owner_unit.get_node("AnimatedSprite2D") as AnimatedSprite2D
 	if direction.x < 0:
-		owner_unit.get_node("AnimatedSprite2D").flip_h = true
+		sprite.flip_h = true
 	elif direction.x > 0:
-		owner_unit.get_node("AnimatedSprite2D").flip_h = false
+		sprite.flip_h = false
 
 # VALIDACIONES
 

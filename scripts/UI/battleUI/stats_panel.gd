@@ -80,9 +80,9 @@ func update_stats(unit: BaseUnit):
 	# Power
 	unit_power_label.text = "%d" % unit.power
 	
-	# Movement
+	# Movement - Usar la función pública get_current_range()
 	if unit.movement_component:
-		unit_movement_label.text = "%d" % unit.movement_component.current_range
+		unit_movement_label.text = "%d" % unit.movement_component.get_current_range()
 	
 	# Status
 	_update_status(unit)
@@ -217,8 +217,8 @@ func _get_range_type_frame(range_type: AttackData.RangeType) -> int:
 	match range_type:
 		AttackData.RangeType.SQUARE:
 			return 0
-		AttackData.RangeType.DIAMOND:
-			return 7
+		AttackData.RangeType.X:
+			return 1
 		AttackData.RangeType.CROSS:
 			return 2
 		AttackData.RangeType.LINE:
@@ -227,6 +227,8 @@ func _get_range_type_frame(range_type: AttackData.RangeType) -> int:
 			return 3
 		AttackData.RangeType.KNIGHT:
 			return 5
+		AttackData.RangeType.DIAMOND:
+			return 7
 		_:
 			return 0
 

@@ -1,14 +1,15 @@
-[gd_scene load_steps=24 format=3 uid="uid://ccssg4kstmjn5"]
+[gd_scene load_steps=26 format=3 uid="uid://ccssg4kstmjn5"]
 
 [ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_np83u"]
 [ext_resource type="Texture2D" uid="uid://dnrqxcwygot2q" path="res://sprites/bugs/bug-sheets/fly.png" id="2_ujijq"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="3_ba6ym"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="4_o120r"]
-[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="5_wdem3"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/grid/attack_data.gd" id="5_wdem3"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_ypak7"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_wdem3"]
+[ext_resource type="Script" uid="uid://ctusj77lfknl" path="res://scripts/game/grid/movement_data.gd" id="7_wdem3"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="7_xxgyh"]
-[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="8_b1eto"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/base_unit/unit_state_machine.gd" id="8_b1eto"]
 [ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="9_tw7hk"]
 [ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="10_hk3pj"]
 [ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="11_cwobb"]
@@ -124,7 +125,6 @@ attack_name = "Buzz Strike"
 damage = 1
 range = 2
 attack_type = 2
-range_type = 4
 effect = 4
 effect_duration = 3
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
@@ -132,11 +132,17 @@ metadata/_custom_type_script = "uid://d0wnru8venrfq"
 [sub_resource type="Resource" id="Resource_b1eto"]
 script = ExtResource("5_wdem3")
 attack_name = "Dive & Retreat"
-damage = 3
+damage = 1
 range = 3
-attack_type = 1
-range_type = 2
+range_type = 1
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_tw7hk"]
+script = ExtResource("7_wdem3")
+movement_type = 4
+range_type = 1
+base_range = 3
+metadata/_custom_type_script = "uid://ctusj77lfknl"
 
 [node name="fly" type="Area2D"]
 script = ExtResource("1_np83u")
@@ -171,7 +177,7 @@ metadata/_custom_type_script = "uid://ctrvtqym607y4"
 
 [node name="MovementComponent" type="Node" parent="."]
 script = ExtResource("5_ypak7")
-movement_type = 4
+movement_data = SubResource("Resource_tw7hk")
 metadata/_custom_type_script = "uid://bsetip1eay5vo"
 
 [node name="AnimationComponent" type="Node" parent="."]
@@ -188,8 +194,8 @@ metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("9_tw7hk")
-max_hp = 8
-hp = 8
+max_hp = 2
+hp = 2
 metadata/_custom_type_script = "uid://dge20l8umo3ho"
 
 [node name="UIHandler" type="Node" parent="."]

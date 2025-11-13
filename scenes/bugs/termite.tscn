@@ -1,14 +1,15 @@
-[gd_scene load_steps=26 format=3 uid="uid://kwrlb76lg5uc"]
+[gd_scene load_steps=28 format=3 uid="uid://kwrlb76lg5uc"]
 
 [ext_resource type="Script" uid="uid://6a6uyysheykg" path="res://scripts/base_unit/base_unit.gd" id="1_22ybm"]
 [ext_resource type="Texture2D" uid="uid://dlwv0bfmyl386" path="res://sprites/bugs/bug-sheets/termite.png" id="2_vibut"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="3_x2oyf"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="4_766ff"]
-[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="5_hcfcc"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/grid/attack_data.gd" id="5_hcfcc"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="6_5ajbc"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="7_0vu60"]
+[ext_resource type="Script" uid="uid://ctusj77lfknl" path="res://scripts/game/grid/movement_data.gd" id="7_hcfcc"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="8_k0ecg"]
-[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="9_3bsv2"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/base_unit/unit_state_machine.gd" id="9_3bsv2"]
 [ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="10_ad7iq"]
 [ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="11_37jce"]
 [ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="12_vmqvb"]
@@ -117,19 +118,22 @@ size = Vector2(28, 29)
 [sub_resource type="Resource" id="Resource_766ff"]
 script = ExtResource("5_hcfcc")
 attack_name = "Gnaw Wood"
-damage = 2
+damage = 1
 range_type = 0
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [sub_resource type="Resource" id="Resource_hcfcc"]
 script = ExtResource("5_hcfcc")
 attack_name = "Tunnel Dive"
-damage = 2
-range = 5
-range_type = 2
+damage = 1
+range = 2
 effect = 4
 effect_duration = 2
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_5ajbc"]
+script = ExtResource("7_hcfcc")
+metadata/_custom_type_script = "uid://ctusj77lfknl"
 
 [node name="termite" type="Area2D"]
 script = ExtResource("1_22ybm")
@@ -158,11 +162,11 @@ shape = SubResource("RectangleShape2D_v8n0r")
 [node name="AttackComponent" type="Node" parent="."]
 script = ExtResource("4_766ff")
 attacks = Array[ExtResource("5_hcfcc")]([SubResource("Resource_766ff"), SubResource("Resource_hcfcc")])
-tile_size = null
 metadata/_custom_type_script = "uid://ctrvtqym607y4"
 
 [node name="MovementComponent" type="Node" parent="."]
 script = ExtResource("6_5ajbc")
+movement_data = SubResource("Resource_5ajbc")
 metadata/_custom_type_script = "uid://bsetip1eay5vo"
 
 [node name="AnimationComponent" type="Node" parent="."]
@@ -179,8 +183,8 @@ metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("10_ad7iq")
-max_hp = 8
-hp = 8
+max_hp = 2
+hp = 2
 metadata/_custom_type_script = "uid://dge20l8umo3ho"
 
 [node name="UIHandler" type="Node" parent="."]

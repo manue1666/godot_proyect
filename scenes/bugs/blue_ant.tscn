@@ -1,14 +1,15 @@
-[gd_scene load_steps=25 format=3 uid="uid://cean33tt6t34s"]
+[gd_scene load_steps=27 format=3 uid="uid://cean33tt6t34s"]
 
 [ext_resource type="Script" uid="uid://bx6csb3yuhc68" path="res://scripts/bugs/blue_ant.gd" id="1_xs8ad"]
 [ext_resource type="Texture2D" uid="uid://c1ylraabrxab2" path="res://sprites/bugs/bug-sheets/blue_ant.png" id="2_4s8cf"]
 [ext_resource type="Script" uid="uid://ctrvtqym607y4" path="res://scripts/base_unit/attack_component.gd" id="3_v5bu6"]
-[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/attack_data.gd" id="4_nspur"]
+[ext_resource type="Script" uid="uid://d0wnru8venrfq" path="res://scripts/game/grid/attack_data.gd" id="4_nspur"]
 [ext_resource type="Script" uid="uid://bsetip1eay5vo" path="res://scripts/base_unit/movement_component.gd" id="5_awbq1"]
 [ext_resource type="Script" uid="uid://42xm15ltyvn0" path="res://scripts/base_unit/animation_component.gd" id="6_nspur"]
+[ext_resource type="Script" uid="uid://ctusj77lfknl" path="res://scripts/game/grid/movement_data.gd" id="7_fgiyc"]
 [ext_resource type="PackedScene" uid="uid://dex02gily5741" path="res://scenes/interfaz/health_bar.tscn" id="8_dwbtb"]
 [ext_resource type="Script" uid="uid://dvxcv4rs07sug" path="res://scripts/base_unit/status_manager.gd" id="9_xdbr7"]
-[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/game/unit_state_machine.gd" id="10_dhvca"]
+[ext_resource type="Script" uid="uid://dn0t4jxi5lhn0" path="res://scripts/base_unit/unit_state_machine.gd" id="10_dhvca"]
 [ext_resource type="Script" uid="uid://dge20l8umo3ho" path="res://scripts/base_unit/health_component.gd" id="11_677mx"]
 [ext_resource type="Script" uid="uid://d4gv5e3gfep1" path="res://scripts/base_unit/input_handler.gd" id="12_fgiyc"]
 [ext_resource type="Script" uid="uid://cxyoi21174a4f" path="res://scripts/base_unit/ui_handler.gd" id="13_r5j7w"]
@@ -110,18 +111,23 @@ size = Vector2(29, 30)
 [sub_resource type="Resource" id="Resource_dwbtb"]
 script = ExtResource("4_nspur")
 attack_name = "Bite"
-damage = 3
+damage = 1
 range_type = 0
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
 
 [sub_resource type="Resource" id="Resource_xdbr7"]
 script = ExtResource("4_nspur")
 attack_name = "Lock Jaw"
-damage = 2
-range_type = 2
+damage = 1
+range_type = 3
 effect = 2
 effect_duration = 2
 metadata/_custom_type_script = "uid://d0wnru8venrfq"
+
+[sub_resource type="Resource" id="Resource_r5j7w"]
+script = ExtResource("7_fgiyc")
+movement_type = 0
+metadata/_custom_type_script = "uid://ctusj77lfknl"
 
 [node name="blue_ant" type="Area2D"]
 script = ExtResource("1_xs8ad")
@@ -153,7 +159,7 @@ metadata/_custom_type_script = "uid://ctrvtqym607y4"
 
 [node name="MovementComponent" type="Node" parent="."]
 script = ExtResource("5_awbq1")
-movement_type = 0
+movement_data = SubResource("Resource_r5j7w")
 metadata/_custom_type_script = "uid://bsetip1eay5vo"
 
 [node name="AnimationComponent" type="Node" parent="."]
@@ -170,6 +176,8 @@ metadata/_custom_type_script = "uid://dn0t4jxi5lhn0"
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("11_677mx")
+max_hp = 3
+hp = 3
 metadata/_custom_type_script = "uid://dge20l8umo3ho"
 
 [node name="UIHandler" type="Node" parent="."]

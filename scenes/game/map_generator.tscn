@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://btr7olxlpg05c"]
 
-[ext_resource type="Script" uid="uid://bfhxvbouscvh1" path="res://scripts/game/map_generator.gd" id="1_gjwrw"]
+[ext_resource type="Script" uid="uid://bfhxvbouscvh1" path="res://scripts/game/map/map_generator.gd" id="1_gjwrw"]
 
 [node name="MapGenerator" type="Node" node_paths=PackedStringArray("ground_layer", "obstacles_layer", "decoration_layer") groups=["map_generator"]]
 script = ExtResource("1_gjwrw")
