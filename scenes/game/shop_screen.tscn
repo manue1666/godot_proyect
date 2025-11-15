@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://b187f1dmr56i6"]
+[gd_scene load_steps=7 format=3 uid="uid://b187f1dmr56i6"]
 
 [ext_resource type="Script" uid="uid://dvb6a02ktsa1u" path="res://scripts/UI/shop_screen.gd" id="1_jliv7"]
 [ext_resource type="Theme" uid="uid://bkfdwh2gbiv4t" path="res://sprites/UI/trees/panels.tres" id="2_j4xvi"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_jymxn"]
 [ext_resource type="Theme" uid="uid://c7gw2v1gydah5" path="res://sprites/UI/trees/buttons.tres" id="4_j4xvi"]
+[ext_resource type="Script" uid="uid://dfpqaavy1vhd" path="res://scripts/game/shop/shop_inventory.gd" id="5_8q50a"]
+[ext_resource type="Script" uid="uid://22uh2qp1vt1v" path="res://scripts/game/economy/currency_manager.gd" id="6_25ns7"]
 
 [node name="ShopScreen" type="CanvasLayer"]
 script = ExtResource("1_jliv7")
@@ -54,3 +56,11 @@ theme_override_colors/font_color = Color(0.95791954, 0.9669356, 0.96791226, 1)
 theme_override_fonts/font = ExtResource("2_jymxn")
 theme_override_font_sizes/font_size = 32
 text = "Continue"
+
+[node name="ShopInventory" type="Node" parent="."]
+script = ExtResource("5_8q50a")
+metadata/_custom_type_script = "uid://dfpqaavy1vhd"
+
+[node name="CurrencyManager" type="Node" parent="."]
+script = ExtResource("6_25ns7")
+metadata/_custom_type_script = "uid://22uh2qp1vt1v"

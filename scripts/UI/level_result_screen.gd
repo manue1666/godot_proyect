@@ -12,9 +12,12 @@ signal continue_pressed()
 signal menu_pressed()
 
 func _ready():
-	visible = false
+	add_to_group("level_result_screen")
+	
 	continue_button.pressed.connect(_on_continue_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
+	
+	print("✅ LevelResultScreen inicializado")
 
 func show_result(result_type: ResultType, current_level: int, total_levels: int, units_alive: int, total_units: int):
 	match result_type:
@@ -36,6 +39,7 @@ func show_result(result_type: ResultType, current_level: int, total_levels: int,
 	stats_label.text = "Level: %d/%d\nUnits Alive: %d/%d" % [current_level, total_levels, units_alive, total_units]
 	
 	visible = true
+	print("📊 Resultado mostrado: %s" % ResultType.keys()[result_type])
 
 func hide_screen():
 	visible = false

@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 GState="*res://scripts/core/game_state.gd"
+run_state="*res://scripts/core/run_state.gd"
+run_manager="*res://scripts/core/run_manager.gd"
 
 [display]
 

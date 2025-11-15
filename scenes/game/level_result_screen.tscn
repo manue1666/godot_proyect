@@ -75,7 +75,6 @@ theme_override_constants/separation = 37
 [node name="MenuButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_m3mpy")
-theme_override_constants/outline_size = 0
 text = "Main Menu"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/Panel/VBoxContainer/HBoxContainer"]

@@ -10,43 +10,119 @@ signal unit_selected(unit: BaseUnit)
 var current_team_index := 0
 var selected_unit: BaseUnit = null
 var map_generator: MapGenerator
+var is_battle_started: bool = false
 
 func _ready():
 	add_to_group("turn_manager")
-
+	
 	map_generator = get_tree().get_first_node_in_group("map_generator")
 	if map_generator:
 		map_generator.map_generated.connect(_on_map_generated)
 	
-	# Buscar equipos automáticamente si no están asignados
+	print("✅ TurnManager listo (esperando instrucciones de RunManager)\n")
+
+func _process(_delta):
+	# Búsqueda lazy de equipos - solo si aún no los encontró
+	if teams.is_empty() and not is_battle_started:
+		_search_for_teams()
+
+func _search_for_teams():
+	# Busca equipos en el árbol de escena - se ejecuta lazily
 	if teams.is_empty():
+		# BUSCAR EN ORDEN: Primero player_team (team_id=0), luego enemy (team_id=1)
 		for child in get_parent().get_children():
 			if child is Team:
-				teams.append(child)
-	
-	print("📋 Equipos encontrados: %d" % teams.size())
-	
-	# ESPERAR un frame para que Team._ready() se ejecute primero
-	await get_tree().process_frame
+				if child.team_id == 0:
+					teams.insert(0, child)  # Insertar al principio
+				else:
+					teams.append(child)
+		
+		if not teams.is_empty():
+			print("📋 TurnManager encontró %d equipos:" % teams.size())
+			for i in range(teams.size()):
+				var unit_count = teams[i].units.size()
+				print("  [%d] %s (team_id: %d, unidades: %d)" % [i, teams[i].team_name, teams[i].team_id, unit_count])
+			
+			# Conectar señales de unidades existentes
+			_setup_initial_connections()
 
-	# Conectar señales de todas las unidades
+func _setup_initial_connections():
+	# Conecta señales de las unidades que existan en este momento
+	print("\n🔗 Conectando señales de unidades iniciales...")
+	
 	for team in teams:
 		print("  - Team: %s con %d unidades" % [team.team_name, team.units.size()])
 		for unit in team.units:
 			if unit and is_instance_valid(unit):
-				print("    · Conectando señales de: %s" % unit.name)
-				
-				# CONECTAR TODAS LAS SEÑALES
-				unit.clicked.connect(_on_unit_clicked.bind(unit))
-				unit.moved.connect(_on_unit_moved)       
-				unit.attacked.connect(_on_unit_attacked)    
-				unit.died.connect(_on_unit_died)
-				unit.receive_dam.connect(_on_unit_received_damage)
+				print("    · Conectando: %s" % unit.name)
+				connect_unit_signals(unit)
+	
+	print("✅ Señales iniciales conectadas\n")
 
+func begin_battle():
+	print("\n🎮 === BEGIN_BATTLE LLAMADO ===")
+	print("🆔 TurnManager ID: %d" % get_instance_id())
+	print("📊 Estado actual:")
+	print("  · is_battle_started: %s" % is_battle_started)
+	print("  · teams.size(): %d" % teams.size())
+	
+	if is_battle_started:
+		print("⚠️ Batalla ya iniciada - abortando")
+		return
+	
+	# Asegurar que los equipos estén buscados
+	if teams.is_empty():
+		print("⚠️ Teams vacío, buscando...")
+		_search_for_teams()
+	
+	if teams.is_empty():
+		push_error("❌ No hay equipos disponibles para iniciar batalla")
+		return
+	
+	#	CONECTAR SEÑALES DE TODAS LAS UNIDADES ANTES DE VALIDAR
+	print("\n🔗 Conectando señales de TODAS las unidades...")
+	for team in teams:
+		print("  · Team: %s" % team.team_name)
+		for unit in team.get_living_units():
+			if unit and is_instance_valid(unit):
+				# Evitar reconexiones
+				if not unit.clicked.is_connected(_on_unit_clicked):
+					connect_unit_signals(unit)
+					print("    ✅ Conectado: %s" % unit.name)
+				else:
+					print("    ⚠️ Ya conectado: %s" % unit.name)
+	
+	if not _validate_battle_start():
+		push_error("❌ Validación de batalla falló")
+		return
+	
+	is_battle_started = true
+	print("✅ is_battle_started = TRUE")
+	print("🎮 === FIN BEGIN_BATTLE ===\n")
+	
 	start_turn()
 
+func _validate_battle_start() -> bool:
+	print("\n🔍 Validando inicio de batalla...")
+	
+	if teams.size() < 2:
+		push_error("  ❌ Se necesitan al menos 2 equipos (actual: %d)" % teams.size())
+		return false
+	
+	for i in range(teams.size()):
+		var team = teams[i]
+		var living_units = team.get_living_units()
+		print("  · Team %d (%s): %d unidades vivas" % [i, team.team_name, living_units.size()])
+		
+		if living_units.is_empty():
+			push_error("  ❌ Equipo %s no tiene unidades vivas" % team.team_name)
+			return false
+	
+	print("  ✅ Validación exitosa")
+	return true
+
 func _on_map_generated(map_data: MapData):
-	print("🗺️  TurnManager recibió mapa generado")
+	print("🗺️ TurnManager recibió mapa generado")
 	
 	# Esperar un frame para que las unidades estén listas
 	await get_tree().process_frame
@@ -58,7 +134,7 @@ func _on_map_generated(map_data: MapData):
 
 func _spawn_team(team: Team, spawn_positions: Array[Vector2i]):
 	if spawn_positions.is_empty():
-		push_warning("⚠️  No hay posiciones de spawn para %s" % team.team_name)
+		push_warning("⚠️ No hay posiciones de spawn para %s" % team.team_name)
 		return
 	
 	var units = team.get_living_units()
@@ -68,25 +144,30 @@ func _spawn_team(team: Team, spawn_positions: Array[Vector2i]):
 		if i < spawn_positions.size():
 			units[i].board_position = spawn_positions[i]
 		else:
-			# Reutilizar posiciones si hay más unidades que slots
 			var pos_index = i % spawn_positions.size()
 			units[i].board_position = spawn_positions[pos_index]
 		
 		units[i].update_visual_position()
 		print("    · %s → %s" % [units[i].name, units[i].board_position])
 
-# HANDLERS DE SEÑALES 
+# ============ HANDLERS DE SEÑALES ============
 
 func _on_unit_clicked(unit: BaseUnit):
+	print("DEBUG: _on_unit_clicked llamado - is_battle_started=%s, unit=%s" % [is_battle_started, unit.name])
+	
+	if not is_battle_started:
+		print("❌ Batalla NO iniciada aún - ignorando click")
+		return
+	
 	print("🖱️ Unidad clickeada: %s" % unit.name)
 	
-	# emitir para mostrar stats (aliada o enemiga)
+	# Emitir para mostrar stats (aliada o enemiga)
 	unit_selected.emit(unit)
 	
 	# Solo permitir SELECCIONAR unidades del equipo actual
 	if unit.team != get_current_team():
 		print("❌ No es tu turno - solo visualizando stats")
-		return  # ← Mostró stats, pero no seleccionó
+		return
 	
 	# Si la unidad ya actuó, no se puede seleccionar
 	if unit.state_machine.is_exhausted() or unit.state_machine.is_dead():
@@ -109,31 +190,53 @@ func _on_unit_clicked(unit: BaseUnit):
 		print("✅ Unidad deseleccionada")
 
 func _on_unit_moved(unit: BaseUnit, new_position: Vector2i):
+	if not is_battle_started:
+		return
+	
 	print("📍 %s se movió a %v" % [unit.name, new_position])
 	unit.board_position = new_position
 	unit.update_visual_position()
 	check_turn_end()
 
 func _on_unit_attacked(attacker: BaseUnit, target: BaseUnit, attack_num: int):
+	if not is_battle_started:
+		return
+	
 	print("⚔️ %s atacó a %s con ataque %d" % [attacker.name, target.name, attack_num])
 	check_turn_end()
 
 func _on_unit_died(unit: BaseUnit):
+	if not is_battle_started:
+		return
+	
 	print("💀 %s murió" % unit.name)
 	if unit == selected_unit:
 		selected_unit = null
-	# Verificar batalla
 	check_battle_end()
 
 func _on_unit_received_damage(damage: int, attacker: BaseUnit):
-	print("🏥 %s recibió %d de daño" % [attacker.name, damage])
+	if not is_battle_started:
+		return
+	
+	print("🏥 Unidad recibió %d de daño de %s" % [damage, attacker.name])
 
 func get_current_team() -> Team:
+	if teams.is_empty():
+		return null
 	return teams[current_team_index] if current_team_index < teams.size() else null
 
 func start_turn():
-	var current_team = teams[current_team_index]
+	var current_team = get_current_team()
+	if not current_team:
+		push_error("❌ TurnManager: No hay equipo actual")
+		return
+	
 	print("\n=== Turno de %s ===" % current_team.team_name)
+	
+	# Actualizar UI del HUD
+	var battle_hud = get_tree().get_first_node_in_group("battle_hud")
+	if battle_hud:
+		battle_hud.update_turn(current_team.team_name)
 	
 	# Resetear SOLO si es el equipo del jugador
 	if current_team.team_id == 0:
@@ -152,12 +255,15 @@ func start_turn():
 func check_turn_end():
 	var current_team = get_current_team()
 	# Solo verificar si quedan unidades del jugador que actúen
-	if current_team.team_id == 0:
+	if current_team and current_team.team_id == 0:
 		if not current_team.has_units_that_can_act():
 			print("  📋 Equipo %s completó su turno" % current_team.team_name)
 
 func end_turn():
 	var current_team = get_current_team()
+	if not current_team:
+		return
+	
 	turn_ended.emit(current_team)
 	print("=== Fin del turno de %s ===" % current_team.team_name)
 	
@@ -188,26 +294,19 @@ func check_battle_end():
 			print("\n💀 ¡EMPATE! Todos murieron 💀")
 
 func connect_unit_signals(unit: BaseUnit):
+	# Conecta las señales de una unidad individual
 	if not unit or not is_instance_valid(unit):
-		push_warning("⚠️  Intentando conectar señales a unidad inválida")
+		push_warning("⚠️ Intentando conectar señales a unidad inválida")
+		return
+	
+	# Evitar conexiones duplicadas
+	if unit.clicked.is_connected(_on_unit_clicked):
+		print("    ⚠️ Señales ya conectadas a %s" % unit.name)
 		return
 	
 	print("    🔗 Conectando señales a: %s" % unit.name)
 	
-	# Desconectar si ya estaban conectadas (evitar duplicados)
-	if unit.clicked.is_connected(_on_unit_clicked):
-		unit.clicked.disconnect(_on_unit_clicked)
-	if unit.moved.is_connected(_on_unit_moved):
-		unit.moved.disconnect(_on_unit_moved)
-	if unit.attacked.is_connected(_on_unit_attacked):
-		unit.attacked.disconnect(_on_unit_attacked)
-	if unit.died.is_connected(_on_unit_died):
-		unit.died.disconnect(_on_unit_died)
-	if unit.receive_dam.is_connected(_on_unit_received_damage):
-		unit.receive_dam.disconnect(_on_unit_received_damage)
-	
-	# Conectar nuevas señales
-	unit.clicked.connect(_on_unit_clicked.bindv([unit]))
+	unit.clicked.connect(_on_unit_clicked.bind(unit))
 	unit.moved.connect(_on_unit_moved)
 	unit.attacked.connect(_on_unit_attacked)
 	unit.died.connect(_on_unit_died)
@@ -218,7 +317,7 @@ func connect_unit_signals(unit: BaseUnit):
 func reset_all_units_for_new_battle():
 	print("\n🔄 === RESETEANDO UNIDADES PARA NUEVA BATALLA ===")
 	
-	var team_stats_tracker = get_tree().get_first_node_in_group("team_stats_tracker")
+	var team_stats_tracker = run_state.team_stats_tracker if run_state else null
 	
 	for team in teams:
 		for unit in team.get_living_units():
@@ -227,7 +326,7 @@ func reset_all_units_for_new_battle():
 			
 			print("  🔄 Reseteando: %s" % unit.name)
 			
-			# ✅ RESETEAR MOVIMIENTO CON BOOSTS
+			# RESETEAR MOVIMIENTO CON BOOSTS
 			if unit.has_node("MovementComponent"):
 				var movement_comp = unit.get_node("MovementComponent") as MovementComponent
 				
@@ -243,7 +342,7 @@ func reset_all_units_for_new_battle():
 					])
 				else:
 					movement_comp.reset_range()
-
+			
 			# RESETEAR PODER CON BOOSTS
 			if team_stats_tracker:
 				var power_boost = team_stats_tracker.get_power_boost()
@@ -279,4 +378,4 @@ func reset_all_units_for_new_battle():
 			
 			unit.deselect_unit()
 	
-	print("Todas las unidades reseteadas\n")
+	print("✅ Todas las unidades reseteadas\n")

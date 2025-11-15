@@ -1,4 +1,5 @@
 extends Camera2D
+class_name BattleCamera
 
 @export var drag_button: MouseButton = MOUSE_BUTTON_RIGHT
 @export var zoom_step: float = 0.1

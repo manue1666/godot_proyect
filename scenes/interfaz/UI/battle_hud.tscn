@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cbel4s06fdhuw"]
+[gd_scene load_steps=38 format=3 uid="uid://cbel4s06fdhuw"]
 
 [ext_resource type="Script" uid="uid://csmgyj3plcabb" path="res://scripts/UI/battleUI/battle_hud.gd" id="1_ueiah"]
 [ext_resource type="FontFile" uid="uid://bagxrydj664hr" path="res://sprites/fonts/Jersey_10/Jersey10-Regular.ttf" id="2_tv7i6"]
@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://8bn5dgafwwv6" path="res://sprites/UI/icons/knight_range.png" id="19_vuh6p"]
 [ext_resource type="Texture2D" uid="uid://kpo1o754hpi5" path="res://sprites/UI/icons/tp_range.png" id="20_ye1ei"]
 [ext_resource type="Texture2D" uid="uid://ec4d1r64skly" path="res://sprites/UI/icons/diamond_icon.png" id="21_73til"]
+[ext_resource type="Script" uid="uid://dxm0il0o84itk" path="res://scripts/UI/game_camera.gd" id="22_rl7l4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rl7l4"]
 atlas = ExtResource("7_juuyc")
@@ -555,3 +556,8 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tv7i6")
 theme_override_font_sizes/font_size = 24
 text = "0"
+
+[node name="BattleCamera" type="Camera2D" parent="."]
+position = Vector2(590, -323)
+script = ExtResource("22_rl7l4")
+metadata/_custom_type_script = "uid://dxm0il0o84itk"

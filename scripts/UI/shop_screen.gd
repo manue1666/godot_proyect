@@ -11,34 +11,33 @@ signal shop_closed()
 
 @export var card_scene: PackedScene = preload("res://scenes/interfaz/UI/shop_item_card.tscn")
 
-var shop_inventory: ShopInventory
-var currency_manager: CurrencyManager
+var shop_inventory: ShopInventory = null
+var currency_manager: CurrencyManager = null
 var card_scenes: Array[ShopItemCard] = []
 
 func _ready():
 	add_to_group("shop_screen")
 	
-	# Conectar botones
 	continue_button.pressed.connect(_on_continue_pressed)
 	
-	# Obtener referencias
 	await get_tree().process_frame
-	shop_inventory = get_tree().get_first_node_in_group("shop_inventory")
-	currency_manager = get_tree().get_first_node_in_group("currency_manager")
+	
+	shop_inventory = run_state.shop_inventory
+	currency_manager = run_state.currency_manager
 	
 	if not shop_inventory:
-		push_error("❌ ShopScreen: No encontró ShopInventory")
+		push_error("ShopScreen: run_state.shop_inventory es nulo")
+		return
+	
 	if not currency_manager:
-		push_error("❌ ShopScreen: No encontró CurrencyManager")
+		push_error("ShopScreen: run_state.currency_manager es nulo")
+		return
 	
 	print("✅ ShopScreen inicializado")
 	
-	# Conectar señales
-	if currency_manager:
-		currency_manager.coins_changed.connect(_on_coins_changed)
+	currency_manager.coins_changed.connect(_on_coins_changed)
 	
-	# Comenzar oculto
-	visible = false
+	_refresh_display()
 
 func show_shop():
 	print("🛍️ ShopScreen: Mostrando tienda")
@@ -50,61 +49,42 @@ func hide_shop():
 	visible = false
 
 func _refresh_display():
-	# Limpiar tarjetas anteriores
 	for card in card_scenes:
 		card.queue_free()
 	card_scenes.clear()
 	
-	# Obtener items actuales
 	var items = shop_inventory.get_current_items()
 	
 	print("🛍️ Actualizando display: %d items" % items.size())
 	
-	# Crear tarjeta por cada item
 	for i in range(items.size()):
 		var item = items[i]
-		print("  📦 Creando tarjeta para: %s" % item.item_name)
 		
-		# Instanciar la escena
 		var card = card_scene.instantiate() as ShopItemCard
 		if not card:
-			push_error("❌ Error: card_scene.instantiate() retornó null")
+			push_error("Error: card_scene.instantiate() retornó null")
 			continue
 		
-		print("    ✅ Tarjeta instanciada")
-		
 		items_container.add_child(card)
-		print("    ✅ Agregada a items_container")
 		
-		# ESPERAR UN FRAME para que _ready() se ejecute
 		await get_tree().process_frame
-		print("    ✅ Frame esperado, _ready() debería haber ejecutado")
 		
-		# Ahora los @onready deberían estar inicializados
 		card.set_item(item, i)
-		print("    ✅ set_item() ejecutado")
 		
-		# Verificar si se puede comprar
 		var can_afford = currency_manager.can_afford(item.cost)
 		card.set_purchasable(can_afford)
-		print("    ✅ set_purchasable() ejecutado")
 		
-		# Conectar señal de compra
 		card.purchase_pressed.connect(_on_card_purchase_pressed)
-		print("    ✅ Señal conectada")
 		
 		card_scenes.append(card)
 		
 		print("  [%d] %s - %d monedas (asequible: %s)" % [i, item.item_name, item.cost, "✅" if can_afford else "❌"])
 	
-	print("🛍️ Tarjetas creadas: %d" % card_scenes.size())
-	
-	# Actualizar etiqueta de monedas
 	_update_coins_display()
 
 func _update_coins_display():
 	var current_coins = currency_manager.get_coins()
-	coins_label.text = "💰 Monedas: %d" % current_coins
+	coins_label.text = "Monedas: %d" % current_coins
 
 func _on_coins_changed(_current_coins: int, _change: int):
 	_update_coins_display()
@@ -129,18 +109,15 @@ func _on_card_purchase_pressed(index: int):
 		print("❌ Item no encontrado")
 		return
 	
-	# Comprar item
 	if shop_inventory.purchase_item(index, currency_manager):
 		print("✅ Compra exitosa")
 		
-
 		var result = await item.apply_effect(get_tree().root)
 		if result:
 			print("✅ Efecto aplicado")
 		else:
 			print("⚠️ Error al aplicar efecto")
 		
-		# Actualizar display
 		_refresh_display()
 	else:
 		print("❌ Compra fallida")
@@ -149,10 +126,3 @@ func _on_continue_pressed():
 	print("➡️ Cerrando tienda y continuando...")
 	hide_shop()
 	shop_closed.emit()
-
-func print_status() -> void:
-	print("\n🛍️ === SHOP STATUS ===")
-	print("  Visible: %s" % visible)
-	print("  Items mostrados: %d" % card_scenes.size())
-	print("  Monedas: %d" % currency_manager.get_coins())
-	print("  ======================\n")
